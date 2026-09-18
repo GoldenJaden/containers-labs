@@ -856,5 +856,89 @@ qerenny@containers:~/containers-labs$ sudo docker exec lab1-volume \
 hello-volume
 ```
 
+# gVisor — теперь давайте ещё одно ядро между нами и ядром
 
+Запустим тот же `lab1-api:multi`, но теперь через `runsc`:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker run --rm \
+  --runtime=runsc \
+  --name lab1-api-gvisor \
+  -p 8081:8080 \
+  lab1-api:multi
+2026/09/18 12:39:58 api listening on :8080
+
+qerenny@containers:~/containers-labs$ curl http://127.0.0.1:8081/health
+ok
+```
+
+Ну то есть сервис жив, только runtime у нас теперь уже не обычный `runc`, а `runsc`.
+
+Посмотрим, что там вообще происходит:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker run --rm \
+  --runtime=runsc \
+  ubuntu:24.04 \
+  dmesg
+[sudo] password for qerenny:
+[    0.000000] Starting gVisor...
+[    0.471395] Letting the watchdogs out...
+[    0.598962] Forking spaghetti code...
+[    0.951228] Singleplexing /dev/ptmx...
+[    1.322209] Adversarially training Redcode AI...
+[    1.627695] Rewriting operating system in Javascript...
+[    1.940872] Generating random numbers by fair dice roll...
+[    1.980556] Constructing home...
+[    2.385223] Searching for socket adapter...
+[    2.722363] Checking naughty and nice process list...
+[    2.884919] Searching for needles in stacks...
+[    2.911042] Setting up VFS...
+[    3.346032] Setting up FUSE...
+[    3.450887] Ready!
+```
+
+Да, cнова много букв, но главное тут `Starting gVisor...` и `Ready!`.
+
+Теперь сравним `uname`.
+
+Обычный Docker:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker run --rm \
+  ubuntu:24.04 \
+  uname -a
+Linux 0de849fb0853 6.8.0-139-generic #139-Ubuntu SMP PREEMPT_DYNAMIC Sat Aug  1 03:52:05 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+А теперь через gVisor:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker run --rm \
+  --runtime=runsc \
+  ubuntu:24.04 \
+  uname -a
+Linux 23ca3bf4eb44 4.4.0 #1 SMP Sun Jan 10 15:06:54 PST 2016 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+У обычного контейнера мы увидели ядро хоста `6.8.0-139-generic`, потому что контейнеры всё ещё используют общее ядро Linux.
+
+У gVisor уже другое представление — `4.4.0`. Это не настоящее ядро Linux внутри контейнера, а интерфейс, который отдаёт сам gVisor.
+
+По сути разница такая:
+
+
+
+
+В нашем `mydocker.sh` и в обычном Docker изоляция строится вокруг namespaces, cgroups, capabilities и seccomp, но syscalls процесса всё равно уходят в ядро хоста.
+
+gVisor вставляет между приложением и host kernel свой userspace-kernel `Sentry`, который сам обрабатывает большую часть Linux syscall API. Поэтому приложение уже не общается с ядром хоста так напрямую, а поверхность атаки становится меньше.
+
+Из-за этого gVisor и считают более изолированным вариантом, хотя это всё ещё не полноценная VM.
+
+## Что всё равно остаётся общим у обычного контейнера
+
+Самое главное — ядро Linux.
+
+Контейнер может иметь свой PID namespace, сеть, hostname, mount namespace, rootfs и cgroup, но настоящее ядро у него всё равно то же самое, что и у хоста.
 
