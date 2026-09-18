@@ -316,3 +316,160 @@ stress-ng: info:  [65727] dispatching hogs: 100 fork
     
 
 ```
+
+# Права, права, права -- а что это по сути своей?
+
+## capabilities
+
+Ну ну давайте снова неймспейс сделаем че бы нет. Там пойдем наши права кашмарить. Начнем с capabilities.
+
+```bash
+qerenny@containers:~/containers-labs$ unshare \
+  --user \
+  --map-root-user \
+  --mount \
+  --uts \
+  --ipc \
+  --pid \
+  --net \
+  --fork \
+  --mount-proc \
+  bash  
+  
+# посмотрим че мы могём... а много мы могём
+root@containers:~/containers-labs# capsh --print
+Current: =ep
+Bounding set =cap_chown,cap_dac_override,cap_dac_read_search,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_linux_immutable,cap_net_bind_service,cap_net_broadcast,cap_net_admin,cap_net_raw,cap_ipc_lock,cap_ipc_owner,cap_sys_module,cap_sys_rawio,cap_sys_chroot,cap_sys_ptrace,cap_sys_pacct,cap_sys_admin,cap_sys_boot,cap_sys_nice,cap_sys_resource,cap_sys_time,cap_sys_tty_config,cap_mknod,cap_lease,cap_audit_write,cap_audit_control,cap_setfcap,cap_mac_override,cap_mac_admin,cap_syslog,cap_wake_alarm,cap_block_suspend,cap_audit_read,cap_perfmon,cap_bpf,cap_checkpoint_restore
+Ambient set =
+Current IAB: 
+Securebits: 00/0x0/1'b0 (no-new-privs=0)
+ secure-noroot: no (unlocked)
+ secure-no-suid-fixup: no (unlocked)
+ secure-keep-caps: no (unlocked)
+ secure-no-ambient-raise: no (unlocked)
+uid=0(root) euid=0(root)
+gid=0(root)
+groups=65534(nogroup),65534(nogroup),65534(nogroup),65534(nogroup),65534(nogroup),65534(nogroup),0(root)
+Guessed mode: HYBRID (4)
+
+root@containers:~/containers-labs# setpriv \
+  --bounding-set=-all \
+  --inh-caps=-all \
+  --ambient-caps=-all \
+  --no-new-privs \
+  bash --noprofile --norc
+
+
+  
+# так букв здесь много, но кажется мы ничего не могём 
+bash-5.2# 
+bash-5.2# capsh --print
+Current: =
+Bounding set =
+Ambient set =
+Current IAB: !cap_chown,!cap_dac_override,!cap_dac_read_search,!cap_fowner,!cap_fsetid,!cap_kill,!cap_setgid,!cap_setuid,!cap_setpcap,!cap_linux_immutable,!cap_net_bind_service,!cap_net_broadcast,!cap_net_admin,!cap_net_raw,!cap_ipc_lock,!cap_ipc_owner,!cap_sys_module,!cap_sys_rawio,!cap_sys_chroot,!cap_sys_ptrace,!cap_sys_pacct,!cap_sys_admin,!cap_sys_boot,!cap_sys_nice,!cap_sys_resource,!cap_sys_time,!cap_sys_tty_config,!cap_mknod,!cap_lease,!cap_audit_write,!cap_audit_control,!cap_setfcap,!cap_mac_override,!cap_mac_admin,!cap_syslog,!cap_wake_alarm,!cap_block_suspend,!cap_audit_read,!cap_perfmon,!cap_bpf,!cap_checkpoint_restore
+Securebits: 00/0x0/1'b0 (no-new-privs=1)
+ secure-noroot: no (unlocked)
+ secure-no-suid-fixup: no (unlocked)
+ secure-keep-caps: no (unlocked)
+ secure-no-ambient-raise: no (unlocked)
+uid=0(root) euid=0(root)
+gid=0(root)
+groups=65534(nogroup),65534(nogroup),65534(nogroup),65534(nogroup),65534(nogroup),65534(nogroup),0(root)
+Guessed mode: HYBRID (4)
+
+# а че это у нас не выходит
+bash-5.2# hostname 
+containers
+bash-5.2# hostname cc
+hostname: you must be root to change the host name
+
+# а че
+bash-5.2# getcap /usr/bin/ping
+/usr/bin/ping cap_net_raw=ep
+bash-5.2# ping 8.8.8.8
+bash: /usr/bin/ping: Operation not permitted
+
+# ааа, так вот че, мыж бесправные
+bash-5.2# grep CapBnd /proc/$$/status
+CapBnd: 0000000000000000
+# да и у нас повышений привелегий запрещено, 
+# поэтому бедолага пинг ничего не может от слова совсем
+# (даже если бы ему что то и можно было разрешено получить)
+NoNewPrivs:     1
+```
+
+## Seccomp
+
+Seccomp-профиль работает по denylist-модели:
+- все системные вызовы разрешены по умолчанию;
+- syscall uname блокируется;
+- перед загрузкой фильтра no_new_privs;
+- после загрузки фильтра launcher через execvp заменяется целевой программой.
+
+Это моджно увидеть по этому отрывку файла seccomp-launcher.c:
+
+```c
+prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+
+filter = seccomp_init(SCMP_ACT_ALLOW);
+
+seccomp_rule_add(
+    filter,
+    SCMP_ACT_ERRNO(EPERM),
+    SCMP_SYS(uname),
+    0
+);
+
+seccomp_load(filter);
+
+execvp(argv[1], &argv[1]);
+```
+
+SCMP_ACT_ALLOW задаёт разрешение всех syscall по умолчанию. Для uname добавляется отдельное правило, возвращающее EPERM. После seccomp_load() фильтр загружается в ядро. execvp() заменяет launcher целевой программой, которая наследует установленный seccomp-фильтр.
+
+Увидеть работу обычных программ можно на:
+
+```bash
+qerenny@containers:~/containers-labs$  ./lab1/seccomp-launcher /bin/true
+echo $?
+0
+```
+
+Посмотрим на заблокированный uname:
+
+```bash
+qerenny@containers:~/containers-labs$ ./lab1/seccomp-launcher bash
+qerenny@??host??:~/containers-labs$ uname -a
+uname: cannot get system name: Operation not permitted
+```
+
+Его работу можно увидеть сразу по `??host??` система просто не смогла получить имя хоста.
+
+Чтобы было совсем честно проверим так:
+
+```bash
+qerenny@containers:~/containers-labs$ ./lab1/seccomp-launcher bash --noprofile --norc
+bash-5.2$ uname -a
+uname: cannot get system name: Operation not permitted
+bash-5.2$ echo hello
+hello
+bash-5.2$ grep -E 'Seccomp|NoNewPrivs' /proc/$$/status
+NoNewPrivs:     1
+Seccomp:        2
+Seccomp_filters:        1
+bash-5.2$ pwd
+/home/qerenny/containers-labs
+bash-5.2$ exec ./lab1/api/api 
+2026/09/18 10:35:48 api listening on :8080
+    
+    qerenny@containers:~/containers-labs$ curl http://localhost:8080/health
+    ok
+        
+    qerenny@containers:~/containers-labs$ ps aux | grep [a]pi
+    qerenny   382079  0.0  0.0 1599944 6356 pts/2    Sl+  10:47   0:00 ./lab1/api/api
+    qerenny@containers:~/containers-labs$ cat /proc/382079/status | grep -E 'Seccomp|NoNewPrivs'
+    NoNewPrivs:     1
+    Seccomp:        2
+    Seccomp_filters:        1
+```
