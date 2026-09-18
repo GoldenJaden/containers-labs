@@ -473,3 +473,388 @@ bash-5.2$ exec ./lab1/api/api
     Seccomp:        2
     Seccomp_filters:        1
 ```
+
+# Сравним докер и наш скрипт
+
+Ну что, руками мы уже собрали почти контейнер. Теперь посмотрим насколько Docker делает то же самое, только без танцев с бубном.
+
+## Наш `mydocker.sh`
+
+Запускаем:
+
+```bash
+qerenny@containers:~/containers-labs$ ./lab1/mydocker.sh
+Running as unit: lab1-386940.scope; invocation ID: 668f04cb6afb48049c1eb44f998ee92d
+cgroup: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/lab1-386940.scope
+memory.max=33554432
+cpu.max=50000 100000
+pids.max=20
+cgroup:
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/lab1-386940.scope/api
+pid=1
+uid=0
+hostname=lab1-api
+2026/09/18 11:33:29 api listening on :8080
+
+api host pid: 387049
+health:
+sudo nsenter -t 387049 --net curl http://127.0.0.1:8080/health
+```
+
+Проверим, что он вообще жив:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo nsenter -t 387049 --net curl http://127.0.0.1:8080/health
+ok
+```
+
+Ну и права:
+
+```bash
+qerenny@containers:~/containers-labs$ grep -E '^(Cap|NoNewPrivs|Seccomp)' /proc/387049/status
+CapInh: 0000000000000000
+CapPrm: 0000000000000000
+CapEff: 0000000000000000
+CapBnd: 0000000000000000
+CapAmb: 0000000000000000
+NoNewPrivs:     1
+Seccomp:        2
+Seccomp_filters:        1
+```
+
+В общем capabilities нет, `no_new_privs` есть, seccomp тоже на месте.
+
+## А теперь Docker
+
+Запускаем тот же сервис примерно с теми же ограничениями:
+
+```bash
+qerenny@containers:~/containers-labs$ docker run --rm \
+  --name=lab1-api-docker \
+  --memory=32m \
+  --memory-swap=32m \
+  --cpus=0.5 \
+  --pids-limit=20 \
+  --cap-drop=ALL \
+  --security-opt=no-new-privileges \
+  --hostname=lab1-api \
+  --publish=8081:8080 \
+  --mount type=bind,source="$PWD/lab1/api/api",target=/api,readonly \
+  ubuntu:24.04 \
+  /api
+2026/09/18 11:45:45 api listening on :8080
+```
+
+Посмотрим PID контейнера:
+
+```bash
+qerenny@containers:~/containers-labs$ PID=$(sudo docker inspect --format '{{.State.Pid}}' lab1-api-docker)
+qerenny@containers:~/containers-labs$ echo "$PID"
+390939
+```
+
+Проверим hostname и `uname`:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-api-docker id
+uid=0(root) gid=0(root) groups=0(root)
+
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-api-docker hostname
+lab1-api
+
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-api-docker uname -a
+Linux lab1-api 6.8.0-139-generic #139-Ubuntu SMP PREEMPT_DYNAMIC Sat Aug 1 03:52:05 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+Права:
+
+```bash
+qerenny@containers:~/containers-labs$ grep -E '^(Cap|NoNewPrivs|Seccomp)' "/proc/$PID/status"
+CapInh: 0000000000000000
+CapPrm: 0000000000000000
+CapEff: 0000000000000000
+CapBnd: 0000000000000000
+CapAmb: 0000000000000000
+NoNewPrivs:     1
+Seccomp:        2
+Seccomp_filters:        1
+```
+
+Ну и cgroup:
+
+```bash
+qerenny@containers:~/containers-labs$ CG_PATH="/sys/fs/cgroup$(awk -F: '$1 == 0 {print $3}' "/proc/$PID/cgroup")"
+
+qerenny@containers:~/containers-labs$ cat "$CG_PATH/memory.max"
+33554432
+
+qerenny@containers:~/containers-labs$ cat "$CG_PATH/memory.swap.max"
+0
+
+qerenny@containers:~/containers-labs$ cat "$CG_PATH/cpu.max"
+50000 100000
+
+qerenny@containers:~/containers-labs$ cat "$CG_PATH/pids.max"
+20
+```
+
+То есть лимиты получились буквально те же.
+
+## Ну и в чем тогда разница?
+
+По базе всё совпало: namespaces, cgroups, capabilities, `no_new_privs`, seccomp и hostname.
+
+Но наш скрипт совсем минимальный.
+
+С сетью мы только сделали отдельный net namespace и подняли `lo`, поэтому до API приходится лезть через:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo nsenter -t 387049 --net curl http://127.0.0.1:8080/health
+ok
+```
+
+Docker же сам сделал сеть и пробросил:
+
+```text
+8081 -> 8080
+```
+
+Ещё у нас есть mount namespace, но отдельного rootfs мы не собирали. Docker же запускает процесс внутри файловой системы образа `ubuntu:24.04`.
+
+Seccomp тоже отличается: в нашем launcher мы специально запретили `uname`, а в Docker:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-api-docker uname -a
+Linux lab1-api 6.8.0-139-generic #139-Ubuntu SMP PREEMPT_DYNAMIC Sat Aug 1 03:52:05 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+Ну и Docker сверху сам занимается lifecycle, сетью, rootfs, пробросом портов и уборкой после `--rm`.
+
+В общем мы руками сделали и потратили время на то что Docker умеет собирать сам без нас за секунду.
+
+# образы
+
+
+
+## Сначала жирный вариант
+
+Для начала просто берём Go-образ, собираем бинарник прямо внутри него и там же оставляем.
+
+`lab1/api/Dockerfile.single`:
+
+```dockerfile
+FROM golang:1.22.12-bookworm
+
+WORKDIR /src
+
+COPY go.mod ./
+COPY . .
+
+RUN go build -o api .
+
+CMD ["/src/api"]
+```
+
+Чтобы случайно не протащить внутрь уже собранный на хосте бинарник:
+
+```text
+# .dockerignore
+api
+```
+
+Собираем и сразу смотрим что получилось:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker build \
+  -f lab1/api/Dockerfile.single \
+  -t lab1-api:single \
+  lab1/api
+[+] Building 35.9s (10/10) FINISHED
+
+qerenny@containers:~/containers-labs$ sudo docker image ls lab1-api:single
+IMAGE             ID             DISK USAGE   CONTENT SIZE
+lab1-api:single   78884d039461       1.31GB          319MB
+```
+
+Ну и получился слегка упитанный образ.
+
+Посмотрим откуда весь этот вес:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker history lab1-api:single
+IMAGE          CREATED BY                                      SIZE
+78884d039461   CMD ["/src/api"]                                0B
+<missing>      RUN /bin/sh -c go build -o api .                77.9MB
+<missing>      COPY . .                                        24.6kB
+<missing>      COPY go.mod ./                                  12.3kB
+<missing>      WORKDIR /src                                    8.19kB
+...
+<missing>      COPY /target/ /                                 265MB
+<missing>      RUN ... apt-get ...                             267MB
+<missing>      RUN ... apt-get ...                             194MB
+<missing>      RUN ... apt-get ...                             52.3MB
+<missing>      debian bookworm                                 133MB
+```
+
+Ну да, вместе с нашим маленьким `api` внутрь приехал весь Go toolchain и Debian.
+
+Проверяем что оно вообще живёт:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker run --rm \
+  --name lab1-api-single \
+  -p 8081:8080 \
+  lab1-api:single
+2026/09/18 12:18:35 api listening on :8080
+
+qerenny@containers:~/containers-labs$ curl http://127.0.0.1:8081/health
+ok
+```
+
+## А теперь без лишнего — multi-stage
+
+Соберём бинарник в одном stage, а в финальный образ положим только его.
+
+`lab1/api/Dockerfile.multi`:
+
+```dockerfile
+FROM golang:1.22.12-bookworm AS builder
+
+WORKDIR /src
+
+COPY go.mod ./
+COPY . .
+
+RUN CGO_ENABLED=0 go build -o api .
+
+FROM scratch
+
+COPY --from=builder /src/api /api
+
+ENTRYPOINT ["/api"]
+```
+
+Собираем и смотрим размер:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker build \
+  -f lab1/api/Dockerfile.multi \
+  -t lab1-api:multi \
+  lab1/api
+[+] Building 10.8s (11/11) FINISHED
+
+qerenny@containers:~/containers-labs$ sudo docker image ls lab1-api:multi
+IMAGE            ID             DISK USAGE   CONTENT SIZE
+lab1-api:multi   f55e6d1533e1       11.1MB         4.04MB
+```
+
+Было `1.31GB`, стало `11.1MB`. Ну тут без комментариев.
+
+История слоёв тоже внезапно стала очень короткой:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker history lab1-api:multi
+IMAGE          CREATED BY                      SIZE
+f55e6d1533e1   ENTRYPOINT ["/api"]             0B
+<missing>      COPY /src/api /api              7.02MB
+```
+
+То есть в финальном образе по сути только бинарник и настройка запуска.
+
+Проверяем:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker run --rm \
+  -p 8081:8080 \
+  lab1-api:multi
+2026/09/18 12:24:25 api listening on :8080
+```
+
+## А что там с кэшем
+
+Собираем тот же multi-stage ещё раз ничего не меняя:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker build \
+  -f lab1/api/Dockerfile.multi \
+  -t lab1-api:multi \
+  lab1/api
+[+] Building 0.7s (11/11) FINISHED
+ => CACHED [builder 2/5] WORKDIR /src
+ => CACHED [builder 3/5] COPY go.mod ./
+ => CACHED [builder 4/5] COPY . .
+ => CACHED [builder 5/5] RUN CGO_ENABLED=0 go build -o api .
+ => CACHED [stage-1 1/1] COPY --from=builder /src/api /api
+```
+
+То есть если входные данные слоя не менялись, Docker просто берёт его из cache и не выполняет заново.
+
+## Данные внутри контейнера — вещь временная
+
+Теперь проверим что будет с обычным файлом внутри контейнера.
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker run -d \
+  --name lab1-data \
+  lab1-api:single
+6d5f9a5c43104e4e1c4bd4ae6a0a90119c8fee71ee145bb7286606b87b3f2e75
+
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-data \
+  sh -c 'echo hello > /tmp/test.txt'
+
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-data \
+  cat /tmp/test.txt
+hello
+```
+
+Удаляем контейнер и создаём новый:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker rm -f lab1-data
+lab1-data
+
+qerenny@containers:~/containers-labs$ sudo docker run -d \
+  --name lab1-data \
+  lab1-api:single
+60f60814ca447755255e164cf1ae1c0e5be30678ed2a0946d1b1bf5492deb10b
+
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-data \
+  cat /tmp/test.txt
+cat: /tmp/test.txt: No such file or directory
+```
+
+То есть writable layer умер вместе со старым контейнером.
+
+## А теперь с volume
+
+Создаём volume, пишем туда файл, потом пересоздаём контейнер:
+
+```bash
+qerenny@containers:~/containers-labs$ sudo docker volume create lab1-data
+lab1-data
+
+qerenny@containers:~/containers-labs$ sudo docker run -d \
+  --name lab1-volume \
+  -v lab1-data:/data \
+  lab1-api:single
+905344e33bb0a84bf48dcec2adf6026d62a2c19e0d4a54c186c7c406991318dc
+
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-volume \
+  sh -c 'echo hello-volume > /data/test.txt'
+
+qerenny@containers:~/containers-labs$ sudo docker rm -f lab1-volume
+lab1-volume
+
+qerenny@containers:~/containers-labs$ sudo docker run -d \
+  --name lab1-volume \
+  -v lab1-data:/data \
+  lab1-api:single
+157ed08224a9b351f5545d1dbe31c031f175502bb048a514a5c44e1a4fd32981
+
+qerenny@containers:~/containers-labs$ sudo docker exec lab1-volume \
+  cat /data/test.txt
+hello-volume
+```
+
+
+
