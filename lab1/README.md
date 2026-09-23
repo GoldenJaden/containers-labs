@@ -3,6 +3,8 @@
 
 Навайбкодили сервис
 
+Исходник сервиса: [`src/app.go`](./src/app.go).
+
 ## part 1
 
 Проверим сервис
@@ -10,7 +12,7 @@
 Запускаем приложение. Оно начинает слушать на порту 8080.
 Проверим его здоровье и с помощью команды ps получим pid (16888)
 
-![alt text](image.png)
+![Запуск сервиса, проверка health endpoint и поиск PID](./images/00-service-health.png)
 
 
 ## part 2
@@ -25,7 +27,7 @@
 
 Остальные флаги означают создание разных видов неймспейсов (соответствуют первой букве названия неймспейса, при этом U = user, -u = uts)
 
-![alt text](image-1.png)
+![Запуск сервиса в отдельных namespaces](./images/01-unshare-network-isolation.png)
 
 найдем его айди и с  помощью команды `nsenter`,  которая позволяет запускать процессы в неймспейсах других процессов, запустим `bash`.
 
@@ -39,11 +41,11 @@
 - IPC - изолируются IPC-объекты вроде shared memory, semaphores и message queues.
 
 
-![alt text](image-3.png)
+![Проверка PID, порта и hostname через nsenter](./images/02-nsenter-inspection.png)
 
 Проверим работу нашего сервиса внутри неймспейсов. Потратим 15 минут на то, чтобы понять, что loopback интерфейс в новом неймспейсе ВЫКЛЮЧЕН.  влючим его и всё работает
 
-![alt text](image-2.png)
+![Включение loopback-интерфейса внутри network namespace](./images/03-loopback-interface.png)
 
 ## Part 3 - cgroups
 **Cgroups** - это механизм ядра Linux, позволяющий ограничивать процессы по ресурсам: CPU, Memory, IO, Devices, PID.
@@ -73,9 +75,10 @@
 
 Проверим работу ограничения памяти (у нас оно установлено в 100 мб).
 
+![Рост потребления памяти процесса до лимита cgroup](./images/04-cgroup-memory-pressure.png)
 
 Наш процесс был прибит. В `/sys/fs/cgroup/lab1/memory.events` увидим что счетчик oom_kill повысился на 1.
-![alt text](image-5.png)
+![OOM kill и счётчики memory.events](./images/05-cgroup-oom-kill.png)
 
 Дальше проверим работу ограничения по CPU.
 
@@ -83,14 +86,14 @@
 
 Видим что процессы тротлятся и CPU съелся на 50%, вместо 100% (на этой виртуалке у меня всего одно ядро)
 
-![alt text](image-6.png)
+![CPU throttling в cpu.stat](./images/06-cgroup-cpu-throttling.png)
 
 Проверим ограничение по pid. Для этого создадим процесс bash в неймспейсах изолированного app, добавим этот баш в ту же cgroups и запустим форк-бомбу с помощью команды `stress-ng --fork`.
 Видим, что я попросил сделать 20 форков но появилось всего несколько (4 штуки) при ограничении в 10 pids. pids так же считает kernel tasks, и наше приложение app работает в 5 потоков. 5 + 4 + 1 (bash) = 10.
 
-![alt text](image-7.png)
+![Ограничение количества процессов через pids.max](./images/07-cgroup-pids-limit.png)
 
-![alt text](image-8.png)
+![Потоки приложения и процессы внутри PID namespace](./images/08-cgroup-process-tree.png)
 
 ### Послесловие
 
@@ -110,17 +113,17 @@
 
 С помощью команды `unshare -pmnuiU --fork --mount-proc --map-root-user capsh --drop=all --caps="" -- -c './app'` запустим процесс, убрав все привилегии.
 
-![alt text](image-9.png)
+![Запуск приложения без capabilities](./images/09-capabilities-dropped.png)
 
 Зайдя в "контейнер", в `/proc/1/status` находим индикаторы Capabilities и видим что они нулевые. Значит ограничение сработало.
 
-![alt text](image-10.png)
+![Нулевые наборы capabilities в status процесса](./images/10-capabilities-status.png)
 
 Для проверки попробуем запустить наше приложение на привилегированном порту (< 1024).
 
 Получаем ошибку: не хватает прав, чтобы запустить приложение на 14 порту. При этом без ограничения capabilities, так как внутри неймспейсов наш процесс - root, все capabilities ему доступны и он может спокойно слушать порт 14.
 
-![alt text](image-11.png)
+![Проверка доступа к привилегированному порту](./images/11-privileged-port.png)
 
 ### Seccomp
 
@@ -136,6 +139,8 @@
 
 Готовой (как мы любим) линуксовой утилиты я не нашел, поэтому пришлось вайбкодить свою, на сях. Я (мой агент) назвал её `seccomp-run`. Если ты - другой студент и читаешь мою лабу, то можешь не убиваться в поисках лёгкого способа настройки seccomp для процессов в Linux, ведь его НЕТ (если есть - пишите в ЛС), а взять готовый бинарь или код из папки с материалами к лабе. Это мой подарок миру.
 
+Материалы: [`seccomp-run.c`](./misc/seccomp-run.c), [готовый `seccomp-run`](./misc/seccomp-run) и [профиль `seccomp.json`](./misc/seccomp.json).
+
 Build:
 ```
 cc -O2 -Wall -Wextra \
@@ -148,15 +153,15 @@ cc -O2 -Wall -Wextra \
 
 Для теста добавим в приложение ручку, делающую syscall "uname" и заблокируем этот вызов.
 
-![alt text](image-12.png)
+![Обработчик для проверки syscall uname](./images/12-uname-handler.png)
 
 При запуске без ограничений всё работает:
 
-![alt text](image-13.png)
+![Вызов uname без seccomp-фильтра](./images/13-uname-without-seccomp.png)
 
 Запустим в процесс с ограничением на системный вызов "uname". Вызов блокируется.
 
-![alt text](image-14.png)
+![Блокировка uname с помощью seccomp](./images/14-uname-blocked-seccomp.png)
 
 ## Part 5 - Assemble your Docker
 
@@ -164,7 +169,9 @@ cc -O2 -Wall -Wextra \
 
 Для работы скрипта рядом с директорией запуска должен лежать профиль seccomp.json. В данном случае мы положили тот, что используется в докере.
 
-![alt text](image-19.png)
+Файлы: [`misc/mydocker.sh`](./misc/mydocker.sh) и [`misc/seccomp.json`](./misc/seccomp.json).
+
+![Запуск приложения через mydocker.sh](./images/19-mydocker-script.png)
 
 Наш скрипт и докер используют те же базовые механизмы Линукса: namespace, cgroup, capabilities, seccomp.
 
@@ -177,24 +184,26 @@ cc -O2 -Wall -Wextra \
 
 Создадим 2 Dockerfile. Один будет базироваться на базовом слое go, второй с помощью multistage соберем и нужное для runtime запустим в scratch.
 
-![alt text](image-15.png)
+Dockerfile'ы: [`src/Dockerfile.minimal`](./src/Dockerfile.minimal) и [`src/Dockerfile.multistage`](./src/Dockerfile.multistage).
+
+![Сравнение размеров образов](./images/15-image-size-comparison.png)
 
 Разница в размерах образов - в 20 раз!
 
 Финальный образ первого докерфайла содержит 8 слоев, а multistage - один слой.
 
-![alt text](image-16.png)
+![Сравнение количества слоёв образов](./images/16-image-layer-comparison.png)
 
 После запуска контейнера, изменения, вносимые в файловую систему внутри него, сохраняются в слой "upperdir", который удаляется вместе с удалением контейнера. 
 Проверим:
 
-![alt text](image-17.png)
+![Удаление writable layer вместе с контейнером](./images/17-container-writable-layer.png)
 
 Действительно, созданный файл не сохранился.
 
 Для сохранения изменений, можно использовать volume - персистентное хранилище, которое можно смонтировать в контейнер.
 
-![alt text](image-18.png)
+![Сохранение данных в Docker volume](./images/18-volume-persistence.png)
 
 ## Part 7 — When a container isn't enough
 
@@ -204,7 +213,6 @@ gVisor - рантайм среда для контейнеров. Этот ин�
 
 После установки пакета, в докер появился выбор runtime "runsc" (вместо стандартного runc).
 
-![alt text](image-20.png)
+![Запуск контейнера через runtime runsc](./images/20-gvisor-runsc.png)
 
 ## Part 8 — Monitoring
-
