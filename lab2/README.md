@@ -1,45 +1,33 @@
-# Лабораторная работа № 2: наблюдаемость приложения в Kubernetes
-
-В работе приложение упаковывается в Helm chart и разворачивается через Argo CD. Затем для него последовательно настраиваются метрики, логи, трассировки и алерты.
-
-## Содержание
-
-- [Part 0 — Сервис и развёртывание](#part-0--сервис-и-развёртывание)
-- [Part 1 — Метрики: Prometheus и Grafana](#part-1--метрики-prometheus-и-grafana)
-- [Part 2 — Логи: Loki, Grafana Alloy и Grafana](#part-2--логи-loki-grafana-alloy-и-grafana)
-- [Part 3 — Трассировки: OpenTelemetry и Jaeger](#part-3--трассировки-opentelemetry-и-jaeger)
-- [Part 4 — Алерты: Alertmanager и Karma](#part-4--алерты-alertmanager-и-karma)
-
-## Part 0 — Сервис и развёртывание
+## Part 0 — Your service
 
 ### Предисловие
 
-В качестве окружения для развёртывания буду использовать уже имеющийся у меня двухнодовый кластер Kubernetes, который содержит (хвастаюсь):
+В качестве окружения для развертывания буду использовать уже имеющийся у меня двухнодовый кластер k8s, который содержит (хвастаюсь):
 
-- Prometheus и Grafana (их конфигурацию я опишу в следующей главе);
-- MetalLB для получения кластером внешнего IP-адреса;
-- ExternalDNS для регистрации Ingress-доменов в DNS;
-- cert-manager для работы HTTPS (CA самоподписной и доверен в системе);
-- ingress-nginx controller (да, устарел, но терпим) для получения трафика в кластер;
-- Argo CD для деплоя;
-- Proxmox CSI — Container Storage Interface, позволяющий выделять PV приложениям кластера;
-- Forgejo для хранения Git-репозиториев с манифестами Argo CD.
+- развернутый прометеус с графаной (Их конфигурацию я опишу в следующей главе)
+- metallb для получения кластером внешнего айпишника
+- external-dns для регистрации ingress доменов в DNS
+- cert-manager для работы https (CA самоподписной и доверен в системе)
+- ingress nginx controller (да, устарел, но терпим) для получения трафика в кластер
+- argocd для деплоя
+- proxmox-csi - container storage interface, позволяющий отрезать PV для использования в прикладах кластера
+- forgejo для хранения git репозиториев (там храним манифесты для применения argo)
 
 К моему удивлению, всё это более менее стабильно работает и даже почти не отваливается.
 
-Argo CD позволяет устанавливать Helm charts, однако не создаёт обычный `Helm release`: в Argo CD он заменён абстракцией `Application`. Argo CD самостоятельно рендерит манифесты из шаблонов и применяет их.
+ArgoCD позволяет устанавливать хельм чарты, однако сам чарт он не устанавливает, так как абстракция `helm release` в арго заменена абстракцией `application`, поэтому он сам рендерит манифесты из шаблонов и применяет их.
 
 ### Подготовка
 
-Исходный код приложения находится в [`src/app.py`](src/app.py), а инструкция сборки — в [`Dockerfile`](Dockerfile). Для начала соберём образ и отправим его в локальный registry Forgejo.
+Для начала соберём образ и запушим его в локальный registry (у меня используется `forgejo`). Файлы сервиса находятся в [`Dockerfile`](Dockerfile) и каталоге [`src`](src/).
 
 Работает он у меня без шифрования, поэтому в файл `/etc/docker/daemon.json` добавим следующие строки:
 
 ```json
-{
-  "insecure-registries": [
-    "192.168.0.242:3000"
-  ]
+{ 
+"insecure-registries":[
+                "192.168.0.242:3000"
+        ] 
 }
 ```
 
@@ -50,17 +38,16 @@ Argo CD позволяет устанавливать Helm charts, однако 
 
 ### Сервис
 
-Создадим для сервиса [Helm chart](helm/lab2-app/) командой `helm create lab2-app`.
+Напишем для него [Helm Chart](helm/lab2-app/): для начала создадим шаблон чарта командой `helm create lab2-app`.
 
 Из коробки создаются шаблоны для всех нужных нам ресурсов:
-
 - Деплоймент
 - Сервис
 - Ингресс (не обязательно, но я заиспользую)
 
 Нам остаётся лишь настроить нужные values.
 
-Включим Ingress на домене `lab-2-app.homelab.internal` в [`values.yaml`](helm/lab2-app/values.yaml):
+Включим ingress на домен `lab-1-app.homelab.internal` в [`values.yaml`](helm/lab2-app/values.yaml):
 
 ```yaml
 ingress:
@@ -100,7 +87,7 @@ service:
   port: 8080
 ```
 
-Chart готов. Соберём и отправим его в registry.
+Чарт готов. Соберём и запушим его в registry.
 
 ```bash
 helm package .
@@ -110,8 +97,8 @@ curl --user $user:$password -X POST --upload-file ./lab2-app-1.0.0.tgz http://19
 Проверим что чарт присутствует в удаленном репозитории:
 
 ```bash
-helm repo add --username $user --password $password forgejo \
-  http://192.168.0.242:3000/api/packages/gjaden/helm
+helm repo add --username $user --password $password forgejo http://192.168.0.242:3000/api/packages/gjaden/he
+lm
 "forgejo" has been added to your repositories
 
 helm repo update
@@ -125,8 +112,8 @@ Hang tight while we grab the latest from your chart repositories...
 ...Successfully got an update from the "stirling-pdf" chart repository
 Update Complete. ⎈Happy Helming!⎈
 
-helm search repo forgejo
-NAME                    CHART VERSION   APP VERSION     DESCRIPTION
+helm search repo forgejo 
+NAME                    CHART VERSION   APP VERSION     DESCRIPTION                
 forgejo/lab2-app        1.0.0           1.0.0           A Helm chart for Kubernetes
 ```
 
@@ -187,7 +174,7 @@ spec:
 
 ![Файлы Argo CD Application для приложения](docs/images/argocd-application-files.png)
 
-[`app.yaml`](argo/study/helm/lab-2-app/app.yaml) — описание chart:
+[`app.yaml`](argo/study/helm/lab-2-app/app.yaml), описание чарта:
 
 ```yaml
 name: lab-2-app
@@ -199,7 +186,7 @@ namespace: lab-2
 releaseName: lab2-app
 ```
 
-[`values.yaml`](argo/study/helm/lab-2-app/values.yaml) — дополнительные values с адресом образа:
+[`values.yaml`](argo/study/helm/lab-2-app/values.yaml), дополнительные values (тут пропишем путь но образа):
 
 ```yaml
 image:
@@ -219,13 +206,13 @@ image:
 ![Ответ health endpoint приложения через HTTPS](docs/images/application-health-endpoint.png)
 
 
-## Part 1 — Метрики: Prometheus и Grafana
+## Part 1 — Metrics (Prometheus + Grafana)
 
-Prometheus и Grafana развёрнуты в кластере с помощью chart `kube-prometheus-stack`. Его параметры находятся в [`argo/kube-prometheus-stack/values.yaml`](argo/kube-prometheus-stack/values.yaml).
+Аналогичным приложению образом у меня в кластере развернут Prometheus + Grafana, при помощи чарта `kube-prometheus-stack` (его values лежат в [`argo/infrastructure/helm/kube-prometheus-stack/values.yaml`](argo/infrastructure/helm/kube-prometheus-stack/values.yaml)).
 
 Для того, чтобы прометеус собирал метрики с нашего приложения, нужно задеплоить ресурс `servicemonitor` или `podmonitor`, чтобы указать прометеусу, откуда и как собирать метрики.
 
-Добавим в chart шаблон [`ServiceMonitor`](helm/lab2-app/templates/servicemonitor.yaml). В селекторе укажем label, по которому Prometheus найдёт Service приложения, а путь до метрик и интервал сбора параметризуем через values.
+Добавим в чарт ресурс [`servicemonitor`](helm/lab2-app/templates/servicemonitor.yaml). В селекторе укажем лейбл, по которому прометеус найдет сервис нашего приложения. Параметризуем путь до метрик и интервал их сбора.
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -253,11 +240,11 @@ servicemonitor:
   path: /metrics
 ```
 
-Поднимем минорную версию chart, отправим пакет в registry и обновим версию в репозитории Argo CD:
+Апнем версию чарта по минору, запушим в регистри, поднимем версию в репо и видим успешный результат:
 
 ![ServiceMonitor приложения в Argo CD](docs/images/argocd-servicemonitor-synced.png)
 
-Чтобы Prometheus обнаруживал `ServiceMonitor` и `PodMonitor` независимо от release-label и namespace, добавим в `prometheus.prometheusSpec`:
+Дополнительно в values Прома в prometheus.prometheusSpec добавим
 
 ```yaml
 serviceMonitorSelectorNilUsesHelmValues: false
@@ -266,19 +253,21 @@ serviceMonitorNamespaceSelector: {}
 podMonitorSelectorNilUsesHelmValues: false
 ```
 
-В логах приложения видно, что Prometheus периодически опрашивает endpoint `/metrics`:
+Для того, чтобы Пром подтягивал любые servicemonitor и podmonitor, а не только с указанными лейблами и в указанных неймспейсах.
+
+В логах приложения видим, что прометеус периодически опрашивает ручку /metrics. Значит всё работает.
 
 ```log
 {"timestamp":"2026-09-26T10:17:41+0000","level":"INFO","message":"request completed","method":"GET","route":"/metrics","status":200,"duration_ms":0.544,"trace_id":"4a894f400aaed3744285f25527848460","span_id":"0e58caa9323d664f"}
 {"timestamp":"2026-09-26T10:17:42+0000","level":"INFO","message":"request completed","method":"GET","route":"/metrics","status":200,"duration_ms":0.481,"trace_id":"b514152cffa6a263ed9c4abc9c47a35c","span_id":"b47cbf34aae5fd39"}
-{"timestamp":"2026-09-26T10:17:42+0000","level":"INFO","message":"request completed","method":"GET","route":"/metrics","status":200,"duration_ms":1.417,"trace_id":"412d4626bf57e0f69f0981e3a6b06683","span_id":"5ecf83b7a0b6abbe"}
+{"timestamp":"2026-09-26T10:17:42+0000","level":"INFO","message":"request completed","method":"GET","route":"/metrics","status":200,"duration_ms":1.417,"trace_id":"412d4626bf57e0f69f0981e3a6b06683","span_id":"5ecf83b7a0b6abbe"} 
 ```
 
-В интерфейсе Prometheus target находится в состоянии `healthy`:
+В Проме видим наш таргет healthy
 
 ![Healthy target приложения в Prometheus](docs/images/prometheus-target-healthy.png)
 
-Метрики приложения доступны для запросов:
+И метрики появились
 
 ![Метрики приложения в Prometheus](docs/images/prometheus-application-metrics.png)
 
@@ -286,13 +275,13 @@ podMonitorSelectorNilUsesHelmValues: false
 
 ![RED-дашборд приложения в Grafana](docs/images/grafana-red-dashboard.png)
 
-Я сделал две секции: `Overview` с общими значениями и `Detalization` с метриками по маршрутам, чтобы при обнаружении аномалии можно было перейти к деталям.
+Я сделал 2 секции: overview с общими значениями и detalization (метрики by route), чтобы можно было углубиться, если в overview есть аномалии.
 
 Из интересного: в promql для получения range vector я использовал не хардкод значение (e.g. `[5m]`), а специальную переменную `$__rate_interval`, которая автоматически вычисляет оптимальный интервал на основе данных в зависимости от scrape interval и выбранного диапазона в Графане.
 
-## Part 2 — Логи: Loki, Grafana Alloy и Grafana
+## Part 2 — Logs (Loki + Grafana)
 
-### Хранилище логов — Loki
+### Хранилище метрик - Loki
 
 Первым делом задеплоим Loki.
 
@@ -307,12 +296,8 @@ singleBinary:
     size: 10Gi
 
 loki:
-  commonConfig:
-    replication_factor: 1
-
   storage:
     type: filesystem
-
   schemaConfig:
     configs:
       - from: "2026-01-01"
@@ -328,12 +313,6 @@ loki:
   compactor:
     retention_enabled: true
     delete_request_store: filesystem
-
-chunksCache:
-  enabled: false
-
-resultsCache:
-  enabled: false
 
 backend:
   replicas: 0
@@ -356,16 +335,15 @@ gateway:
       - host: logs.homelab.internal
         paths:
           - path: /
-            pathType: Prefix
     annotations:
       cert-manager.io/cluster-issuer: homelab-ca
 ```
 
-Я выбрал самый лёгкий режим работы — `Monolithic`. Он рассчитан на небольшие инсталляции и подходит для этой лабораторной работы. Включаем Ingress, а в качестве хранилища используем локальную файловую систему на PVC вместо объектного S3. Retention задаём равным 10 дням и включаем compactor — компонент, который обслуживает индекс и удаляет данные после истечения retention.
+Я выбрал самый легкий режим работы: "Monolithic". Он рекомендуется при рейте до 10 гб логов в день и должен нам подойти. Также как обычно включаем ingress, настраиваем тип хранилища на локальную fs вместо стандартного удаленного S3. Ставим retention (срок хранения логов) на 10 дней и включаем compactor - компонент, периодически оптимизирующий индексы и удаляющий старые данные по истечение retention.
 
-В `loki.schemaConfig` задаём TSDB как формат индекса и суточный период его разбиения. Поскольку Loki работает в одном экземпляре, `replication_factor` также должен быть равен `1`.
+В блоке loki.schemaConfig указываем что сейчас данные об индексах нужно хранить в формате tsdb и указываем служебные данные, такие как период разбиения индекса.
 
-На моменте деплоя в кластере закончились ресурсы, поэтому отдельные Memcached-компоненты `chunksCache` и `resultsCache` отключены. Они ускоряют повторное чтение, но не нужны для корректного хранения логов:
+На моменте деплоя в кластере кончились ресы, поэтому с помощью values вырубаю установку отдельных компонентов кеширования запросов chunksCache и resultsCache:
 
 ```yaml
 chunksCache:
@@ -374,11 +352,11 @@ resultsCache:
   enabled: false
 ```
 
-В итоге deployment прошёл успешно.
+В итоге деплой прошёл успешно
 
-### Сборщик логов — Grafana Alloy
+### Сборщик логов - Grafana Alloy
 
-Настроим Grafana Alloy как агент, собирающий логи Pod'ов и отправляющий их в Loki. Alloy может читать их через Kubernetes API, поэтому для этой лабораторной работы не требуется монтировать локальные каталоги нод. Запустим один экземпляр Alloy как обычный Deployment, а не DaemonSet.
+Настроим values для деплоя Grafana Alloy как агента, собирающего логи с подов и отсылающего их в Loki. Собирать логи он может через Kubernetes API, а локальные логи с нод я получать пока не хочу, да и кластер вот-вот рванет по ресурсам. Поэтому я буду запускать Alloy не в стандартном режиме Daemonset а в виде обыкновенного Deployment в размере одной реплики.
 
 ```yaml
 controller:
@@ -386,19 +364,23 @@ controller:
   replicas: 1
 ```
 
-Конфигурацию агента помещаем в `alloy.configMap.content`, ориентируясь на [официальную документацию Grafana Alloy](https://grafana.com/docs/alloy/latest/collect/logs-in-kubernetes/).
+Далее необходимо собрать конфиг агента и положить его в `alloy.configMap.content`. Воспользуемся [официальным гайдом](https://grafana.com/docs/alloy/latest/collect/logs-in-kubernetes/).
 
-Сначала настраиваем обнаружение всех Pod'ов кластера. Ограничение по `spec.nodeName` здесь не используется: оно нужно при запуске Alloy как DaemonSet, а единственный Deployment должен видеть Pod'ы со всех нод.
+Первым делом настраиваем компонент discovery для обнаружения pod'ов в кубе. В селекторе прописано интересное правило, условно: spec.nodeName = HOSTNAME. Это позволяет аллою, запущенному в режиме демонсета на каждой ноде, выбирать поды только с ноды, на которой он сейчас запущен, и тем самым избежать дублирования логов.
 
-```alloy
+```yaml
 discovery.kubernetes "pod" {
   role = "pod"
+  selectors {
+    role = "pod"
+    field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
+  }
 }
 ```
 
-Далее добавляем понятные labels: например, имя Pod'а помещаем в label `pod`. В качестве targets используется экспорт предыдущего компонента — `discovery.kubernetes.pod.targets`.
+Далее делаем крутую череду релейблов под дабстеп (пример: имя пода кладем в лейбл "pod"). Заметьте, что в качестве таргетов мы указываем результат (в терминологии alloy вроде бы `export`) предыдущего компонента: `targets = discovery.kubernetes.pod.targets`.
 
-```alloy
+```yaml
 discovery.relabel "pod_logs" {
   targets = discovery.kubernetes.pod.targets
 
@@ -416,22 +398,22 @@ discovery.relabel "pod_logs" {
     target_label = "pod"
   }
 
-  // Остальные правила формируют labels container, app, job и т. д.
+  И ТАК ДАЛЕЕ
   ...
 ```
 
 Следующим шагом тянем логи из подов и отправляем в ресивер следующего компонента.
 
-```alloy
+```yaml
 loki.source.kubernetes "pod_logs" {
   targets    = discovery.relabel.pod_logs.output
   forward_to = [loki.process.pod_logs.receiver]
 }
 ```
 
-Добавляем статический label с названием кластера и передаём поток в `loki.write.grafana_loki`.
+Клеим статический лейбл с названием кластера и отправляем в `loki.write.grafana_loki`.
 
-```alloy
+```yaml
 loki.process "pod_logs" {
   stage.static_labels {
       values = {
@@ -445,7 +427,7 @@ loki.process "pod_logs" {
 
 И наконец гоним логи в наш инстанс Loki:
 
-```alloy
+```yaml
 loki.write "grafana_loki" {
   endpoint {
     url = "http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push"
@@ -454,9 +436,9 @@ loki.write "grafana_loki" {
 }
 ```
 
-Также настроим сбор Kubernetes Events:
+Также настроим отправку логов о ивентах кластера:
 
-```alloy
+```yaml
 loki.source.kubernetes_events "cluster_events" {
   job_name   = "integrations/kubernetes/eventhandler"
   log_format = "logfmt"
@@ -465,6 +447,8 @@ loki.source.kubernetes_events "cluster_events" {
   ]
 }
 
+// loki.process receives log entries from other loki components, applies one or more processing stages,
+// and forwards the results to the list of receivers in the component's arguments.
 loki.process "cluster_events" {
   forward_to = [loki.write.grafana_loki.receiver]
 
@@ -482,14 +466,24 @@ loki.process "cluster_events" {
 }
 ```
 
-Деплоим. При скачивании образа с Docker Hub получаем сетевой таймаут до CloudFront:
-
-```text
-Failed to pull image "docker.io/grafana/alloy:v1.20.0":
-failed to pull and unpack image: net/http: TLS handshake timeout
+Деплоим. Но что-то произошло и до docker.io ловим таймаут при пулле образа 🥰:
+```
+Failed to pull image "docker.io/grafana/alloy:v1.20.0": failed to pull and unpack image
+  "docker.io/grafana/alloy:v1.20.0": failed to copy: httpReadSeeker: failed open: failed to do request: Get
+  "https://produ │
+  │
+  ction.cloudfront.docker.com/registry-v2/docker/registry/v2/blobs/sha256/05/0589767014b1aedf0cafcf81f0f6abcb97069df2
+  bb0271b7c74e3fe90fa43e0d/data?Expires=1790457985&Signature=MKwas5CztWntODKm42zdidhgehbo0oY2uJUGafN8A3YOdcZDUYnPWSKI
+  eLpxKfqpYJ7MvBh~48LIvzz-~gAbzUjs7yEs4ebn
+  │
+  │ -ta48lTFgjXRMn7h4ZxW7EOS3vm80qjLz-
+  D0ULQwnJEma0JSaw7a8JujYOScJR0zw8YoRrmjaJQYCqT4HutAUH~E69dIacS3uxZV45V1FhjhkKWalL6QSUOWwC8gJitcQ7sysJ55XJyh75ytxzI5n
+  9wU7ZxDj-BkADQgDD2cDR9L4jCySO9QoZFvsJHZYQyVu7g3voFjf3KFl4g6vTJMx6q0cpvCKbS4FH~sCptTN7SrI7hZxQyesA__&Key-Pair-
+  Id=K2C9XPB6F │
+  │ LAKUF": net/http: TLS handshake timeout
 ```
 
-Скачиваем образ на машине с VPN, импортируем его в `containerd` на нодах, после чего Pod'ы успешно запускаются.
+Терпим, руками качаем образ на машине с квн и закидываем на все ноды. Поды успешно поднялись.
 
 Надеваем кепку с вертушкой, берем комически большой леденец и идем в Графану проверять работу нашего поделия. Добавляем датасорс, смотрящий на loki gateway service. В Headers добавляем http header `X-Scope-OrgID` с указанием тенанта в Loki (`homelab`).
 
@@ -499,7 +493,7 @@ NO DATA
 
 ![Пустой запрос Loki в Grafana Explore](docs/images/grafana-loki-empty-query.png)
 
-В логах Alloy видим ответы HTTP 500: Loki не хватает реплик. Так как Monolithic Loki запущен в одном экземпляре, задаём:
+Идём смотреть логи. В логах видим пятисотки в Локи и Локи жалуется на то, что ему не хватает реплик. Так как Локи в целях экономии ресурсов у меня запущен в 1 реплике, нужно также задать:
 
 ```yaml
 loki:
@@ -509,11 +503,11 @@ loki:
 
 Чтобы он работал без репликации.
 
-После исправления выясняется и более простая причина `No data`: в Explore не был задан query.
+Запушив я понял, что не мог увидеть логи как минимум потому, что ничего не вписал в query)
 
-Воспользуемся разделом Grafana `Drilldown → Logs`, который строит LogQL-запросы автоматически.
+В этот раз воспользуемся вкладкой графаны "Drilldown" -> Logs, которая сама строит LogQL запросы.
 
-Теперь сервисы и их логи видны:
+В этот раз видим логи. Ура
 
 ![Сервисы в Grafana Logs Drilldown](docs/images/grafana-logs-drilldown-services.png)
 
@@ -525,6 +519,6 @@ loki:
 
 
 
-## Part 3 — Трассировки: OpenTelemetry и Jaeger
+## Part 3 — Traces (OpenTelemetry + Jaeger)
 
-## Part 4 — Алерты: Alertmanager и Karma
+## Part 4 — Alerts (Alertmanager + Karma)
