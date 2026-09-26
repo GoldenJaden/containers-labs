@@ -1,0 +1,9 @@
+name: loki
+chart:
+  repoURL: oci://ghcr.io/grafana-community/helm-charts/loki
+  version: 18.13.5
+  name: loki
+namespace: monitoring
+releaseName: loki
+
+serverSideApply: true

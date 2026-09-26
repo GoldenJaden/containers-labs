@@ -1,0 +1,9 @@
+name: grafana-alloy
+chart:
+  repoURL: https://grafana.github.io/helm-charts
+  version: 1.13.0
+  name: alloy
+namespace: monitoring
+releaseName: grafana-alloy
+
+serverSideApply: true

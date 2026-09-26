@@ -1,0 +1,9 @@
+name: kube-prometheus-stack
+chart:
+  repoURL: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
+  version: 81.5.0
+  name: kube-prometheus-stack
+namespace: monitoring
+releaseName: kube-prometheus-stack
+
+serverSideApply: true
