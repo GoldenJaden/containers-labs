@@ -47,8 +47,6 @@ Argo CD позволяет устанавливать Helm charts, однако 
 
 ![Сборка и отправка Docker-образа в Forgejo Registry](docs/images/container-build-and-push.png)
 
-*Сборка и публикация образа приложения.*
-
 
 ### Сервис
 
@@ -185,13 +183,9 @@ spec:
 
 ![Задача на перевод Forgejo и Registry на HTTPS](docs/images/https-technical-debt-task.png)
 
-*Технический долг по переводу Forgejo и Registry на HTTPS.*
-
 В репозитории, куда смотрит ArgoCD, создаём пару файликов:
 
 ![Файлы Argo CD Application для приложения](docs/images/argocd-application-files.png)
-
-*Описание приложения и его дополнительные values в Git-репозитории Argo CD.*
 
 [`app.yaml`](argo/study/helm/lab-2-app/app.yaml) — описание chart:
 
@@ -220,13 +214,9 @@ image:
 
 ![Успешно синхронизированное приложение в Argo CD](docs/images/argocd-application-synced.png)
 
-*Ресурсы приложения успешно синхронизированы Argo CD.*
-
 И даже доступно через ingress-controller по хттпс:
 
 ![Ответ health endpoint приложения через HTTPS](docs/images/application-health-endpoint.png)
-
-*Проверка `/health` через HTTPS и ingress-nginx.*
 
 
 ## Part 1 — Метрики: Prometheus и Grafana
@@ -267,8 +257,6 @@ servicemonitor:
 
 ![ServiceMonitor приложения в Argo CD](docs/images/argocd-servicemonitor-synced.png)
 
-*Argo CD успешно создал `ServiceMonitor` приложения.*
-
 Чтобы Prometheus обнаруживал `ServiceMonitor` и `PodMonitor` независимо от release-label и namespace, добавим в `prometheus.prometheusSpec`:
 
 ```yaml
@@ -297,8 +285,6 @@ podMonitorSelectorNilUsesHelmValues: false
 На основе метрик построил простой RED (Rate, Error, Duration) дашбордик, который выглядит так:
 
 ![RED-дашборд приложения в Grafana](docs/images/grafana-red-dashboard.png)
-
-*RED-дашборд: частота запросов, ошибки и время ответа.*
 
 Я сделал две секции: `Overview` с общими значениями и `Detalization` с метриками по маршрутам, чтобы при обнаружении аномалии можно было перейти к деталям.
 
@@ -509,13 +495,9 @@ failed to pull and unpack image: net/http: TLS handshake timeout
 
 ![Настройка Loki datasource в Grafana](docs/images/grafana-loki-datasource.png)
 
-*Grafana обращается к внутреннему Service `loki-gateway` и передаёт tenant в `X-Scope-OrgID`.*
-
 NO DATA
 
 ![Пустой запрос Loki в Grafana Explore](docs/images/grafana-loki-empty-query.png)
-
-*Пустой запрос в Explore закономерно не возвращает данные.*
 
 В логах Alloy видим ответы HTTP 500: Loki не хватает реплик. Так как Monolithic Loki запущен в одном экземпляре, задаём:
 
@@ -536,8 +518,6 @@ loki:
 ![Сервисы в Grafana Logs Drilldown](docs/images/grafana-logs-drilldown-services.png)
 
 ![Labels и fields в Grafana Logs Drilldown](docs/images/grafana-logs-drilldown-details.png)
-
-*Детализация потока по indexed labels и извлечённым fields.*
 
 Как ощущается фильтровать логи в интерфейсе новой тулы:
 
