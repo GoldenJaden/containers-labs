@@ -21,12 +21,17 @@ from prometheus_client import CollectorRegistry, Counter, Histogram, generate_la
 
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
+        span_context = trace.get_current_span().get_span_context()
         payload = {
             "timestamp": self.formatTime(record, "%Y-%m-%dT%H:%M:%S%z"),
             "level": record.levelname,
             "message": record.getMessage(),
+            # Keep these fields on every application log entry. Outside a trace
+            # OpenTelemetry formats the invalid context as all zeroes.
+            "trace_id": trace.format_trace_id(span_context.trace_id),
+            "span_id": trace.format_span_id(span_context.span_id),
         }
-        for field in ("method", "route", "status", "duration_ms", "trace_id", "span_id"):
+        for field in ("method", "route", "status", "duration_ms"):
             if hasattr(record, field):
                 payload[field] = getattr(record, field)
         return json.dumps(payload, separators=(",", ":"))
@@ -99,16 +104,14 @@ async def observe(request: Request, call_next):
     if response.status_code >= 500:
         errors_total.labels(request.method, route, status).inc()
 
-    span_context = trace.get_current_span().get_span_context()
-    logger.info(
+    log_request = logger.error if response.status_code >= 500 else logger.info
+    log_request(
         "request completed",
         extra={
             "method": request.method,
             "route": route,
             "status": response.status_code,
             "duration_ms": round(duration * 1000, 3),
-            "trace_id": trace.format_trace_id(span_context.trace_id),
-            "span_id": trace.format_span_id(span_context.span_id),
         },
     )
     return response

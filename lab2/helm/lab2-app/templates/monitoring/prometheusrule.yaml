@@ -1,0 +1,9 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "lab2-app.fullname" . }}
+  labels:
+    {{- include "lab2-app.labels" . | nindent 4 }}
+spec:
+  groups:
+    {{- toYaml .Values.alertGroups.groups | nindent 4 }}

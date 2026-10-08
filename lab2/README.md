@@ -212,7 +212,7 @@ image:
 
 Для того, чтобы прометеус собирал метрики с нашего приложения, нужно задеплоить ресурс `servicemonitor` или `podmonitor`, чтобы указать прометеусу, откуда и как собирать метрики.
 
-Добавим в чарт ресурс [`servicemonitor`](helm/lab2-app/templates/servicemonitor.yaml). В селекторе укажем лейбл, по которому прометеус найдет сервис нашего приложения. Параметризуем путь до метрик и интервал их сбора.
+Добавим в чарт ресурс [`servicemonitor`](helm/lab2-app/templates/monitoring/servicemonitor.yaml). В селекторе укажем лейбл, по которому прометеус найдет сервис нашего приложения. Параметризуем путь до метрик и интервал их сбора.
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -281,9 +281,9 @@ podMonitorSelectorNilUsesHelmValues: false
 
 ## Part 2 — Logs (Loki + Grafana)
 
-### Хранилище метрик - Loki
+### Хранилище логов - Loki
 
-Первым делом задеплоим Loki.
+Первым делом задеплоим Loki ([`app.yaml`](argo/infrastructure/helm/loki/app.yaml), [`values.yaml`](argo/infrastructure/helm/loki/values.yaml)).
 
 Настроим values:
 
@@ -356,7 +356,7 @@ resultsCache:
 
 ### Сборщик логов - Grafana Alloy
 
-Настроим values для деплоя Grafana Alloy как агента, собирающего логи с подов и отсылающего их в Loki. Собирать логи он может через Kubernetes API, а локальные логи с нод я получать пока не хочу, да и кластер вот-вот рванет по ресурсам. Поэтому я буду запускать Alloy не в стандартном режиме Daemonset а в виде обыкновенного Deployment в размере одной реплики.
+Настроим [`values`](argo/infrastructure/helm/grafana-alloy/values.yaml) для деплоя Grafana Alloy ([`app.yaml`](argo/infrastructure/helm/grafana-alloy/app.yaml)) как агента, собирающего логи с подов и отсылающего их в Loki. Собирать логи он может через Kubernetes API, а локальные логи с нод я получать пока не хочу, да и кластер вот-вот рванет по ресурсам. Поэтому я буду запускать Alloy не в стандартном режиме Daemonset а в виде обыкновенного Deployment в размере одной реплики.
 
 ```yaml
 controller:
@@ -521,4 +521,196 @@ loki:
 
 ## Part 3 — Traces (OpenTelemetry + Jaeger)
 
+В коде приложения уже реализовано управление трейсами. ID трейса также логируется с каждой записью лога.
+
+Для сбора и хранения трейсов будем использовать сервис Jaeger-all-in-one. Jaeger в данной конфигурации предоставляет collector, хранилище и query компоненты для хранения, сбора и запроса трейсов. Этот вариант подходит для локального развертывания и тестирования. В обычной продовой конфигурации эти компоненты разделены на микросервисы, а в качестве хранилища обычно выступает NoSQL БД с индексным движком, такая как OpenSearch / ElasticSearch.
+
+Раскатили Jaeger с помощью официального [helm chart](https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger) ([`app.yaml`](argo/infrastructure/helm/jaeger/app.yaml), [`values.yaml`](argo/infrastructure/helm/jaeger/values.yaml))
+
+![Jaeger, синхронизированный Argo CD](docs/images/jaeger-argocd-synced.png)
+
+В вальюсы добавлю только ingress.
+
+Адрес http сервиса Jaeger в кластере: `http://jaeger.monitoring.svc.cluster.local:4318`
+
+При помощи env в Deployment, направим трейсы нашего сервиса в jaeger.
+
+```yaml
+env:
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://jaeger.monitoring.svc.cluster.local:4318"
+```
+
+Работает!
+
+![Интерфейс поиска Jaeger](docs/images/jaeger-ui-search.png)
+
+Видим трейсы нашего приложения
+
+![Трейсы приложения в Jaeger](docs/images/jaeger-application-traces.png)
+
+![Трейс health endpoint в Jaeger](docs/images/jaeger-health-trace.png)
+
+Найдём трейс ручки `/slow`:
+
+Внутри трейса видим спан и 4 дочерних спана. Видно, что бОльшая часть времени была проведена в функции slow-op.
+
+![Трейс slow endpoint в Jaeger](docs/images/jaeger-slow-trace.png)
+
+Найдем трейс ручки `fail` и увидим что в трейсе отражена ошибка 500 с подробной информацией о запросе. Сам трейс помечен красным в UI:
+
+![Трейс запроса с ошибкой в Jaeger](docs/images/jaeger-failed-request-trace.png)
+
+Найдем в графане лог с ошибкой, и возьмём его трейс id.
+
+![Trace ID в записи об ошибке в Grafana](docs/images/grafana-error-log-trace-id.png)
+
+Попробуем найти этот трейс в Jaeger
+
+С помощью поиска трейс был успешно обнаружен
+
+![Трейс, найденный в Jaeger по Trace ID](docs/images/jaeger-trace-by-id.png)
+
 ## Part 4 — Alerts (Alertmanager + Karma)
+
+AlertManager уже добавлен в кластер при помощи kube-prometheus-stack (по дефолту, [`values.yaml`](argo/infrastructure/helm/kube-prometheus-stack/values.yaml)).
+
+Алерты для прома будем добавлять при помощи создания ресурсов kind [`PrometheusRule`](helm/lab2-app/templates/monitoring/prometheusrule.yaml).
+
+В прометеусе из коробки прописан конфиг под отправку алертов в алертменеджер, поэтому тут ничего делать не надо.
+
+### Отправка алертов
+
+Prometheus вычисляет правила из ресурсов `PrometheusRule` с заданным интервалом. Если условие правила остаётся истинным в течение времени, указанного в `for`, алерт переходит из состояния `pending` в `firing` и отправляется в Alertmanager. Когда условие перестает выоплняться, пром отправляет в алертменеджер алерт со статусом `resolved`.
+
+Alertmanager занимается группировкой, заглушением, дедупликацией, и доставкой полученных алертов. В моей конфигурации алерты группируются по `namespace` и `alertname`:
+
+```yaml
+group_by:
+  - namespace
+  - alertname
+```
+
+Основным ресивером настроен Telegram:
+
+```yaml
+route:
+  receiver: telegram
+
+receivers:
+  - name: telegram
+    telegram_configs:
+      - bot_token_file: /etc/alertmanager/secrets/alertmanager-telegram/bot-token
+        chat_id: 764516044
+        send_resolved: true
+```
+
+Нормальная доставка секретов в мой куб возможно появится в следующих сериях, а пока подложил id чата и токен бота в секрет вручную.
+
+Также настроим шаблон сообщения:
+
+```yaml
+ message: |-
+        {{ if eq .Status "firing" }}🔥 АЛЯРМ{{ else }}✅ =Нормально={{ end }}
+        {{ range .Alerts }}
+
+        Alert: {{ .Labels.alertname }}
+        Severity: {{ .Labels.severity }}
+        Namespace: {{ .Labels.namespace }}
+        {{ with .Labels.pod }}Pod: {{ . }}{{ end }}
+        {{ with .Labels.instance }}Instance: {{ . }}{{ end }}
+        {{ with .Annotations.summary }}Summary: {{ . }}{{ end }}
+        {{ with .Annotations.description }}Description: {{ . }}{{ end }}
+        Started: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+        {{ with .GeneratorURL }}Source: {{ . }}{{ end }}
+        {{ end }}
+```
+
+### Алерты приложения
+
+Правила находятся в [`values.yaml`](argo/study/helm/lab-2-app/values.yaml).
+
+#### `Lab2ApiHighErrorRate`
+
+Алерт сообщает о деградации успешности запросов. Он вычисляет долю ответов со статусом `5xx` среди всех HTTP-запросов за последние пять минут:
+
+```promql
+sum(rate(api_http_errors_total[5m]))
+/
+clamp_min(sum(rate(api_http_requests_total[5m])), 0.001)
+```
+
+Алерт переходит в состояние `firing`, если доля ошибок превышает 5% непрерывно в течение пяти минут. Дежурный должен проверить логи и трейсы ошибочных запросов для локализации проблемы.
+
+#### `Lab2ApiHighLatency`
+
+Алерт сообщает о медленных ответах приложения. Функция `histogram_quantile` вычисляет 95-й перцентиль времени ответа по bucket-метрикам гистограммы:
+
+```promql
+histogram_quantile(
+  0.95,
+  sum by (le) (
+    rate(api_http_request_duration_seconds_bucket[5m])
+  )
+)
+```
+
+Алерт срабатывает, если p95 превышает две секунды непрерывно в течение пяти минут. Это означает, что примерно более 5% запросов не укладываются в две секунды. Деж должен определить медленные маршруты по метрикам и трейсам.
+
+#### `Lab2ApiFrequentRestarts`
+
+Алерт обнаруживает нестабильность процесса приложения по счётчику рестартов контейнера:
+
+```promql
+increase(
+  kube_pod_container_status_restarts_total{container="lab2-app"}[15m]
+) > 2
+```
+
+Он срабатывает, если контейнер перезапустился более двух раз за 15 минут. Такое поведение может указывает на падение процесса контейнера: например `OOMKilled`, ошибку конфигурации или провал liveness probe. Деж должен проверить `kubectl describe pod`, предыдущие логи контейнера и причину завершения, а затем исправить конфигурацию или лимиты ресурсов либо откатить проблемный релиз.
+
+### Проверка алертов
+
+Помимо триллиона коробочных алертов, говорящих о неправильной работе моей богом забытой хоумлабы, и пришедших после успешной настройки алертменеджера, попробуем стригерить свежесозданные алерты:
+
+Заспамим приложеньку по ручке `slow` с помощью скрипта
+
+```bash
+while true; do
+  curl -ksS -o /dev/null -w '%{http_code} %{time_total}s\n' https://lab-2-app.homelab.internal/slow;
+done
+```
+
+Словили алёрт
+
+![Срабатывание и разрешение алерта высокой задержки в Telegram](docs/images/telegram-high-latency-resolved.png)
+
+Я знаю что сообщение кривое и можно сделать покрасивее и поинформативнее, но я не хочу отлетать на допсу, так что пришлось с этой лабой поторопиться простите(((
+
+Аналогичным образом словим остальные алёрты
+
+![Алерт высокой доли ошибок в Telegram](docs/images/telegram-high-error-rate.png)
+
+С помощью нехитрых манипуляций (`kill 1`) ловим падение контейнера...
+
+![Алерт частых перезапусков контейнера в Telegram](docs/images/telegram-frequent-restarts.png)
+
+### Karma
+
+Теперь давайте поставим Karma - UI для Alertmanager.
+
+Кластер сейчас ЛОПНЕТ, поэтому карму разверну локально
+
+```bash
+docker run --rm --name karma \
+    -p 8080:8080 \
+    -e ALERTMANAGER_URI=https://alertmanager.homelab.internal \
+    -e ALERTMANAGER_EXTERNAL_URI=https://alertmanager.homelab.internal \
+    -e ALERTMANAGER_PROXY=true \
+    -e ALERTMANAGER_TLS_INSECURE_SKIP_VERIFY=true \
+    ghcr.io/prymitive/karma:v0.132
+```
+
+Видим алёрты (да, карма у меня плохая, судя по количеству алертов). Тут же их можно группировать, фильтровать.
+
+![Алерты кластера в интерфейсе Karma](docs/images/karma-alert-dashboard.png)

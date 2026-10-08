@@ -15,6 +15,17 @@ image:
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
+
+# Environment variables passed to the application container.
+env: []
+  # - name: EXAMPLE_VARIABLE
+  #   value: "example-value"
+  # - name: SECRET_VARIABLE
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: example-secret
+  #       key: password
+
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
@@ -158,3 +169,5 @@ affinity: {}
 
 servicemonitor:
   enabled: false
+
+alertGroups: {}

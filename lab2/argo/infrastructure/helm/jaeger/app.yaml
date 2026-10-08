@@ -1,0 +1,7 @@
+name: jaeger
+chart:
+  repoURL: https://jaegertracing.github.io/helm-charts
+  version: 4.14.1
+  name: jaeger
+namespace: monitoring
+releaseName: jaeger

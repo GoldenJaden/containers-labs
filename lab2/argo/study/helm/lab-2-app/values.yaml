@@ -3,9 +3,68 @@ image:
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.0.0"
+  tag: "1.0.1"
 
 servicemonitor:
   enabled: true
   interval: 30s
   path: /metrics
+
+alertGroups:
+  groups:
+    - name: lab2-api
+      rules:
+        # Более 5% ответов — 5xx в течение 5 минут.
+        - alert: Lab2ApiHighErrorRate
+          expr: |
+            (
+              sum(rate(api_http_errors_total[5m]))
+              /
+              clamp_min(sum(rate(api_http_requests_total[5m])), 0.001)
+            ) > 0.05
+            and
+            sum(rate(api_http_requests_total[5m])) > 0.1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "API has a high error rate"
+            description: |
+              More than 5% of requests have returned 5xx for 5 minutes.
+              Dashboard: http://grafana.homelab.internal:3000/goto/eg0mx9x429wqoe?orgId=1
+
+        # 95-й перцентиль времени ответа превышает 2 секунды.
+        - alert: Lab2ApiHighLatency
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum by (le) (
+                rate(api_http_request_duration_seconds_bucket[5m])
+              )
+            ) > 2
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "API latency is high"
+            description: |
+              The p95 response time has exceeded 2 seconds for 5 minutes.
+              Dashboard: http://grafana.homelab.internal:3000/goto/eg0mx9x429wqoe?orgId=1
+
+        # Контейнер нестабилен и регулярно перезапускается.
+        - alert: Lab2ApiFrequentRestarts
+          expr: |
+            increase(
+              kube_pod_container_status_restarts_total{container="lab2-app"}[15m]
+            ) > 2
+          labels:
+            severity: critical
+          annotations:
+            summary: "API container is restarting frequently"
+            description: |
+              Container {{ $labels.container }} in pod {{ $labels.pod }} restarted more than twice in 15 minutes.
+              Dashboard: http://grafana.homelab.internal:3000/goto/eg0mx9x429wqoe?orgId=1
+
+env:
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://jaeger.monitoring.svc.cluster.local:4318"

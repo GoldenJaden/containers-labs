@@ -4,6 +4,7 @@ from io import StringIO
 
 import httpx
 from fastapi.testclient import TestClient
+from opentelemetry import trace
 
 from app import JsonFormatter, app, logger
 
@@ -26,6 +27,26 @@ def test_health_fail_metrics_and_json_logs():
     assert log_lines
     entries = [json.loads(line) for line in log_lines]
     assert all(len(entry["trace_id"]) == 32 for entry in entries)
+    assert next(entry for entry in entries if entry.get("route") == "/health")["level"] == "INFO"
+    assert next(entry for entry in entries if entry.get("route") == "/fail")["level"] == "ERROR"
+
+
+def test_formatter_adds_the_current_trace_to_every_log_line():
+    output = StringIO()
+    handler = logging.StreamHandler(output)
+    handler.setFormatter(JsonFormatter())
+    isolated_logger = logging.getLogger("trace-correlation-test")
+    isolated_logger.handlers = [handler]
+    isolated_logger.setLevel(logging.INFO)
+    isolated_logger.propagate = False
+
+    with trace.get_tracer("test").start_as_current_span("operation") as span:
+        isolated_logger.info("inside operation")
+        expected_trace_id = trace.format_trace_id(span.get_span_context().trace_id)
+
+    entry = json.loads(output.getvalue())
+    assert entry["trace_id"] == expected_trace_id
+    assert entry["trace_id"] != "0" * 32
 
 
 def test_load(monkeypatch):

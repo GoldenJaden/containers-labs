@@ -1,0 +1,13 @@
+jaeger:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: homelab-ca
+    hosts:
+      - jaeger.homelab.internal
+    pathType: Prefix
+    tls:
+      - secretName: jaeger-tls
+        hosts:
+          - jaeger.homelab.internal
