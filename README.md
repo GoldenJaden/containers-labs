@@ -4,7 +4,7 @@
 |:-:|---|---|:---:|
 | 01 | **Свой Docker** | [Отчёт](./lab1/README.md) · [Файлы](./lab1/) | ✅7/8 |
 | 02 | **Наблюдаемость и мониторинг** | [Отчёт](./lab2/README.md) · [Файлы](./lab2/) | ✅ |
-| 03 | **Control plane Kubernetes** | [Отчёт](./lab3/README.md) · [Файлы](./lab3/) | ⏳ |
+| 03 | **Control plane Kubernetes** | [Отчёт](./lab3/README.md) · [Файлы](./lab3/) | ✅ |
 | 04 | **Ресурсы и планирование** | — | 🔒 |
 | 05 | **Сеть Kubernetes** | — | 🔒 |
 | 06 | **Service mesh и трафик** | — | 🔒 |
