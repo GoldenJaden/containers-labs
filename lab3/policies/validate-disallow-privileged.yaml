@@ -1,0 +1,39 @@
+apiVersion: policies.kyverno.io/v1
+kind: ValidatingPolicy
+metadata:
+  name: validate-disallow-privileged
+spec:
+  failurePolicy: Fail
+  validationActions: [Deny]
+  evaluation:
+    admission:
+      enabled: true
+    background:
+      enabled: true
+  matchConstraints:
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values: [kube-system]
+    resourceRules:
+      - apiGroups: ['']
+        apiVersions: ['v1']
+        operations: ['CREATE', 'UPDATE']
+        resources: ['pods']
+  autogen:
+    podControllers:
+      controllers: [deployments, statefulsets, daemonsets, jobs, cronjobs]
+  variables:
+    - name: allContainers
+      expression: |
+        object.spec.containers +
+        object.spec.?initContainers.orValue([]) +
+        object.spec.?ephemeralContainers.orValue([])
+  validations:
+    - expression: |
+        variables.allContainers.all(container,
+          container.?securityContext.?privileged.orValue(false) == false
+        )
+      message: Privileged mode is forbidden. Every container must leave securityContext.privileged unset or set it to false.
+

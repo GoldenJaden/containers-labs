@@ -1,0 +1,44 @@
+apiVersion: policies.kyverno.io/v1
+kind: ValidatingPolicy
+metadata:
+  name: validate-run-as-non-root
+spec:
+  failurePolicy: Fail
+  validationActions: [Deny]
+  evaluation:
+    admission:
+      enabled: true
+    background:
+      enabled: true
+  matchConstraints:
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values: [kube-system]
+    resourceRules:
+      - apiGroups: ['']
+        apiVersions: ['v1']
+        operations: ['CREATE', 'UPDATE']
+        resources: ['pods']
+  autogen:
+    podControllers:
+      controllers: [deployments, statefulsets, daemonsets, jobs, cronjobs]
+  variables:
+    - name: allContainers
+      expression: |
+        object.spec.containers +
+        object.spec.?initContainers.orValue([]) +
+        object.spec.?ephemeralContainers.orValue([])
+  validations:
+    - expression: |
+        (
+          object.spec.?securityContext.?runAsNonRoot.orValue(false) == true &&
+          variables.allContainers.all(container,
+            container.?securityContext.?runAsNonRoot.orValue(true) == true
+          )
+        ) || variables.allContainers.all(container,
+          container.?securityContext.?runAsNonRoot.orValue(false) == true
+        )
+      message: Every container must run as non-root. Set spec.securityContext.runAsNonRoot to true, or set securityContext.runAsNonRoot to true on every container.
+

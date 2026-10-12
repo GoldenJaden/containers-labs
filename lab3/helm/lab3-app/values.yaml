@@ -1,0 +1,137 @@
+api:
+  replicaCount: 3
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab3-api
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  env:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: lab-db-app
+          key: uri
+  service:
+    type: ClusterIP
+    port: 8080
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+  resources: {}
+
+worker:
+  replicaCount: 2
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab3-worker
+    pullPolicy: IfNotPresent
+    tag: ""
+  env:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: lab-db-app
+          key: uri
+    - name: POLL_INTERVAL_SECONDS
+      value: "1"
+
+  service:
+    type: ClusterIP
+    port: 8081
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+  resources: {}
+
+database:
+  enabled: true
+  clusterName: lab-db
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  instances: 1
+  name: orders
+  owner: app
+  monitoring:
+    enabled: true
+  storage:
+    size: 2Gi
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+securityContext:
+  allowPrivilegeEscalation: false
+  privileged: false
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: homelab-ca
+  hosts:
+    - host: lab-3-app.homelab.internal
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: lab3-app-tls
+      hosts:
+        - lab-3-app.homelab.internal
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+    - name: gateway
+      sectionName: http
+  hostnames:
+    - chart-example.local
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+servicemonitor:
+  enabled: false
+  interval: 30s
+  path: /metrics
+
+alerts:
+  enabled: true
+  containerRestartFor: 0m
+  targetDownFor: 1m
+  replicasUnavailableFor: 2m

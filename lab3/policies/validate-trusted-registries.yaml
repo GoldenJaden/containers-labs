@@ -1,0 +1,47 @@
+apiVersion: policies.kyverno.io/v1
+kind: ValidatingPolicy
+metadata:
+  name: validate-trusted-registries
+spec:
+  failurePolicy: Fail
+  validationActions: [Deny]
+  evaluation:
+    admission:
+      enabled: true
+    background:
+      enabled: true
+  matchConstraints:
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values: [kube-system]
+    resourceRules:
+      - apiGroups: ['']
+        apiVersions: ['v1']
+        operations: ['CREATE', 'UPDATE']
+        resources: ['pods']
+  autogen:
+    podControllers:
+      controllers: [deployments, statefulsets, daemonsets, jobs, cronjobs]
+  variables:
+    - name: allContainers
+      expression: |
+        object.spec.containers +
+        object.spec.?initContainers.orValue([]) +
+        object.spec.?ephemeralContainers.orValue([])
+    - name: allowedRegistries
+      expression: |
+        [
+          "docker.io",
+          "ghcr.io",
+          "quay.io",
+          "registry.k8s.io",
+          "192.168.0.242:3000"
+        ]
+  validations:
+    - expression: |
+        variables.allContainers.all(container,
+          image(container.image).registry() in variables.allowedRegistries
+        )
+      message: Container images must come from an approved registry.

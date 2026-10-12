@@ -1,0 +1,76 @@
+apiVersion: policies.kyverno.io/v1
+kind: MutatingPolicy
+metadata:
+  name: add-default-requests-limits
+spec:
+  matchConstraints:
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values: [kube-system]
+    resourceRules:
+      - apiGroups: ['']
+        apiVersions: ['v1']
+        operations: ['CREATE']
+        resources: ['pods']
+  autogen:
+    podControllers:
+      controllers: [deployments, statefulsets, daemonsets, jobs, cronjobs]
+  variables:
+    - name: defaultResources
+      expression: |
+        {
+          "requests": {
+            "cpu": "50m",
+            "memory": "72Mi",
+            "ephemeral-storage": "32Mi"
+          },
+          "limits": {
+            "cpu": "100m",
+            "memory": "100Mi",
+            "ephemeral-storage": "64Mi"
+          }
+        }
+  mutations:
+    - patchType: ApplyConfiguration
+      applyConfiguration:
+        expression: |
+          Object{
+            spec: Object.spec{
+              containers: object.spec.containers.map(container,
+                Object.spec.containers{
+                  name: container.name,
+                  resources: Object.spec.containers.resources{
+                    requests: {
+                      "cpu": container.?resources.?requests[?'cpu'].orValue(variables.defaultResources["requests"]["cpu"]),
+                      "memory": container.?resources.?requests[?'memory'].orValue(variables.defaultResources["requests"]["memory"]),
+                      "ephemeral-storage": container.?resources.?requests[?'ephemeral-storage'].orValue(variables.defaultResources["requests"]["ephemeral-storage"])
+                    },
+                    limits: {
+                      "cpu": container.?resources.?limits[?'cpu'].orValue(container.?resources.?requests[?'cpu'].hasValue() && quantity(container.?resources.?requests[?'cpu'].value()).compareTo(quantity(variables.defaultResources["limits"]["cpu"])) > 0 ? container.?resources.?requests[?'cpu'].value() : variables.defaultResources["limits"]["cpu"]),
+                      "memory": container.?resources.?limits[?'memory'].orValue(container.?resources.?requests[?'memory'].hasValue() && quantity(container.?resources.?requests[?'memory'].value()).compareTo(quantity(variables.defaultResources["limits"]["memory"])) > 0 ? container.?resources.?requests[?'memory'].value() : variables.defaultResources["limits"]["memory"]),
+                      "ephemeral-storage": container.?resources.?limits[?'ephemeral-storage'].orValue(container.?resources.?requests[?'ephemeral-storage'].hasValue() && quantity(container.?resources.?requests[?'ephemeral-storage'].value()).compareTo(quantity(variables.defaultResources["limits"]["ephemeral-storage"])) > 0 ? container.?resources.?requests[?'ephemeral-storage'].value() : variables.defaultResources["limits"]["ephemeral-storage"])
+                    }
+                  }
+                }
+              ),
+              initContainers: object.spec.?initContainers.orValue([]).map(container,
+                Object.spec.initContainers{
+                  name: container.name,
+                  resources: Object.spec.initContainers.resources{
+                    requests: {
+                      "cpu": container.?resources.?requests[?'cpu'].orValue(variables.defaultResources["requests"]["cpu"]),
+                      "memory": container.?resources.?requests[?'memory'].orValue(variables.defaultResources["requests"]["memory"]),
+                      "ephemeral-storage": container.?resources.?requests[?'ephemeral-storage'].orValue(variables.defaultResources["requests"]["ephemeral-storage"])
+                    },
+                    limits: {
+                      "cpu": container.?resources.?limits[?'cpu'].orValue(container.?resources.?requests[?'cpu'].hasValue() && quantity(container.?resources.?requests[?'cpu'].value()).compareTo(quantity(variables.defaultResources["limits"]["cpu"])) > 0 ? container.?resources.?requests[?'cpu'].value() : variables.defaultResources["limits"]["cpu"]),
+                      "memory": container.?resources.?limits[?'memory'].orValue(container.?resources.?requests[?'memory'].hasValue() && quantity(container.?resources.?requests[?'memory'].value()).compareTo(quantity(variables.defaultResources["limits"]["memory"])) > 0 ? container.?resources.?requests[?'memory'].value() : variables.defaultResources["limits"]["memory"]),
+                      "ephemeral-storage": container.?resources.?limits[?'ephemeral-storage'].orValue(container.?resources.?requests[?'ephemeral-storage'].hasValue() && quantity(container.?resources.?requests[?'ephemeral-storage'].value()).compareTo(quantity(variables.defaultResources["limits"]["ephemeral-storage"])) > 0 ? container.?resources.?requests[?'ephemeral-storage'].value() : variables.defaultResources["limits"]["ephemeral-storage"])
+                    }
+                  }
+                }
+              )
+            }
+          }

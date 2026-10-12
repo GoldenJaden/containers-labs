@@ -1,0 +1,38 @@
+{{- if .Values.alerts.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "lab3-app.fullname" . }}
+  labels:
+    {{- include "lab3-app.labels" . | nindent 4 }}
+spec:
+  groups:
+    - name: {{ include "lab3-app.fullname" . }}.rules
+      rules:
+        - alert: Lab3ContainerRestarting
+          expr: increase(kube_pod_container_status_restarts_total{namespace={{ .Release.Namespace | quote }}, container=~"api|worker|postgres"}[5m]) > 0
+          for: {{ .Values.alerts.containerRestartFor }}
+          labels:
+            severity: critical
+          annotations:
+            summary: A Lab 3 container is restarting
+            description: Container {{ `{{ $labels.container }}` }} in pod {{ `{{ $labels.pod }}` }} restarted during the last five minutes.
+
+        - alert: Lab3ApiMetricsTargetDown
+          expr: up{namespace={{ .Release.Namespace | quote }}, service={{ printf "%s-api" (include "lab3-app.fullname" .) | quote }}} == 0
+          for: {{ .Values.alerts.targetDownFor }}
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus cannot scrape the Lab 3 API
+            description: The API metrics endpoint has been unreachable by Prometheus.
+
+        - alert: Lab3DeploymentReplicasUnavailable
+          expr: kube_deployment_status_replicas_available{namespace={{ .Release.Namespace | quote }}, deployment=~{{ printf "%s-(api|worker)" (include "lab3-app.fullname" .) | quote }}} < kube_deployment_spec_replicas{namespace={{ .Release.Namespace | quote }}, deployment=~{{ printf "%s-(api|worker)" (include "lab3-app.fullname" .) | quote }}}
+          for: {{ .Values.alerts.replicasUnavailableFor }}
+          labels:
+            severity: warning
+          annotations:
+            summary: A Lab 3 deployment has unavailable replicas
+            description: Deployment {{ `{{ $labels.deployment }}` }} has fewer available replicas than requested.
+{{- end }}

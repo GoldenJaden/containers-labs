@@ -1,0 +1,85 @@
+apiVersion: policies.kyverno.io/v1
+kind: ValidatingPolicy
+metadata:
+  name: validate-requests-limits
+spec:
+  failurePolicy: Fail
+  validationActions: [Deny]
+  matchConstraints:
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values: [kube-system]
+    resourceRules:
+      - apiGroups: ['']
+        apiVersions: ['v1']
+        operations: ['CREATE', 'UPDATE']
+        resources: ['pods']
+  autogen:
+    podControllers:
+      controllers: [deployments, statefulsets, daemonsets, jobs, cronjobs]
+  variables:
+    - name: allContainers
+      expression: |
+        object.spec.containers + object.spec.?initContainers.orValue([])
+    - name: maximumLimits
+      expression: |
+        {
+          "cpu": quantity("2"),
+          "memory": quantity("2Gi"),
+          "ephemeral-storage": quantity("1Gi")
+        }
+  validations:
+    - expression: |
+        variables.allContainers.all(container,
+          container.?resources.?requests[?'cpu'].hasValue() &&
+          container.?resources.?requests[?'memory'].hasValue() &&
+          container.?resources.?requests[?'ephemeral-storage'].hasValue() &&
+          container.?resources.?limits[?'cpu'].hasValue() &&
+          container.?resources.?limits[?'memory'].hasValue() &&
+          container.?resources.?limits[?'ephemeral-storage'].hasValue()
+        )
+      message: All containers must define CPU, memory, and ephemeral-storage requests and limits.
+    - expression: |
+        variables.allContainers.all(container,
+          container.?resources.?limits[?'cpu'].hasValue()
+          ? quantity(container.?resources.?limits[?'cpu'].value()).compareTo(variables.maximumLimits["cpu"]) <= 0
+          : true
+        )
+      message: CPU limit must not exceed 2 cores.
+    - expression: |
+        variables.allContainers.all(container,
+          container.?resources.?limits[?'memory'].hasValue()
+          ? quantity(container.?resources.?limits[?'memory'].value()).compareTo(variables.maximumLimits["memory"]) <= 0
+          : true
+        )
+      message: Memory limit must not exceed 2Gi.
+    - expression: |
+        variables.allContainers.all(container,
+          container.?resources.?limits[?'ephemeral-storage'].hasValue()
+          ? quantity(container.?resources.?limits[?'ephemeral-storage'].value()).compareTo(variables.maximumLimits["ephemeral-storage"]) <= 0
+          : true
+        )
+      message: Ephemeral-storage limit must not exceed 1Gi.
+    - expression: |
+        variables.allContainers.all(container,
+          container.?resources.?requests[?'cpu'].hasValue() && container.?resources.?limits[?'cpu'].hasValue()
+          ? quantity(container.?resources.?requests[?'cpu'].value()).compareTo(quantity(container.?resources.?limits[?'cpu'].value())) <= 0
+          : true
+        )
+      message: CPU request must not exceed CPU limit.
+    - expression: |
+        variables.allContainers.all(container,
+          container.?resources.?requests[?'memory'].hasValue() && container.?resources.?limits[?'memory'].hasValue()
+          ? quantity(container.?resources.?requests[?'memory'].value()).compareTo(quantity(container.?resources.?limits[?'memory'].value())) <= 0
+          : true
+        )
+      message: Memory request must not exceed memory limit.
+    - expression: |
+        variables.allContainers.all(container,
+          container.?resources.?requests[?'ephemeral-storage'].hasValue() && container.?resources.?limits[?'ephemeral-storage'].hasValue()
+          ? quantity(container.?resources.?requests[?'ephemeral-storage'].value()).compareTo(quantity(container.?resources.?limits[?'ephemeral-storage'].value())) <= 0
+          : true
+        )
+      message: Ephemeral-storage request must not exceed ephemeral-storage limit.
