@@ -1,0 +1,27 @@
+{{- $root := . -}}
+{{- range $index, $priorityClass := .Values.priorityClasses }}
+{{- if $index }}
+---
+{{- end }}
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: {{ required "priorityClasses[].name is required" $priorityClass.name }}
+  labels:
+    {{- include "lab4-app.labels" $root | nindent 4 }}
+    {{- with $priorityClass.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with $priorityClass.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+value: {{ $priorityClass.value | int }}
+globalDefault: {{ $priorityClass.globalDefault | default false }}
+{{- with $priorityClass.preemptionPolicy }}
+preemptionPolicy: {{ . }}
+{{- end }}
+{{- with $priorityClass.description }}
+description: {{ . | quote }}
+{{- end }}
+{{- end }}

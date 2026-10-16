@@ -1,0 +1,7 @@
+name: lab-4-app
+chart:
+  repoURL: http://192.168.0.242:3000/api/packages/gjaden/helm
+  version: 1.0.6
+  name: lab4-app
+namespace: labs
+releaseName: lab4-app

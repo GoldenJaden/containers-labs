@@ -1,0 +1,244 @@
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.gjaden.dev/zone
+    whenUnsatisfiable: ScheduleAnyway
+    # minDomains: 2 # Only with whenUnsatisfiable: DoNotSchedule
+    # nodeAffinityPolicy: Honor # Honor or Ignore
+    # nodeTaintsPolicy: Honor # Honor or Ignore
+    # matchLabelKeys:
+    #   - pod-template-hash
+
+api:
+  replicaCount: 3
+  priorityClassName: "high-priority"
+  podDisruptionBudget:
+    enabled: true
+    maxUnavailable: 1
+    unhealthyPodEvictionPolicy: ""
+    annotations: {}
+    labels: {}
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab4-api
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  env:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: lab-db-app
+          key: uri
+  service:
+    type: ClusterIP
+    port: 8080
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+  tolerations: []
+  resources: {}
+
+worker:
+  replicaCount: 2
+  priorityClassName: ""
+  podDisruptionBudget:
+    enabled: false
+    maxUnavailable: 1
+    unhealthyPodEvictionPolicy: ""
+    annotations: {}
+    labels: {}
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab4-worker
+    pullPolicy: IfNotPresent
+    tag: ""
+  env:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: lab-db-app
+          key: uri
+    - name: POLL_INTERVAL_SECONDS
+      value: "1"
+
+  service:
+    type: ClusterIP
+    port: 8081
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+  tolerations: []
+  resources: {}
+
+batch:
+  replicaCount: 1
+  priorityClassName: "batch-low-priority"
+  podDisruptionBudget:
+    enabled: false
+    maxUnavailable: 1
+    unhealthyPodEvictionPolicy: ""
+    annotations: {}
+    labels: {}
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab4-batch
+    pullPolicy: IfNotPresent
+    tag: ""
+  env:
+    - name: MEMORY_MB
+      value: "256"
+  tolerations: []
+  resources: {}
+
+database:
+  enabled: true
+  clusterName: lab-db
+  priorityClassName: "high-priority"
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  instances: 1
+  name: orders
+  owner: app
+  resources: {}
+  monitoring:
+    enabled: true
+  storage:
+    size: 2Gi
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+securityContext:
+  allowPrivilegeEscalation: false
+  privileged: false
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: homelab-ca
+  hosts:
+    - host: lab-4-app.homelab.internal
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: lab4-app-tls
+      hosts:
+        - lab-4-app.homelab.internal
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+    - name: gateway
+      sectionName: http
+  hostnames:
+    - chart-example.local
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+priorityClasses:
+  - name: high-priority
+    value: 1000000
+    description: High priority
+  
+  - name: batch-low-priority
+    value: -1000
+    description: Low priority for preemptible batch workloads
+
+servicemonitor:
+  enabled: true
+  interval: 30s
+  path: /metrics
+
+alertGroups:
+  groups:
+    - name: lab4-sla
+      rules:
+        - alert: Lab4ApiHighLatency
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum by (le) (
+                rate(api_http_request_duration_seconds_bucket{
+                  namespace="labs", service="lab4-app-api",
+                  method="POST", route="/order"
+                }[5m])
+              )
+            ) > 0.5
+          for: 1m
+          labels:
+            severity: critical
+            slo: api-latency
+          annotations:
+            summary: "The Orders API violates its latency SLA"
+            description: "The p95 latency of POST /order has exceeded 500 ms for one minute."
+
+        - alert: Lab4ApiHighErrorRate
+          expr: |
+            (
+              sum(rate(api_http_requests_total{
+                namespace="labs", service="lab4-app-api",
+                method="POST", route="/order", status_code=~"5.."
+              }[5m]))
+              /
+              clamp_min(sum(rate(api_http_requests_total{
+                namespace="labs", service="lab4-app-api",
+                method="POST", route="/order"
+              }[5m])), 0.001)
+            ) > 0.01
+          for: 1m
+          labels:
+            severity: critical
+            slo: api-errors
+          annotations:
+            summary: "The Orders API violates its error-rate SLA"
+            description: "More than 1% of POST /order requests have returned 5xx for one minute."
+
+        - alert: Lab4CriticalPodUnschedulable
+          expr: |
+            kube_pod_status_unschedulable{namespace="labs"} == 1
+            and on (namespace, pod)
+            kube_pod_info{namespace="labs", priority_class="high-priority"}
+          for: 1m
+          labels:
+            severity: critical
+            slo: critical-capacity
+          annotations:
+            summary: "A high-priority Lab 4 pod cannot be scheduled"
+            description: "A high-priority pod has remained unschedulable despite spreading and preemption."

@@ -1,0 +1,40 @@
+{{- $root := . -}}
+{{- range $componentName := list "api" "worker" "batch" }}
+{{- $component := index $root.Values $componentName }}
+{{- $pdb := $component.podDisruptionBudget }}
+{{- if $pdb.enabled }}
+{{- $hasMinAvailable := and (hasKey $pdb "minAvailable") (ne (get $pdb "minAvailable") nil) }}
+{{- $hasMaxUnavailable := and (hasKey $pdb "maxUnavailable") (ne (get $pdb "maxUnavailable") nil) }}
+{{- if eq $hasMinAvailable $hasMaxUnavailable }}
+{{- fail (printf "%s.podDisruptionBudget must define exactly one of minAvailable or maxUnavailable" $componentName) }}
+{{- end }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "lab4-app.fullname" $root }}-{{ $componentName }}
+  labels:
+    {{- include "lab4-app.labels" $root | nindent 4 }}
+    app.kubernetes.io/component: {{ $componentName }}
+    {{- with $pdb.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with $pdb.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $hasMinAvailable }}
+  minAvailable: {{ $pdb.minAvailable | toYaml }}
+  {{- else }}
+  maxUnavailable: {{ $pdb.maxUnavailable | toYaml }}
+  {{- end }}
+  {{- with $pdb.unhealthyPodEvictionPolicy }}
+  unhealthyPodEvictionPolicy: {{ . }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "lab4-app.selectorLabels" $root | nindent 6 }}
+      app.kubernetes.io/component: {{ $componentName }}
+{{- end }}
+{{- end }}

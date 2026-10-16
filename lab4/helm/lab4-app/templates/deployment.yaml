@@ -1,0 +1,120 @@
+{{- $root := . -}}
+{{- range $index, $componentName := list "api" "worker" "batch" }}
+{{- $component := index $root.Values $componentName }}
+{{- $topologySpreadConstraints := $root.Values.topologySpreadConstraints }}
+{{- if hasKey $component "topologySpreadConstraints" }}
+{{- $topologySpreadConstraints = $component.topologySpreadConstraints }}
+{{- end }}
+{{- if $index }}
+---
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "lab4-app.fullname" $root }}-{{ $componentName }}
+  labels:
+    {{- include "lab4-app.labels" $root | nindent 4 }}
+    app.kubernetes.io/component: {{ $componentName }}
+spec:
+  replicas: {{ $component.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "lab4-app.selectorLabels" $root | nindent 6 }}
+      app.kubernetes.io/component: {{ $componentName }}
+  template:
+    metadata:
+      {{- with $root.Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "lab4-app.selectorLabels" $root | nindent 8 }}
+        app.kubernetes.io/component: {{ $componentName }}
+        {{- with $root.Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with $component.priorityClassName }}
+      priorityClassName: {{ . | quote }}
+      {{- end }}
+      {{- with $topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- range . }}
+        - maxSkew: {{ .maxSkew }}
+          topologyKey: {{ .topologyKey }}
+          whenUnsatisfiable: {{ .whenUnsatisfiable }}
+          {{- if hasKey . "minDomains" }}
+          minDomains: {{ .minDomains }}
+          {{- end }}
+          {{- with .nodeAffinityPolicy }}
+          nodeAffinityPolicy: {{ . | quote }}
+          {{- end }}
+          {{- with .nodeTaintsPolicy }}
+          nodeTaintsPolicy: {{ . | quote }}
+          {{- end }}
+          {{- with .matchLabelKeys }}
+          matchLabelKeys:
+            {{- range . }}
+            - {{ . | quote }}
+            {{- end }}
+          {{- end }}
+          labelSelector:
+            matchLabels:
+              {{- include "lab4-app.selectorLabels" $root | nindent 14 }}
+              app.kubernetes.io/component: {{ $componentName }}
+        {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "lab4-app.serviceAccountName" $root }}
+      {{- with $root.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml $root.Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ $componentName }}
+          image: "{{ $component.image.repository }}:{{ $component.image.tag | default $root.Chart.AppVersion }}"
+          imagePullPolicy: {{ $component.image.pullPolicy }}
+          securityContext:
+            {{- toYaml $root.Values.securityContext | nindent 12 }}
+          {{- with $component.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $component.service }}
+          ports:
+            - name: http
+              containerPort: {{ .port }}
+              protocol: TCP
+          {{- end }}
+          {{- with $component.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $component.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml $component.resources | nindent 12 }}
+          {{- with $root.Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with $root.Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $root.Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $root.Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with ($component.tolerations | default $root.Values.tolerations) }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

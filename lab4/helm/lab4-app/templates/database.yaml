@@ -1,0 +1,27 @@
+{{- if .Values.database.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Values.database.clusterName }}
+  labels:
+    {{- include "lab4-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  imageName: {{ .Values.database.imageName }}
+  instances: {{ .Values.database.instances }}
+  {{- with .Values.database.priorityClassName }}
+  priorityClassName: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.database.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  bootstrap:
+    initdb:
+      database: {{ .Values.database.name }}
+      owner: {{ .Values.database.owner }}
+  monitoring:
+    enablePodMonitor: {{ .Values.database.monitoring.enabled }}
+  storage:
+    size: {{ .Values.database.storage.size }}
+{{- end }}

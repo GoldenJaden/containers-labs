@@ -1,0 +1,166 @@
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.gjaden.dev/zone
+    whenUnsatisfiable: DoNotSchedule
+    minDomains: 2
+    # minDomains: 2 # Only with whenUnsatisfiable: DoNotSchedule
+    # nodeAffinityPolicy: Honor # Honor or Ignore
+    # nodeTaintsPolicy: Honor # Honor or Ignore
+    # matchLabelKeys:
+    #   - pod-template-hash
+
+api:
+  replicaCount: 2
+  topologySpreadConstraints: []
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab4-api
+    pullPolicy: IfNotPresent
+    tag: "1.0.1"
+  env:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: lab-db-app
+          key: uri
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+  resources:
+    requests:
+      cpu: 43m
+      memory: 100Mi
+    limits:
+      cpu: 43m
+      memory: 100Mi
+
+worker:
+  replicaCount: 2
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab4-worker
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+  env:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: lab-db-app
+          key: uri
+    - name: POLL_INTERVAL_SECONDS
+      value: "1"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 100Mi
+    limits:
+      memory: 100Mi
+
+
+batch:
+  replicaCount: 1
+  priorityClassName: batch-low-priority
+  topologySpreadConstraints: []
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab4-batch
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  env:
+    - name: MEMORY_MB
+      value: "50"
+  resources:
+    requests:
+      cpu: 80m
+      memory: 100Mi
+    limits:
+      cpu: 160m
+      memory: 100Mi
+
+database:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: homelab-ca
+  hosts:
+    - host: lab-app.homelab.internal
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: lab-app-tls
+      hosts:
+        - lab-app.homelab.internal
+
+servicemonitor:
+  enabled: true
+  interval: 30s
+  path: /metrics
+
+alertGroups:
+  groups:
+    - name: lab4-sla
+      rules:
+        - alert: Lab4ApiHighLatency
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum by (le) (
+                rate(api_http_request_duration_seconds_bucket{
+                  namespace="labs", service="lab4-app-api",
+                  method="POST", route="/order"
+                }[5m])
+              )
+            ) > 0.5
+          for: 1m
+          labels:
+            severity: critical
+            slo: api-latency
+          annotations:
+            summary: "The Orders API violates its latency SLA"
+            description: "The p95 latency of POST /order has exceeded 500 ms for one minute."
+
+        - alert: Lab4ApiHighErrorRate
+          expr: |
+            (
+              sum(rate(api_http_requests_total{
+                namespace="labs", service="lab4-app-api",
+                method="POST", route="/order", status_code=~"5.."
+              }[5m]))
+              /
+              clamp_min(sum(rate(api_http_requests_total{
+                namespace="labs", service="lab4-app-api",
+                method="POST", route="/order"
+              }[5m])), 0.001)
+            ) > 0.01
+          for: 1m
+          labels:
+            severity: critical
+            slo: api-errors
+          annotations:
+            summary: "The Orders API violates its error-rate SLA"
+            description: "More than 1% of POST /order requests have returned 5xx for one minute."
+
+        - alert: Lab4CriticalPodUnschedulable
+          expr: |
+            kube_pod_status_unschedulable{namespace="labs"} == 1
+            and on (namespace, pod)
+            kube_pod_info{namespace="labs", priority_class="high-priority"}
+          for: 1m
+          labels:
+            severity: critical
+            slo: critical-capacity
+          annotations:
+            summary: "A high-priority Lab 4 pod cannot be scheduled"
+            description: "A high-priority pod has remained unschedulable despite spreading and preemption."
