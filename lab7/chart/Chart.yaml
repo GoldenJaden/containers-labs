@@ -1,0 +1,6 @@
+apiVersion: v2
+name: drift-demo
+description: Demo workload for Kubernetes configuration drift detection
+type: application
+version: 0.1.0
+appVersion: "1.27"

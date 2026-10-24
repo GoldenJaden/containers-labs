@@ -1,0 +1,130 @@
+[
+  {
+    "createdAt": "2026-10-24T09:08:51.267Z",
+    "updatedAt": "2026-10-24T10:53:55.000Z",
+    "id": "kubernetesDriftAuditor",
+    "name": "Kubernetes Configuration Drift Auditor",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "kubernetes-drift",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "1",
+        "name": "Drift Audit Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [0, 0],
+        "webhookId": "kubernetes-drift-auditor"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://agent:8000/analyze",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json.body ?? $json) }}",
+          "options": {
+            "timeout": 180000
+          }
+        },
+        "id": "3",
+        "name": "AI Agent — GitHub + Kubernetes MCP",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [280, 0]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://result-store:8000/reports",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "id": "4",
+        "name": "Save Drift Report",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [560, 0]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://exporter:8000/observe",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "id": "5",
+        "name": "Publish Drift Metrics",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [820, 0]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ JSON.stringify({ repository: $json.repository, ref: $json.ref, chart_path: $json.chart_path, namespace: $json.namespace, release: $json.release, audited_resources: $json.audited_resources, verdict: $json.analysis.verdict, drift_count: $json.analysis.drift_count, drift_by_severity: $json.metrics.drift_by_severity, resources_out_of_sync: $json.metrics.resources_out_of_sync, likely_cause: $json.analysis.likely_cause, impact: $json.analysis.impact, drift: $json.analysis.drift, actions: $json.analysis.actions, report_path: $json.report_path, model: $json.agent.model, tool_calls: $json.agent.tool_calls }) }}",
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "id": "6",
+        "name": "Return Audit Result",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [1080, 0]
+      }
+    ],
+    "connections": {
+      "Drift Audit Webhook": {
+        "main": [[{"node": "AI Agent — GitHub + Kubernetes MCP", "type": "main", "index": 0}]]
+      },
+      "AI Agent — GitHub + Kubernetes MCP": {
+        "main": [[{"node": "Save Drift Report", "type": "main", "index": 0}]]
+      },
+      "Save Drift Report": {
+        "main": [[{"node": "Publish Drift Metrics", "type": "main", "index": 0}]]
+      },
+      "Publish Drift Metrics": {
+        "main": [[{"node": "Return Audit Result", "type": "main", "index": 0}]]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": null,
+    "versionId": "192f53cb-af26-43e5-a689-749aedcb4754",
+    "triggerCount": 1,
+    "tags": [],
+    "shared": [
+      {
+        "createdAt": "2026-10-24T09:08:51.267Z",
+        "updatedAt": "2026-10-24T09:08:51.267Z",
+        "role": "workflow:owner",
+        "workflowId": "kubernetesDriftAuditor",
+        "projectId": "pN3iSHFlKpJumNUm",
+        "project": {
+          "createdAt": "2026-10-24T09:08:50.939Z",
+          "updatedAt": "2026-10-24T10:42:00.234Z",
+          "id": "pN3iSHFlKpJumNUm",
+          "name": "Admin Admin <admin@example.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null
+        }
+      }
+    ]
+  }
+]

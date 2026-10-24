@@ -8,3 +8,4 @@
 | 04 | **Ресурсы и планирование** | [Отчёт](./lab4/README.md) · [Файлы](./lab4/) | ✅ |
 | 05 | **Сеть Kubernetes** | — | 🔒 |
 | 06 | **Service mesh и трафик** | — | 🔒 |
+| 07 | **Automating a DevOps process with n8n + AI** | [Отчёт](./lab7/README.md) · [Файлы](./lab7/) | ✅ |

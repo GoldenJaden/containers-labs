@@ -1,0 +1,16 @@
+read_only = true
+disable_destructive = true
+kubeconfig = "/kubeconfig"
+list_output = "yaml"
+toolsets = ["core"]
+enabled_tools = ["resources_get", "events_list"]
+
+server_instructions = """
+Read only from namespace drift-demo. Never mutate, delete, exec into,
+or expose secrets from the cluster.
+"""
+
+[[denied_resources]]
+group = ""
+version = "v1"
+kind = "Secret"

@@ -1,0 +1,136 @@
+name: kubernetes-drift-auditor
+
+services:
+  ollama:
+    image: ollama/ollama:0.12.3
+    volumes:
+      - ollama-data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  agent:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      OLLAMA_URL: http://ollama:11434/api/chat
+      MODEL: qwen2.5:1.5b
+      SKILL_FILE: /skills/kubernetes-drift.md
+      GITHUB_TOKEN_FILE: /run/secrets/github_token
+      KUBERNETES_MCP_CONFIG: /config/kubernetes-mcp.toml
+    volumes:
+      - ./skills:/skills:ro
+      - ./mcp:/config:ro
+      - ${HOME}/.kube/config:/kubeconfig:ro
+    secrets:
+      - github_token
+    depends_on:
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  result-store:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    command: ["/venv/bin/python", "/app/result_store.py"]
+    environment:
+      REPORT_DIR: /reports
+    volumes:
+      - ./reports:/reports
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8000/health"]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+
+  exporter:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    command: ["/venv/bin/python", "/app/exporter.py"]
+    ports:
+      - "9108:8000"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8000/health"]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+
+  n8n:
+    image: n8nio/n8n:1.113.3
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - "n8n import:workflow --input=/workflows/kubernetes-drift.json && n8n update:workflow --id=kubernetesDriftAuditor --active=true && n8n start"
+    environment:
+      N8N_HOST: 0.0.0.0
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      N8N_METRICS: "true"
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_PERSONALIZATION_ENABLED: "false"
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      N8N_SECURE_COOKIE: "false"
+      WEBHOOK_URL: http://localhost:5678/
+      GENERIC_TIMEZONE: Europe/Moscow
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n-data:/home/node/.n8n
+      - ./n8n:/workflows:ro
+    depends_on:
+      agent:
+        condition: service_healthy
+      result-store:
+        condition: service_healthy
+      exporter:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+    ports:
+      - "9098:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus-data:/prometheus
+    depends_on:
+      exporter:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:11.6.3
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+    ports:
+      - "3008:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+volumes:
+  n8n-data:
+  ollama-data:
+  prometheus-data:
+  grafana-data:
+
+secrets:
+  github_token:
+    file: ${GITHUB_TOKEN_FILE:-/tmp/drift-auditor-github-token}
