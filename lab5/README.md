@@ -59,8 +59,6 @@
 
 В нашем кластере kube-proxy полностью заменён Cilium. Выбор пода и перенаправление трафика сервисов выполняются через eBPF.
 
-Сравнение режимов: [документация Kubernetes](https://v1-34.docs.kubernetes.io/docs/reference/networking/virtual-ips/).
-
 ## Part 3 - Design the target access matrix
 
 
