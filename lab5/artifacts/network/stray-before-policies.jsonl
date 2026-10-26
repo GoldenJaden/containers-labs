@@ -1,2 +1,0 @@
-{"host": "shop-api.lab5.svc.cluster.local", "port": 8080, "reachable": true}
-{"host": "shop-db-rw.lab5.svc.cluster.local", "port": 5432, "reachable": true}

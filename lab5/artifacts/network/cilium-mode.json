@@ -1,7 +1,0 @@
-{
-  "kube-proxy-replacement": "true",
-  "routing-mode": "tunnel",
-  "tunnel-protocol": "vxlan",
-  "enable-policy": "default",
-  "datapath-mode": "veth"
-}
