@@ -1,0 +1,26 @@
+{{- range $name := list "api" "worker" }}
+{{- $c := index $.Values $name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-{{ $name }}
+  labels:
+    {{- include "shop.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $name }}
+spec:
+  type: {{ $c.service.type }}
+  {{- if eq $c.service.type "NodePort" }}
+  externalTrafficPolicy: Cluster
+  {{- end }}
+  selector:
+    {{- include "shop.selector" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $name }}
+  ports:
+    - name: http
+      port: {{ $c.port }}
+      targetPort: http
+      {{- with $c.service.nodePort }}
+      nodePort: {{ . }}
+      {{- end }}
+{{- end }}

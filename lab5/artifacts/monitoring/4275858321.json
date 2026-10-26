@@ -1,0 +1,28 @@
+{
+  "status": "success",
+  "data": {
+    "resultType": "vector",
+    "result": [
+      {
+        "metric": {
+          "job": "coredns",
+          "rcode": "NOERROR"
+        },
+        "value": [
+          1792946708.722,
+          "2"
+        ]
+      },
+      {
+        "metric": {
+          "job": "coredns",
+          "rcode": "NXDOMAIN"
+        },
+        "value": [
+          1792946708.722,
+          "2"
+        ]
+      }
+    ]
+  }
+}

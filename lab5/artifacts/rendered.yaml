@@ -1,0 +1,1118 @@
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-default-deny
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-client-api
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: api
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels: {"lab5-role":"client"}
+        - ipBlock: {cidr: 192.168.0.0/24}
+      ports: [{protocol: TCP, port: 8080}]
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-client-egress
+spec:
+  podSelector:
+    matchLabels: {"lab5-role":"client"}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: shop
+              app.kubernetes.io/instance: shop
+              app.kubernetes.io/component: api
+      ports: [{protocol: TCP, port: 8080}]
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-api-database-egress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: api
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels: {"cnpg.io/cluster":"shop-db"}
+      ports: [{protocol: TCP, port: 5432}]
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-api-database-ingress
+spec:
+  podSelector:
+    matchLabels: {"cnpg.io/cluster":"shop-db"}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: shop
+              app.kubernetes.io/instance: shop
+              app.kubernetes.io/component: api
+      ports: [{protocol: TCP, port: 5432}]
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-worker-database-egress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: worker
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels: {"cnpg.io/cluster":"shop-db"}
+      ports: [{protocol: TCP, port: 5432}]
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-worker-database-ingress
+spec:
+  podSelector:
+    matchLabels: {"cnpg.io/cluster":"shop-db"}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: shop
+              app.kubernetes.io/instance: shop
+              app.kubernetes.io/component: worker
+      ports: [{protocol: TCP, port: 5432}]
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-dns-api
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: api
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {"k8s-app":"kube-dns"}
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-dns-worker
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: worker
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {"k8s-app":"kube-dns"}
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-dns-database
+spec:
+  podSelector:
+    matchLabels:
+      cnpg.io/cluster: shop-db
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {"k8s-app":"kube-dns"}
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-dns-client
+spec:
+  podSelector:
+    matchLabels:
+      lab5-role: client
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {"k8s-app":"kube-dns"}
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-monitoring-api
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: api
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: monitoring}
+          podSelector:
+            matchLabels: {"app.kubernetes.io/name":"prometheus"}
+      ports:
+        - {protocol: TCP, port: 8080}
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-monitoring-database
+spec:
+  podSelector:
+    matchLabels: {"cnpg.io/cluster":"shop-db"}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: monitoring}
+          podSelector:
+            matchLabels: {"app.kubernetes.io/name":"prometheus"}
+      ports:
+        - {protocol: TCP, port: 9187}
+---
+# Source: shop/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: shop-database-management
+spec:
+  podSelector:
+    matchLabels: {"cnpg.io/cluster":"shop-db"}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: cnpg-system}
+          podSelector:
+            matchLabels: {"app.kubernetes.io/name":"cloudnative-pg"}
+      ports: [{protocol: TCP, port: 8000}]
+    - from:
+        - podSelector:
+            matchLabels: {"cnpg.io/cluster":"shop-db"}
+      ports:
+        - {protocol: TCP, port: 5432}
+        - {protocol: TCP, port: 8000}
+  egress:
+    - to:
+        - podSelector:
+            matchLabels: {"cnpg.io/cluster":"shop-db"}
+      ports:
+        - {protocol: TCP, port: 5432}
+        - {protocol: TCP, port: 8000}
+---
+# Source: shop/templates/monitoring/dashboard.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shop-network-dashboard
+  labels:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/managed-by: Helm
+    grafana_dashboard: "1"
+data:
+  lab5-network.json: |
+    {
+      "uid": "lab5-zero-trust",
+      "title": "Lab 5 \u2014 Zero Trust",
+      "tags": [
+        "lab5",
+        "network"
+      ],
+      "schemaVersion": 39,
+      "version": 2,
+      "refresh": "",
+      "time": {
+        "from": "2026-10-25T17:21:42.930755+00:00",
+        "to": "2026-10-25T17:32:42.725518+00:00"
+      },
+      "panels": [
+        {
+          "id": 1,
+          "title": "Client requests succeeded",
+          "type": "stat",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 0,
+            "w": 6,
+            "h": 4
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(max_over_time(lab5_client_requests_total{run=\"$run\",result=\"success\"}[$__range]))",
+              "instant": true
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
+            "colorMode": "value",
+            "graphMode": "none"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "fixed",
+                "fixedColor": "green"
+              },
+              "decimals": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 2,
+          "title": "Client requests failed (no retries)",
+          "type": "stat",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 6,
+            "y": 0,
+            "w": 6,
+            "h": 4
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(max_over_time(lab5_client_requests_total{run=\"$run\",result=\"failed\"}[$__range]))",
+              "instant": true
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
+            "colorMode": "value",
+            "graphMode": "none"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "fixed",
+                "fixedColor": "red"
+              },
+              "decimals": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 3,
+          "title": "Pods deleted",
+          "type": "stat",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 0,
+            "w": 6,
+            "h": 4
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(max_over_time(lab5_chaos_deleted_pods_total{run=\"$run\"}[$__range]))",
+              "instant": true
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
+            "colorMode": "value",
+            "graphMode": "none"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "fixed",
+                "fixedColor": "orange"
+              },
+              "decimals": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 4,
+          "title": "Distinct observed pod IPs",
+          "type": "stat",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 18,
+            "y": 0,
+            "w": 6,
+            "h": 4
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "max(max_over_time(lab5_chaos_unique_pod_ips{run=\"$run\"}[$__range]))",
+              "instant": true
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
+            "colorMode": "value",
+            "graphMode": "none"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "fixed",
+                "fixedColor": "blue"
+              },
+              "decimals": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 5,
+          "title": "Client continuity while API / worker pods are deleted",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 4,
+            "w": 24,
+            "h": 12
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(lab5_client_requests_total{run=\"$run\",result=\"success\"})",
+              "legendFormat": "Successful client requests"
+            },
+            {
+              "refId": "B",
+              "expr": "sum(lab5_client_requests_total{run=\"$run\",result=\"failed\"})",
+              "legendFormat": "Failed client requests"
+            },
+            {
+              "refId": "C",
+              "expr": "sum(lab5_chaos_deleted_pods_total{run=\"$run\"})",
+              "legendFormat": "Deleted API / worker pods"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              },
+              "decimals": 0
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Successful client requests"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "mode": "fixed",
+                      "fixedColor": "green"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Failed client requests"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "mode": "fixed",
+                      "fixedColor": "red"
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 3
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Deleted API / worker pods"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "mode": "fixed",
+                      "fixedColor": "orange"
+                    }
+                  },
+                  {
+                    "id": "custom.axisPlacement",
+                    "value": "right"
+                  },
+                  {
+                    "id": "custom.axisLabel",
+                    "value": "Deleted pods"
+                  }
+                ]
+              }
+            ]
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          }
+        },
+        {
+          "id": 6,
+          "title": "Lab5 network flows",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 16,
+            "w": 12,
+            "h": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              }
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (verdict) (rate(hubble_flows_processed_total{source_namespace=\"lab5\"}[1m]))",
+              "legendFormat": "{{verdict}}"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Policy drops",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 16,
+            "w": 12,
+            "h": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "pps",
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              }
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (source,destination) (rate(hubble_drop_total{reason=\"POLICY_DENIED\",source_namespace=\"lab5\"}[1m])) or vector(0)",
+              "legendFormat": "{{source}} \u2192 {{destination}}"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "TCP connection events",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 24,
+            "w": 12,
+            "h": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              }
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (flag) (rate(hubble_tcp_flags_total{source_namespace=\"lab5\"}[1m]))",
+              "legendFormat": "{{flag}}"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "title": "CoreDNS responses (cluster)",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 24,
+            "w": 12,
+            "h": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              }
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (rcode) (rate(coredns_dns_responses_total[1m]))",
+              "legendFormat": "{{rcode}}"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "title": "API requests during pod churn",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 32,
+            "w": 12,
+            "h": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              }
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (status_code) (rate(api_http_requests_total{namespace=\"lab5\",route=\"/order\"}[1m]))",
+              "legendFormat": "{{status_code}}"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "title": "Ready API and worker replicas",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 32,
+            "w": 12,
+            "h": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              }
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "kube_deployment_status_replicas_available{namespace=\"lab5\",deployment=~\"shop-api|shop-worker\"}",
+              "legendFormat": "{{deployment}}"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "Network metrics scrape health",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 40,
+            "w": 12,
+            "h": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              }
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "up{job=\"hubble-metrics\"}",
+              "legendFormat": "{{node}}"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "title": "CoreDNS scrape health",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 40,
+            "w": 12,
+            "h": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "drawStyle": "line",
+                "lineWidth": 2
+              }
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "up{job=\"coredns\"}",
+              "legendFormat": "{{pod}}"
+            }
+          ]
+        }
+      ],
+      "templating": {
+        "list": [
+          {
+            "name": "run",
+            "label": "Run",
+            "type": "textbox",
+            "query": "chaos-03",
+            "current": {
+              "text": "chaos-03",
+              "value": "chaos-03"
+            }
+          }
+        ]
+      }
+    }
+---
+# Source: shop/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: shop-api
+  labels:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: api
+spec:
+  type: NodePort
+  externalTrafficPolicy: Cluster
+  selector:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/component: api
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      nodePort: 30085
+---
+# Source: shop/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: shop-worker
+  labels:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: worker
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/component: worker
+  ports:
+    - name: http
+      port: 8081
+      targetPort: http
+---
+# Source: shop/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shop-api
+  labels:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: api
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: shop
+        app.kubernetes.io/instance: shop
+        app.kubernetes.io/component: api
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001, fsGroup: 10001}
+      containers:
+        - name: api
+          image: "192.168.0.242:3000/gjaden/lab4-api:1.0.1"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}
+            seccompProfile: {type: RuntimeDefault}
+          ports:
+            - {name: http, containerPort: 8080}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef: {name: shop-db-app, key: uri}
+          startupProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 2
+            failureThreshold: 60
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 1
+            failureThreshold: 1
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+          lifecycle:
+            preStop:
+              exec:
+                command: [python, -c, "import time; time.sleep(8)"]
+          resources:
+            limits:
+              memory: 160Mi
+            requests:
+              cpu: 15m
+              memory: 100Mi
+---
+# Source: shop/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shop-worker
+  labels:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: worker
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: shop
+        app.kubernetes.io/instance: shop
+        app.kubernetes.io/component: worker
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001, fsGroup: 10001}
+      containers:
+        - name: worker
+          image: "192.168.0.242:3000/gjaden/lab4-worker:1.0.0"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}
+            seccompProfile: {type: RuntimeDefault}
+          ports:
+            - {name: http, containerPort: 8081}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef: {name: shop-db-app, key: uri}
+            - {name: POLL_INTERVAL_SECONDS, value: "1"}
+          startupProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 2
+            failureThreshold: 60
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 1
+            failureThreshold: 1
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+          lifecycle:
+            preStop:
+              exec:
+                command: [python, -c, "import time; time.sleep(8)"]
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 5m
+              memory: 64Mi
+---
+# Source: shop/templates/cilium-apiserver.yaml
+# Node IPs are not selected by ipBlock in the current Cilium configuration.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: shop-database-apiserver
+spec:
+  endpointSelector:
+    matchLabels: {"cnpg.io/cluster":"shop-db"}
+  egress:
+    - toEntities: [kube-apiserver]
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
+---
+# Source: shop/templates/database.yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: shop-db
+  labels:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/managed-by: Helm
+spec:
+  imageName: "ghcr.io/cloudnative-pg/postgresql:18"
+  instances: 1
+  bootstrap:
+    initdb: {database: orders, owner: app}
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 20m
+      memory: 128Mi
+  storage:
+    size: 2Gi
+    storageClass: proxmox-data-xfs
+  monitoring:
+    enablePodMonitor: true
+---
+# Source: shop/templates/monitoring/prometheusrule.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: shop-network
+  labels:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/managed-by: Helm
+spec:
+  groups:
+    - name: lab5-network
+      rules:
+        - alert: Lab5PolicyDrops
+          expr: sum(rate(hubble_drop_total{reason="POLICY_DENIED",source_namespace="lab5"}[1m])) > 0
+          for: 30s
+          labels: {severity: warning, lab: lab5}
+          annotations:
+            summary: Lab5 traffic is blocked by network policy
+            description: Sustained policy drops may indicate a broken allow rule or an unauthorized client.
+        - alert: Lab5DNSFailures
+          expr: sum(rate(coredns_dns_responses_total{rcode="SERVFAIL"}[2m])) > 0
+          for: 1m
+          labels: {severity: warning, lab: lab5}
+          annotations:
+            summary: Cluster DNS returns SERVFAIL
+            description: DNS failures can prevent shop from resolving service names.
+        - alert: Lab5NetworkMetricsUnavailable
+          expr: absent(up{job="hubble-metrics"}) or min(up{job="hubble-metrics"}) == 0
+          for: 1m
+          labels: {severity: warning, lab: lab5}
+          annotations:
+            summary: Hubble metrics collection is unavailable
+            description: Network drops and flows cannot be reliably monitored.
+---
+# Source: shop/templates/monitoring/servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: shop-api
+  labels:
+    app.kubernetes.io/name: shop
+    app.kubernetes.io/instance: shop
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: shop
+      app.kubernetes.io/instance: shop
+      app.kubernetes.io/component: api
+  endpoints:
+    - port: http
+      interval: 15s
+      path: /metrics

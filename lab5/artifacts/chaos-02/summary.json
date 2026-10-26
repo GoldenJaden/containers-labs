@@ -1,0 +1,12 @@
+{
+  "total": 3000,
+  "failed": 0,
+  "pending_orders_at_verification": [],
+  "verified_at": 1792947706.163438,
+  "start": 1792946988.4509578,
+  "end": 1792947588.248221,
+  "deletions": 103,
+  "unique_pod_ips": 87,
+  "control_errors": 1,
+  "note": "Raw requests and full events were saved. The original summary writer failed on a control_error event without an ip; summary reconstructed from original files."
+}

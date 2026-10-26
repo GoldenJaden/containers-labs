@@ -1,0 +1,6 @@
+{
+  "valid_continuity_proof": false,
+  "reason": "Controller lost Kubernetes API connection after 36 deletions; complete event history was not saved by the first script version.",
+  "client_attempts": 3000,
+  "client_failures": 0
+}

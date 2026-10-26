@@ -1,0 +1,61 @@
+api:
+  replicas: 3
+  image: 192.168.0.242:3000/gjaden/lab4-api:1.0.1
+  port: 8080
+  service:
+    type: NodePort
+    nodePort: 30085
+  resources:
+    requests: {cpu: 15m, memory: 100Mi}
+    limits: {memory: 160Mi}
+worker:
+  replicas: 2
+  image: 192.168.0.242:3000/gjaden/lab4-worker:1.0.0
+  port: 8081
+  service:
+    type: ClusterIP
+  resources:
+    requests: {cpu: 5m, memory: 64Mi}
+    limits: {memory: 128Mi}
+database:
+  name: shop-db
+  image: ghcr.io/cloudnative-pg/postgresql:18
+  instances: 1
+  storage: 2Gi
+  storageClass: proxmox-data-xfs
+  resources:
+    requests: {cpu: 20m, memory: 128Mi}
+    limits: {memory: 256Mi}
+networkPolicy:
+  enabled: true
+  clientLabels: {lab5-role: client}
+  apiLabels: {app.kubernetes.io/component: api}
+  workerLabels: {app.kubernetes.io/component: worker}
+  databaseLabels: {cnpg.io/cluster: shop-db}
+  databasePort: 5432
+  allowApiDatabase: true
+  allowWorkerDatabase: true
+  dnsComponents: [api, worker, database, client]
+  dnsNamespace: kube-system
+  dnsLabels: {k8s-app: kube-dns}
+  dnsPort: 53
+  externalClientCIDRs: [192.168.0.0/24]
+  monitoringNamespace: monitoring
+  prometheusLabels: {app.kubernetes.io/name: prometheus}
+  operatorNamespace: cnpg-system
+  operatorLabels: {app.kubernetes.io/name: cloudnative-pg}
+  operatorPort: 8000
+  databaseMetricsPort: 9187
+  kubernetesAPIEntity: kube-apiserver
+  kubernetesAPI:
+    - cidr: 192.168.0.230/32
+      port: 6443
+    - cidr: 10.96.0.1/32
+      port: 443
+monitoring:
+  enabled: true
+  interval: 15s
+  dashboard: true
+loadTest:
+  enabled: false
+  metricsPort: 9090

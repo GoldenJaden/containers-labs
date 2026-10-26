@@ -1,0 +1,11 @@
+{
+  "total": 3000,
+  "failed": 0,
+  "pending_orders": [],
+  "start": 1792948932.9307554,
+  "end": 1792949532.7255177,
+  "deletions": 97,
+  "unique_pod_ips": 78,
+  "control_errors": 4,
+  "metrics_run": "chaos-03"
+}

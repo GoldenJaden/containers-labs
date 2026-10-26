@@ -1,0 +1,18 @@
+{{- if .Values.networkPolicy.enabled }}
+# Node IPs are not selected by ipBlock in the current Cilium configuration.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-database-apiserver
+spec:
+  endpointSelector:
+    matchLabels: {{ toJson .Values.networkPolicy.databaseLabels }}
+  egress:
+    - toEntities: [{{ .Values.networkPolicy.kubernetesAPIEntity }}]
+      toPorts:
+        - ports:
+            {{- range .Values.networkPolicy.kubernetesAPI }}
+            - port: {{ .port | quote }}
+              protocol: TCP
+            {{- end }}
+{{- end }}

@@ -1,0 +1,34 @@
+# Overlay for the existing Cilium 1.18.5 release; retain its original values.
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    resources:
+      requests: {cpu: 5m, memory: 32Mi}
+      limits: {memory: 128Mi}
+  ui:
+    enabled: true
+    backend:
+      resources:
+        requests: {cpu: 5m, memory: 32Mi}
+        limits: {memory: 128Mi}
+    frontend:
+      resources:
+        requests: {cpu: 5m, memory: 16Mi}
+        limits: {memory: 64Mi}
+  metrics:
+    enabled:
+      - 'flow:labelsContext=source_namespace,destination_namespace;sourceContext=workload-name;destinationContext=workload-name'
+      - 'drop:labelsContext=source_namespace,destination_namespace;sourceContext=workload-name;destinationContext=workload-name'
+      - 'tcp:labelsContext=source_namespace,destination_namespace'
+    serviceMonitor:
+      enabled: true
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+operator:
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      enabled: true

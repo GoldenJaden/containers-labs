@@ -1,0 +1,176 @@
+{{- if .Values.networkPolicy.enabled }}
+{{- $p := .Values.networkPolicy }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-default-deny
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-client-api
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "shop.selector" . | nindent 6 }}
+      {{- toYaml $p.apiLabels | nindent 6 }}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels: {{ toJson $p.clientLabels }}
+        {{- range $p.externalClientCIDRs }}
+        - ipBlock: {cidr: {{ . }}}
+        {{- end }}
+      ports: [{protocol: TCP, port: {{ .Values.api.port }}}]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-client-egress
+spec:
+  podSelector:
+    matchLabels: {{ toJson $p.clientLabels }}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- include "shop.selector" . | nindent 14 }}
+              {{- toYaml $p.apiLabels | nindent 14 }}
+      ports: [{protocol: TCP, port: {{ .Values.api.port }}}]
+{{- range $name := list "api" "worker" }}
+{{- $allow := ternary $p.allowApiDatabase $p.allowWorkerDatabase (eq $name "api") }}
+{{- $labels := index $p (printf "%sLabels" $name) }}
+{{- if $allow }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $.Release.Name }}-{{ $name }}-database-egress
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "shop.selector" $ | nindent 6 }}
+      {{- toYaml $labels | nindent 6 }}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels: {{ toJson $p.databaseLabels }}
+      ports: [{protocol: TCP, port: {{ $p.databasePort }}}]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $.Release.Name }}-{{ $name }}-database-ingress
+spec:
+  podSelector:
+    matchLabels: {{ toJson $p.databaseLabels }}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- include "shop.selector" $ | nindent 14 }}
+              {{- toYaml $labels | nindent 14 }}
+      ports: [{protocol: TCP, port: {{ $p.databasePort }}}]
+{{- end }}
+{{- end }}
+{{- range $component := $p.dnsComponents }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $.Release.Name }}-dns-{{ $component }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- if eq $component "database" }}
+      {{- toYaml $p.databaseLabels | nindent 6 }}
+      {{- else if eq $component "client" }}
+      {{- toYaml $p.clientLabels | nindent 6 }}
+      {{- else }}
+      {{- include "shop.selector" $ | nindent 6 }}
+      app.kubernetes.io/component: {{ $component }}
+      {{- end }}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: {{ $p.dnsNamespace }}}
+          podSelector:
+            matchLabels: {{ toJson $p.dnsLabels }}
+      ports:
+        - {protocol: UDP, port: {{ $p.dnsPort }}}
+        - {protocol: TCP, port: {{ $p.dnsPort }}}
+{{- end }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-monitoring-api
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "shop.selector" . | nindent 6 }}
+      {{- toYaml $p.apiLabels | nindent 6 }}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: {{ $p.monitoringNamespace }}}
+          podSelector:
+            matchLabels: {{ toJson $p.prometheusLabels }}
+      ports:
+        - {protocol: TCP, port: {{ .Values.api.port }}}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-monitoring-database
+spec:
+  podSelector:
+    matchLabels: {{ toJson $p.databaseLabels }}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: {{ $p.monitoringNamespace }}}
+          podSelector:
+            matchLabels: {{ toJson $p.prometheusLabels }}
+      ports:
+        - {protocol: TCP, port: {{ $p.databaseMetricsPort }}}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-database-management
+spec:
+  podSelector:
+    matchLabels: {{ toJson $p.databaseLabels }}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: {{ $p.operatorNamespace }}}
+          podSelector:
+            matchLabels: {{ toJson $p.operatorLabels }}
+      ports: [{protocol: TCP, port: {{ $p.operatorPort }}}]
+    - from:
+        - podSelector:
+            matchLabels: {{ toJson $p.databaseLabels }}
+      ports:
+        - {protocol: TCP, port: {{ $p.databasePort }}}
+        - {protocol: TCP, port: {{ $p.operatorPort }}}
+  egress:
+    - to:
+        - podSelector:
+            matchLabels: {{ toJson $p.databaseLabels }}
+      ports:
+        - {protocol: TCP, port: {{ $p.databasePort }}}
+        - {protocol: TCP, port: {{ $p.operatorPort }}}
+{{- end }}

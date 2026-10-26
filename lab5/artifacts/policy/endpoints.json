@@ -1,0 +1,528 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "cilium.io/v2",
+      "kind": "CiliumEndpoint",
+      "metadata": {
+        "creationTimestamp": "2026-10-25T16:44:02Z",
+        "generation": 1,
+        "labels": {
+          "lab5-role": "client"
+        },
+        "name": "lab5-client",
+        "namespace": "lab5",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "name": "lab5-client",
+            "uid": "bea63736-f5bf-4216-9542-0b6dea99f3eb"
+          }
+        ],
+        "resourceVersion": "60334939",
+        "uid": "0363c0ce-9657-4c9e-9482-09d0073d8771"
+      },
+      "status": {
+        "encryption": {},
+        "external-identifiers": {
+          "cni-attachment-id": "24e5ba41a1133e2848f94409194cfc4c187d2fd4875a96ea4f98cceae23235cd:eth0",
+          "container-id": "24e5ba41a1133e2848f94409194cfc4c187d2fd4875a96ea4f98cceae23235cd",
+          "k8s-namespace": "lab5",
+          "k8s-pod-name": "lab5-client",
+          "pod-name": "lab5/lab5-client"
+        },
+        "id": 330,
+        "identity": {
+          "id": 36116,
+          "labels": [
+            "k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=lab5",
+            "k8s:io.cilium.k8s.policy.cluster=kubernetes",
+            "k8s:io.cilium.k8s.policy.serviceaccount=default",
+            "k8s:io.kubernetes.pod.namespace=lab5",
+            "k8s:lab5-role=client"
+          ]
+        },
+        "networking": {
+          "addressing": [
+            {
+              "ipv4": "10.0.0.189"
+            }
+          ],
+          "node": "192.168.0.230"
+        },
+        "state": "ready"
+      }
+    },
+    {
+      "apiVersion": "cilium.io/v2",
+      "kind": "CiliumEndpoint",
+      "metadata": {
+        "creationTimestamp": "2026-10-25T16:44:02Z",
+        "generation": 1,
+        "labels": {
+          "lab5-role": "stray"
+        },
+        "name": "lab5-stray",
+        "namespace": "lab5",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "name": "lab5-stray",
+            "uid": "ce643ede-e07e-4f4f-9712-9a76336c2292"
+          }
+        ],
+        "resourceVersion": "60334941",
+        "uid": "c19d3da3-3956-470a-bb84-79f968d8c160"
+      },
+      "status": {
+        "encryption": {},
+        "external-identifiers": {
+          "cni-attachment-id": "aa8628d86e35b8aea7d6af16a0e8b5a6c3583ffc044dd836139f7478cd2043c4:eth0",
+          "container-id": "aa8628d86e35b8aea7d6af16a0e8b5a6c3583ffc044dd836139f7478cd2043c4",
+          "k8s-namespace": "lab5",
+          "k8s-pod-name": "lab5-stray",
+          "pod-name": "lab5/lab5-stray"
+        },
+        "id": 1785,
+        "identity": {
+          "id": 13647,
+          "labels": [
+            "k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=lab5",
+            "k8s:io.cilium.k8s.policy.cluster=kubernetes",
+            "k8s:io.cilium.k8s.policy.serviceaccount=default",
+            "k8s:io.kubernetes.pod.namespace=lab5",
+            "k8s:lab5-role=stray"
+          ]
+        },
+        "networking": {
+          "addressing": [
+            {
+              "ipv4": "10.0.1.204"
+            }
+          ],
+          "node": "192.168.0.231"
+        },
+        "state": "ready"
+      }
+    },
+    {
+      "apiVersion": "cilium.io/v2",
+      "kind": "CiliumEndpoint",
+      "metadata": {
+        "creationTimestamp": "2026-10-25T16:59:33Z",
+        "generation": 1,
+        "labels": {
+          "app.kubernetes.io/component": "api",
+          "app.kubernetes.io/instance": "shop",
+          "app.kubernetes.io/name": "shop",
+          "pod-template-hash": "d89c79656"
+        },
+        "name": "shop-api-d89c79656-fdw4b",
+        "namespace": "lab5",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "name": "shop-api-d89c79656-fdw4b",
+            "uid": "d731969b-722a-4301-8be4-f7b74b959b91"
+          }
+        ],
+        "resourceVersion": "60345181",
+        "uid": "a7d66281-8b4a-4acb-8adf-d37c315e141d"
+      },
+      "status": {
+        "encryption": {},
+        "external-identifiers": {
+          "cni-attachment-id": "c3403b7bec7d2d2532ddb5c05e7e6b20542fc025697b4d96d8d2f36fc91ebd82:eth0",
+          "container-id": "c3403b7bec7d2d2532ddb5c05e7e6b20542fc025697b4d96d8d2f36fc91ebd82",
+          "k8s-namespace": "lab5",
+          "k8s-pod-name": "shop-api-d89c79656-fdw4b",
+          "pod-name": "lab5/shop-api-d89c79656-fdw4b"
+        },
+        "id": 542,
+        "identity": {
+          "id": 15012,
+          "labels": [
+            "k8s:app.kubernetes.io/component=api",
+            "k8s:app.kubernetes.io/instance=shop",
+            "k8s:app.kubernetes.io/name=shop",
+            "k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=lab5",
+            "k8s:io.cilium.k8s.policy.cluster=kubernetes",
+            "k8s:io.cilium.k8s.policy.serviceaccount=default",
+            "k8s:io.kubernetes.pod.namespace=lab5"
+          ]
+        },
+        "named-ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "networking": {
+          "addressing": [
+            {
+              "ipv4": "10.0.1.163"
+            }
+          ],
+          "node": "192.168.0.231"
+        },
+        "state": "ready"
+      }
+    },
+    {
+      "apiVersion": "cilium.io/v2",
+      "kind": "CiliumEndpoint",
+      "metadata": {
+        "creationTimestamp": "2026-10-25T16:59:22Z",
+        "generation": 1,
+        "labels": {
+          "app.kubernetes.io/component": "api",
+          "app.kubernetes.io/instance": "shop",
+          "app.kubernetes.io/name": "shop",
+          "pod-template-hash": "d89c79656"
+        },
+        "name": "shop-api-d89c79656-lqmjh",
+        "namespace": "lab5",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "name": "shop-api-d89c79656-lqmjh",
+            "uid": "06439ab5-fe4d-4674-9e74-1c536f9ab1e3"
+          }
+        ],
+        "resourceVersion": "60345040",
+        "uid": "69b37260-b05e-4cc0-bb69-311a75aabfeb"
+      },
+      "status": {
+        "encryption": {},
+        "external-identifiers": {
+          "cni-attachment-id": "65fb3c64fde7e54556cbae34ceaadd505af810dbe8b896d0be3e5da93223aa6e:eth0",
+          "container-id": "65fb3c64fde7e54556cbae34ceaadd505af810dbe8b896d0be3e5da93223aa6e",
+          "k8s-namespace": "lab5",
+          "k8s-pod-name": "shop-api-d89c79656-lqmjh",
+          "pod-name": "lab5/shop-api-d89c79656-lqmjh"
+        },
+        "id": 2723,
+        "identity": {
+          "id": 15012,
+          "labels": [
+            "k8s:app.kubernetes.io/component=api",
+            "k8s:app.kubernetes.io/instance=shop",
+            "k8s:app.kubernetes.io/name=shop",
+            "k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=lab5",
+            "k8s:io.cilium.k8s.policy.cluster=kubernetes",
+            "k8s:io.cilium.k8s.policy.serviceaccount=default",
+            "k8s:io.kubernetes.pod.namespace=lab5"
+          ]
+        },
+        "named-ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "networking": {
+          "addressing": [
+            {
+              "ipv4": "10.0.1.4"
+            }
+          ],
+          "node": "192.168.0.231"
+        },
+        "state": "ready"
+      }
+    },
+    {
+      "apiVersion": "cilium.io/v2",
+      "kind": "CiliumEndpoint",
+      "metadata": {
+        "creationTimestamp": "2026-10-25T16:59:11Z",
+        "generation": 1,
+        "labels": {
+          "app.kubernetes.io/component": "api",
+          "app.kubernetes.io/instance": "shop",
+          "app.kubernetes.io/name": "shop",
+          "pod-template-hash": "d89c79656"
+        },
+        "name": "shop-api-d89c79656-mwf6g",
+        "namespace": "lab5",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "name": "shop-api-d89c79656-mwf6g",
+            "uid": "666ceac3-24c2-4dde-8743-91eeffffd50f"
+          }
+        ],
+        "resourceVersion": "60344913",
+        "uid": "29553723-0422-4757-b7f9-a63e26bee678"
+      },
+      "status": {
+        "encryption": {},
+        "external-identifiers": {
+          "cni-attachment-id": "d6e9a83ca2553eb60413c921b126210e829448466e1e58c54c7e1cfb965baedb:eth0",
+          "container-id": "d6e9a83ca2553eb60413c921b126210e829448466e1e58c54c7e1cfb965baedb",
+          "k8s-namespace": "lab5",
+          "k8s-pod-name": "shop-api-d89c79656-mwf6g",
+          "pod-name": "lab5/shop-api-d89c79656-mwf6g"
+        },
+        "id": 959,
+        "identity": {
+          "id": 15012,
+          "labels": [
+            "k8s:app.kubernetes.io/component=api",
+            "k8s:app.kubernetes.io/instance=shop",
+            "k8s:app.kubernetes.io/name=shop",
+            "k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=lab5",
+            "k8s:io.cilium.k8s.policy.cluster=kubernetes",
+            "k8s:io.cilium.k8s.policy.serviceaccount=default",
+            "k8s:io.kubernetes.pod.namespace=lab5"
+          ]
+        },
+        "named-ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "networking": {
+          "addressing": [
+            {
+              "ipv4": "10.0.1.146"
+            }
+          ],
+          "node": "192.168.0.231"
+        },
+        "state": "ready"
+      }
+    },
+    {
+      "apiVersion": "cilium.io/v2",
+      "kind": "CiliumEndpoint",
+      "metadata": {
+        "creationTimestamp": "2026-10-25T16:42:37Z",
+        "generation": 4,
+        "labels": {
+          "app.kubernetes.io/component": "database",
+          "app.kubernetes.io/instance": "shop-db",
+          "app.kubernetes.io/managed-by": "cloudnative-pg",
+          "app.kubernetes.io/name": "postgresql",
+          "app.kubernetes.io/version": "18",
+          "cnpg.io/cluster": "shop-db",
+          "cnpg.io/instanceName": "shop-db-1",
+          "cnpg.io/instanceRole": "primary",
+          "cnpg.io/podRole": "instance",
+          "role": "primary"
+        },
+        "name": "shop-db-1",
+        "namespace": "lab5",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "name": "shop-db-1",
+            "uid": "9d857529-0ec1-4124-86d0-e831434bec98"
+          }
+        ],
+        "resourceVersion": "60334658",
+        "uid": "a41030bc-8cef-4866-a3a3-7abeef5828f3"
+      },
+      "status": {
+        "encryption": {},
+        "external-identifiers": {
+          "cni-attachment-id": "c09fe998422a4022c0c10105c23cd95f89f3583b6b041c87c78efff55196b324:eth0",
+          "container-id": "c09fe998422a4022c0c10105c23cd95f89f3583b6b041c87c78efff55196b324",
+          "k8s-namespace": "lab5",
+          "k8s-pod-name": "shop-db-1",
+          "pod-name": "lab5/shop-db-1"
+        },
+        "id": 535,
+        "identity": {
+          "id": 6661,
+          "labels": [
+            "k8s:app.kubernetes.io/component=database",
+            "k8s:app.kubernetes.io/instance=shop-db",
+            "k8s:app.kubernetes.io/managed-by=cloudnative-pg",
+            "k8s:app.kubernetes.io/name=postgresql",
+            "k8s:app.kubernetes.io/version=18",
+            "k8s:cnpg.io/cluster=shop-db",
+            "k8s:cnpg.io/instanceName=shop-db-1",
+            "k8s:cnpg.io/instanceRole=primary",
+            "k8s:cnpg.io/podRole=instance",
+            "k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=lab5",
+            "k8s:io.cilium.k8s.policy.cluster=kubernetes",
+            "k8s:io.cilium.k8s.policy.serviceaccount=shop-db",
+            "k8s:io.kubernetes.pod.namespace=lab5",
+            "k8s:role=primary"
+          ]
+        },
+        "named-ports": [
+          {
+            "name": "metrics",
+            "port": 9187,
+            "protocol": "TCP"
+          },
+          {
+            "name": "postgresql",
+            "port": 5432,
+            "protocol": "TCP"
+          },
+          {
+            "name": "status",
+            "port": 8000,
+            "protocol": "TCP"
+          }
+        ],
+        "networking": {
+          "addressing": [
+            {
+              "ipv4": "10.0.1.55"
+            }
+          ],
+          "node": "192.168.0.231"
+        },
+        "state": "ready"
+      }
+    },
+    {
+      "apiVersion": "cilium.io/v2",
+      "kind": "CiliumEndpoint",
+      "metadata": {
+        "creationTimestamp": "2026-10-25T16:59:45Z",
+        "generation": 1,
+        "labels": {
+          "app.kubernetes.io/component": "worker",
+          "app.kubernetes.io/instance": "shop",
+          "app.kubernetes.io/name": "shop",
+          "pod-template-hash": "d469cc64f"
+        },
+        "name": "shop-worker-d469cc64f-k5vbp",
+        "namespace": "lab5",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "name": "shop-worker-d469cc64f-k5vbp",
+            "uid": "781bfd7a-3c59-492d-b2fc-45f076ea6ef5"
+          }
+        ],
+        "resourceVersion": "60345303",
+        "uid": "698e34ca-23a2-407b-875f-a788b27cb06e"
+      },
+      "status": {
+        "encryption": {},
+        "external-identifiers": {
+          "cni-attachment-id": "6d8db6afc7cb6d070995ea10431e9bcd0a706f3edb664fd36d81d2fae0ad0c88:eth0",
+          "container-id": "6d8db6afc7cb6d070995ea10431e9bcd0a706f3edb664fd36d81d2fae0ad0c88",
+          "k8s-namespace": "lab5",
+          "k8s-pod-name": "shop-worker-d469cc64f-k5vbp",
+          "pod-name": "lab5/shop-worker-d469cc64f-k5vbp"
+        },
+        "id": 742,
+        "identity": {
+          "id": 3649,
+          "labels": [
+            "k8s:app.kubernetes.io/component=worker",
+            "k8s:app.kubernetes.io/instance=shop",
+            "k8s:app.kubernetes.io/name=shop",
+            "k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=lab5",
+            "k8s:io.cilium.k8s.policy.cluster=kubernetes",
+            "k8s:io.cilium.k8s.policy.serviceaccount=default",
+            "k8s:io.kubernetes.pod.namespace=lab5"
+          ]
+        },
+        "named-ports": [
+          {
+            "name": "http",
+            "port": 8081,
+            "protocol": "TCP"
+          }
+        ],
+        "networking": {
+          "addressing": [
+            {
+              "ipv4": "10.0.1.81"
+            }
+          ],
+          "node": "192.168.0.231"
+        },
+        "state": "ready"
+      }
+    },
+    {
+      "apiVersion": "cilium.io/v2",
+      "kind": "CiliumEndpoint",
+      "metadata": {
+        "creationTimestamp": "2026-10-25T16:59:28Z",
+        "generation": 1,
+        "labels": {
+          "app.kubernetes.io/component": "worker",
+          "app.kubernetes.io/instance": "shop",
+          "app.kubernetes.io/name": "shop",
+          "pod-template-hash": "d469cc64f"
+        },
+        "name": "shop-worker-d469cc64f-qc67n",
+        "namespace": "lab5",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "name": "shop-worker-d469cc64f-qc67n",
+            "uid": "10647339-d39b-4a52-9b16-4f95526a87ec"
+          }
+        ],
+        "resourceVersion": "60345108",
+        "uid": "c502bf86-a89a-49b9-9484-e570f96fa172"
+      },
+      "status": {
+        "encryption": {},
+        "external-identifiers": {
+          "cni-attachment-id": "a2dca11feb8faaa8ddb58c5045d520525279ee12635be331391523e4a8c04b55:eth0",
+          "container-id": "a2dca11feb8faaa8ddb58c5045d520525279ee12635be331391523e4a8c04b55",
+          "k8s-namespace": "lab5",
+          "k8s-pod-name": "shop-worker-d469cc64f-qc67n",
+          "pod-name": "lab5/shop-worker-d469cc64f-qc67n"
+        },
+        "id": 3164,
+        "identity": {
+          "id": 3649,
+          "labels": [
+            "k8s:app.kubernetes.io/component=worker",
+            "k8s:app.kubernetes.io/instance=shop",
+            "k8s:app.kubernetes.io/name=shop",
+            "k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=lab5",
+            "k8s:io.cilium.k8s.policy.cluster=kubernetes",
+            "k8s:io.cilium.k8s.policy.serviceaccount=default",
+            "k8s:io.kubernetes.pod.namespace=lab5"
+          ]
+        },
+        "named-ports": [
+          {
+            "name": "http",
+            "port": 8081,
+            "protocol": "TCP"
+          }
+        ],
+        "networking": {
+          "addressing": [
+            {
+              "ipv4": "10.0.1.73"
+            }
+          ],
+          "node": "192.168.0.231"
+        },
+        "state": "ready"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

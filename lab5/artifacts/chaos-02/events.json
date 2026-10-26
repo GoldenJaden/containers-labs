@@ -1,0 +1,1695 @@
+[
+  {
+    "event": "observed",
+    "time": 1792946988.4560184,
+    "pod": "shop-api-d89c79656-fkm9r",
+    "uid": "79927774-c710-46b8-a1d2-dab3f6ec4be9",
+    "ip": "10.0.1.221",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792946988.456022,
+    "pod": "shop-api-d89c79656-n97wk",
+    "uid": "fd093d68-5635-4bce-91fc-27b312ea406b",
+    "ip": "10.0.1.35",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792946988.4560246,
+    "pod": "shop-api-d89c79656-tccbk",
+    "uid": "00827f08-4fee-4fb5-a532-75c04ced9996",
+    "ip": "10.0.1.126",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792946988.4560256,
+    "pod": "shop-worker-d469cc64f-wc89r",
+    "uid": "0bfc69ad-9a69-43cf-88b0-6bd3ce4c39de",
+    "ip": "10.0.1.130",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792946988.456026,
+    "pod": "shop-worker-d469cc64f-wwt2c",
+    "uid": "3a011808-8756-464f-a97f-eba771e6cddb",
+    "ip": "10.0.1.237",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792946994.134486,
+    "pod": "shop-api-d89c79656-fkm9r",
+    "uid": "79927774-c710-46b8-a1d2-dab3f6ec4be9",
+    "ip": "10.0.1.221",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792946995.241863,
+    "pod": "shop-api-d89c79656-vwkp8",
+    "uid": "8d61669a-c600-4016-a037-c08e8d46aabd",
+    "ip": "10.0.1.112",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792946999.825967,
+    "pod": "shop-api-d89c79656-n97wk",
+    "uid": "fd093d68-5635-4bce-91fc-27b312ea406b",
+    "ip": "10.0.1.35",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947000.9442103,
+    "pod": "shop-api-d89c79656-26qn2",
+    "uid": "06364ee3-665a-437f-9933-4516870b3036",
+    "ip": "10.0.1.81",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947005.486751,
+    "pod": "shop-api-d89c79656-vwkp8",
+    "uid": "8d61669a-c600-4016-a037-c08e8d46aabd",
+    "ip": "10.0.1.112",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947007.7035294,
+    "pod": "shop-api-d89c79656-qmd9b",
+    "uid": "89eb05cf-b278-4f5e-86e1-341aeea37491",
+    "ip": "10.0.1.252",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947011.1462505,
+    "pod": "shop-worker-d469cc64f-wwt2c",
+    "uid": "3a011808-8756-464f-a97f-eba771e6cddb",
+    "ip": "10.0.1.237",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947012.2764971,
+    "pod": "shop-worker-d469cc64f-vkt4g",
+    "uid": "d2d894e2-67ab-454d-9e75-e843d2ccd830",
+    "ip": "10.0.1.190",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947016.8396769,
+    "pod": "shop-worker-d469cc64f-wc89r",
+    "uid": "0bfc69ad-9a69-43cf-88b0-6bd3ce4c39de",
+    "ip": "10.0.1.130",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947019.0690613,
+    "pod": "shop-worker-d469cc64f-lgxsw",
+    "uid": "79ea9c0e-fdde-4de1-9828-a52c7d36b43d",
+    "ip": "10.0.1.93",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947022.4980533,
+    "pod": "shop-worker-d469cc64f-lgxsw",
+    "uid": "79ea9c0e-fdde-4de1-9828-a52c7d36b43d",
+    "ip": "10.0.1.93",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947024.7254686,
+    "pod": "shop-worker-d469cc64f-ktzjk",
+    "uid": "9c09ad6e-07e2-48a7-97f8-6812ce0cd286",
+    "ip": "10.0.1.206",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947028.2018793,
+    "pod": "shop-api-d89c79656-tccbk",
+    "uid": "00827f08-4fee-4fb5-a532-75c04ced9996",
+    "ip": "10.0.1.126",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947029.3235054,
+    "pod": "shop-api-d89c79656-krqnb",
+    "uid": "45691b26-f0ca-40b8-8582-b6f4fa1a218b",
+    "ip": "10.0.1.139",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947033.8786728,
+    "pod": "shop-api-d89c79656-qmd9b",
+    "uid": "89eb05cf-b278-4f5e-86e1-341aeea37491",
+    "ip": "10.0.1.252",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947036.1086173,
+    "pod": "shop-api-d89c79656-mxbfl",
+    "uid": "456fd09b-c58e-4247-8d70-458d8774e73f",
+    "ip": "10.0.1.88",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947039.5614378,
+    "pod": "shop-api-d89c79656-26qn2",
+    "uid": "06364ee3-665a-437f-9933-4516870b3036",
+    "ip": "10.0.1.81",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947041.7936172,
+    "pod": "shop-api-d89c79656-kkjx8",
+    "uid": "f4307990-8a6f-497d-b174-15748cb58f83",
+    "ip": "10.0.1.13",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947045.2374783,
+    "pod": "shop-api-d89c79656-krqnb",
+    "uid": "45691b26-f0ca-40b8-8582-b6f4fa1a218b",
+    "ip": "10.0.1.139",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947046.3479135,
+    "pod": "shop-api-d89c79656-7t6zm",
+    "uid": "9ab695b1-5adb-4efb-a246-c65c4e7320c7",
+    "ip": "10.0.1.50",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947050.9226673,
+    "pod": "shop-worker-d469cc64f-ktzjk",
+    "uid": "9c09ad6e-07e2-48a7-97f8-6812ce0cd286",
+    "ip": "10.0.1.206",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947053.1561506,
+    "pod": "shop-worker-d469cc64f-zpsl9",
+    "uid": "3c25c99e-f501-4d85-a510-b27b3b35098c",
+    "ip": "10.0.1.239",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947056.5849886,
+    "pod": "shop-api-d89c79656-kkjx8",
+    "uid": "f4307990-8a6f-497d-b174-15748cb58f83",
+    "ip": "10.0.1.13",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947057.6941948,
+    "pod": "shop-api-d89c79656-t6nff",
+    "uid": "caa3ed2d-3ee3-452c-a25d-c85733018129",
+    "ip": "10.0.1.4",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947062.2648787,
+    "pod": "shop-worker-d469cc64f-zpsl9",
+    "uid": "3c25c99e-f501-4d85-a510-b27b3b35098c",
+    "ip": "10.0.1.239",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947064.4936295,
+    "pod": "shop-worker-d469cc64f-qqtm9",
+    "uid": "538f6cf2-1e94-468c-9ba1-bd29a31e4210",
+    "ip": "10.0.1.56",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947067.9369118,
+    "pod": "shop-api-d89c79656-mxbfl",
+    "uid": "456fd09b-c58e-4247-8d70-458d8774e73f",
+    "ip": "10.0.1.88",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947070.176061,
+    "pod": "shop-api-d89c79656-cfswg",
+    "uid": "6438b773-02b2-41af-8447-c01905d04dea",
+    "ip": "10.0.1.120",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947073.6179826,
+    "pod": "shop-worker-d469cc64f-vkt4g",
+    "uid": "d2d894e2-67ab-454d-9e75-e843d2ccd830",
+    "ip": "10.0.1.190",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947075.8508556,
+    "pod": "shop-worker-d469cc64f-d7jhv",
+    "uid": "473562b5-5b5b-49c6-bf6a-69d80c141172",
+    "ip": "10.0.1.228",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947079.2976882,
+    "pod": "shop-worker-d469cc64f-qqtm9",
+    "uid": "538f6cf2-1e94-468c-9ba1-bd29a31e4210",
+    "ip": "10.0.1.56",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947081.5255704,
+    "pod": "shop-worker-d469cc64f-9gwwg",
+    "uid": "a5734638-8500-431c-8e33-1fcbb013d91b",
+    "ip": "10.0.1.229",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947084.9695349,
+    "pod": "shop-worker-d469cc64f-d7jhv",
+    "uid": "473562b5-5b5b-49c6-bf6a-69d80c141172",
+    "ip": "10.0.1.228",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947087.1949666,
+    "pod": "shop-worker-d469cc64f-x9dlg",
+    "uid": "ef83492c-2c42-47b9-8f0c-9cd87f04a37d",
+    "ip": "10.0.1.52",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947090.6454587,
+    "pod": "shop-api-d89c79656-t6nff",
+    "uid": "caa3ed2d-3ee3-452c-a25d-c85733018129",
+    "ip": "10.0.1.4",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947092.8695924,
+    "pod": "shop-api-d89c79656-vfdrf",
+    "uid": "e69dfdc8-300a-4488-a031-1e65c7535eff",
+    "ip": "10.0.1.1",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947096.3098774,
+    "pod": "shop-api-d89c79656-cfswg",
+    "uid": "6438b773-02b2-41af-8447-c01905d04dea",
+    "ip": "10.0.1.120",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947098.5366516,
+    "pod": "shop-api-d89c79656-vbx9q",
+    "uid": "0580b11e-d0eb-445a-af54-e03f08e868eb",
+    "ip": "10.0.1.217",
+    "component": "api"
+  },
+  {
+    "event": "control_error",
+    "time": 1792947111.8727949,
+    "detail": "kubectl ('get', 'pods', '-n'): E1025 19:51:51.849993   14012 request.go:1196] \"Unexpected error when reading response body\" err=\"net/http: request canceled (Client.Timeout or context cancellation while reading body)\"\nerror: unexpected error when reading response body. Please retry. Original error: net/http: request canceled (Client.Timeout or context cancellation while reading body)\n"
+  },
+  {
+    "event": "delete",
+    "time": 1792947113.0984926,
+    "pod": "shop-api-d89c79656-vfdrf",
+    "uid": "e69dfdc8-300a-4488-a031-1e65c7535eff",
+    "ip": "10.0.1.1",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947114.2152238,
+    "pod": "shop-api-d89c79656-xgcvf",
+    "uid": "cab1fb62-32fb-455f-952c-4ec288c51860",
+    "ip": "10.0.1.31",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947118.7428083,
+    "pod": "shop-worker-d469cc64f-x9dlg",
+    "uid": "ef83492c-2c42-47b9-8f0c-9cd87f04a37d",
+    "ip": "10.0.1.52",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947120.9579654,
+    "pod": "shop-worker-d469cc64f-xxrnq",
+    "uid": "13368c5d-6b00-4401-b5dd-204666a54eb4",
+    "ip": "10.0.1.168",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947124.395402,
+    "pod": "shop-api-d89c79656-vbx9q",
+    "uid": "0580b11e-d0eb-445a-af54-e03f08e868eb",
+    "ip": "10.0.1.217",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947126.6116135,
+    "pod": "shop-api-d89c79656-fc8tw",
+    "uid": "071b9192-5c27-415e-848f-c7a14ae04dee",
+    "ip": "10.0.1.85",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947130.0528057,
+    "pod": "shop-worker-d469cc64f-xxrnq",
+    "uid": "13368c5d-6b00-4401-b5dd-204666a54eb4",
+    "ip": "10.0.1.168",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947132.274873,
+    "pod": "shop-worker-d469cc64f-fpts6",
+    "uid": "844be33e-b384-430b-aeee-5f88604258ca",
+    "ip": "10.0.1.83",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947135.7317748,
+    "pod": "shop-api-d89c79656-7t6zm",
+    "uid": "9ab695b1-5adb-4efb-a246-c65c4e7320c7",
+    "ip": "10.0.1.50",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947137.962101,
+    "pod": "shop-api-d89c79656-svsxw",
+    "uid": "79405877-232f-49ee-8b11-4a534b03faed",
+    "ip": "10.0.1.115",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947141.4355192,
+    "pod": "shop-api-d89c79656-xgcvf",
+    "uid": "cab1fb62-32fb-455f-952c-4ec288c51860",
+    "ip": "10.0.1.31",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947143.6581767,
+    "pod": "shop-api-d89c79656-hnn8h",
+    "uid": "e6b079c3-821a-41d6-9bd5-bb5e9678ee1e",
+    "ip": "10.0.1.86",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947147.1178904,
+    "pod": "shop-worker-d469cc64f-9gwwg",
+    "uid": "a5734638-8500-431c-8e33-1fcbb013d91b",
+    "ip": "10.0.1.229",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947148.228132,
+    "pod": "shop-worker-d469cc64f-68dkx",
+    "uid": "26bbea1f-fc42-47f3-99a1-d67da1f4e942",
+    "ip": "10.0.1.190",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947152.7746346,
+    "pod": "shop-api-d89c79656-svsxw",
+    "uid": "79405877-232f-49ee-8b11-4a534b03faed",
+    "ip": "10.0.1.115",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947155.005569,
+    "pod": "shop-api-d89c79656-fhdbd",
+    "uid": "fab2b312-ed62-44c5-904f-b6d7d8375417",
+    "ip": "10.0.1.105",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947158.4418488,
+    "pod": "shop-api-d89c79656-hnn8h",
+    "uid": "e6b079c3-821a-41d6-9bd5-bb5e9678ee1e",
+    "ip": "10.0.1.86",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947160.6606565,
+    "pod": "shop-api-d89c79656-5vtdr",
+    "uid": "5a4ba618-f57b-478d-a0f8-7e9363e2ff77",
+    "ip": "10.0.1.76",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947164.0998845,
+    "pod": "shop-api-d89c79656-fhdbd",
+    "uid": "fab2b312-ed62-44c5-904f-b6d7d8375417",
+    "ip": "10.0.1.105",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947166.3418396,
+    "pod": "shop-api-d89c79656-thq9l",
+    "uid": "e6d94014-1b01-4dea-ace0-04202c11046f",
+    "ip": "10.0.1.192",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947169.7880893,
+    "pod": "shop-api-d89c79656-fc8tw",
+    "uid": "071b9192-5c27-415e-848f-c7a14ae04dee",
+    "ip": "10.0.1.85",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947172.011591,
+    "pod": "shop-api-d89c79656-fdpmc",
+    "uid": "6ac7f7a4-98cd-497e-9815-6961f63f40e9",
+    "ip": "10.0.1.233",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947175.4666839,
+    "pod": "shop-worker-d469cc64f-fpts6",
+    "uid": "844be33e-b384-430b-aeee-5f88604258ca",
+    "ip": "10.0.1.83",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947176.5785716,
+    "pod": "shop-worker-d469cc64f-xnbkt",
+    "uid": "27a574e2-e823-41c9-b2ce-92e64a35263b",
+    "ip": "10.0.1.16",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947181.117841,
+    "pod": "shop-api-d89c79656-5vtdr",
+    "uid": "5a4ba618-f57b-478d-a0f8-7e9363e2ff77",
+    "ip": "10.0.1.76",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947183.3435218,
+    "pod": "shop-api-d89c79656-hwjv4",
+    "uid": "6d78497d-a2fe-4f1d-868a-f9944cfb6cf5",
+    "ip": "10.0.1.157",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947186.8039043,
+    "pod": "shop-worker-d469cc64f-xnbkt",
+    "uid": "27a574e2-e823-41c9-b2ce-92e64a35263b",
+    "ip": "10.0.1.16",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947187.9327953,
+    "pod": "shop-worker-d469cc64f-htdlq",
+    "uid": "47dd869b-1132-4cf7-9eee-af9f6e9806bc",
+    "ip": "10.0.1.90",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947192.482935,
+    "pod": "shop-api-d89c79656-hwjv4",
+    "uid": "6d78497d-a2fe-4f1d-868a-f9944cfb6cf5",
+    "ip": "10.0.1.157",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947194.7074478,
+    "pod": "shop-api-d89c79656-wjfdz",
+    "uid": "87fe5764-2000-47f3-b692-9221d8f8272d",
+    "ip": "10.0.1.244",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947198.1592987,
+    "pod": "shop-worker-d469cc64f-68dkx",
+    "uid": "26bbea1f-fc42-47f3-99a1-d67da1f4e942",
+    "ip": "10.0.1.190",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947200.4024518,
+    "pod": "shop-worker-d469cc64f-sl5gr",
+    "uid": "6d964bed-8f3d-4064-ba35-4cab3486e049",
+    "ip": "10.0.1.110",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947203.8470695,
+    "pod": "shop-worker-d469cc64f-htdlq",
+    "uid": "47dd869b-1132-4cf7-9eee-af9f6e9806bc",
+    "ip": "10.0.1.90",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947204.962739,
+    "pod": "shop-worker-d469cc64f-lzwst",
+    "uid": "fad93a6b-8ae9-4b7e-859e-b5946463917d",
+    "ip": "10.0.1.245",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947209.5356107,
+    "pod": "shop-api-d89c79656-fdpmc",
+    "uid": "6ac7f7a4-98cd-497e-9815-6961f63f40e9",
+    "ip": "10.0.1.233",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947211.7585416,
+    "pod": "shop-api-d89c79656-wp6k2",
+    "uid": "4d839220-bb5e-444b-a1b6-523e3ac0fec0",
+    "ip": "10.0.1.71",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947215.2015495,
+    "pod": "shop-worker-d469cc64f-lzwst",
+    "uid": "fad93a6b-8ae9-4b7e-859e-b5946463917d",
+    "ip": "10.0.1.245",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947217.447318,
+    "pod": "shop-worker-d469cc64f-fmhch",
+    "uid": "f3e104fe-c6c7-45bc-8a3f-fb90436623e9",
+    "ip": "10.0.1.164",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947220.8937964,
+    "pod": "shop-api-d89c79656-wjfdz",
+    "uid": "87fe5764-2000-47f3-b692-9221d8f8272d",
+    "ip": "10.0.1.244",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947222.0102005,
+    "pod": "shop-api-d89c79656-gkkv2",
+    "uid": "d3736f01-af15-4c5e-abbb-1bd7a31553b5",
+    "ip": "10.0.1.182",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947226.5813901,
+    "pod": "shop-worker-d469cc64f-fmhch",
+    "uid": "f3e104fe-c6c7-45bc-8a3f-fb90436623e9",
+    "ip": "10.0.1.164",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947228.884394,
+    "pod": "shop-worker-d469cc64f-n26pm",
+    "uid": "89bccdd7-02a7-4b96-bbf1-e964c686f4fb",
+    "ip": "10.0.1.42",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947233.3086066,
+    "pod": "shop-api-d89c79656-gkkv2",
+    "uid": "d3736f01-af15-4c5e-abbb-1bd7a31553b5",
+    "ip": "10.0.1.182",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947235.5320668,
+    "pod": "shop-api-d89c79656-4kpf5",
+    "uid": "7f56c2ba-3d80-4914-98b6-935e1470483c",
+    "ip": "10.0.1.248",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947238.9990702,
+    "pod": "shop-api-d89c79656-thq9l",
+    "uid": "e6d94014-1b01-4dea-ace0-04202c11046f",
+    "ip": "10.0.1.192",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947241.2246175,
+    "pod": "shop-api-d89c79656-4j2gd",
+    "uid": "ce06739c-2d9c-4f11-803a-8e56123c4181",
+    "ip": "10.0.1.2",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947244.667135,
+    "pod": "shop-api-d89c79656-wp6k2",
+    "uid": "4d839220-bb5e-444b-a1b6-523e3ac0fec0",
+    "ip": "10.0.1.71",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947245.7819679,
+    "pod": "shop-api-d89c79656-c8zfh",
+    "uid": "42067d7b-7acf-4863-ba6d-9b7d0869fac9",
+    "ip": "10.0.1.171",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947250.3644822,
+    "pod": "shop-worker-d469cc64f-sl5gr",
+    "uid": "6d964bed-8f3d-4064-ba35-4cab3486e049",
+    "ip": "10.0.1.110",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947252.58286,
+    "pod": "shop-worker-d469cc64f-wp4k9",
+    "uid": "63504d0e-2f7a-4370-a71c-aaff14e53fe5",
+    "ip": "10.0.1.173",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947256.030747,
+    "pod": "shop-api-d89c79656-c8zfh",
+    "uid": "42067d7b-7acf-4863-ba6d-9b7d0869fac9",
+    "ip": "10.0.1.171",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947258.266102,
+    "pod": "shop-api-d89c79656-tlx7n",
+    "uid": "9d4ac703-4c04-495e-b504-b52ffa5c83de",
+    "ip": "10.0.1.6",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947261.718276,
+    "pod": "shop-worker-d469cc64f-wp4k9",
+    "uid": "63504d0e-2f7a-4370-a71c-aaff14e53fe5",
+    "ip": "10.0.1.173",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947262.8307652,
+    "pod": "shop-worker-d469cc64f-dnzl5",
+    "uid": "b1c9fdfb-8d7a-4e59-832d-b059a12ce855",
+    "ip": "10.0.1.216",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947267.3785572,
+    "pod": "shop-api-d89c79656-4j2gd",
+    "uid": "ce06739c-2d9c-4f11-803a-8e56123c4181",
+    "ip": "10.0.1.2",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947269.6143782,
+    "pod": "shop-api-d89c79656-vbw65",
+    "uid": "55f8a60d-0371-419b-8d10-ef2c1274ec80",
+    "ip": "10.0.1.139",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947273.062918,
+    "pod": "shop-api-d89c79656-vbw65",
+    "uid": "55f8a60d-0371-419b-8d10-ef2c1274ec80",
+    "ip": "10.0.1.139",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947274.187608,
+    "pod": "shop-api-d89c79656-ch7nj",
+    "uid": "9cc7538d-c361-44cd-96dd-ab7b2413c85d",
+    "ip": "10.0.1.12",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947278.782339,
+    "pod": "shop-api-d89c79656-4kpf5",
+    "uid": "7f56c2ba-3d80-4914-98b6-935e1470483c",
+    "ip": "10.0.1.248",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947279.8965404,
+    "pod": "shop-api-d89c79656-cg5sb",
+    "uid": "0fa0d8c8-09e2-470e-b3ec-507723e22e62",
+    "ip": "10.0.1.163",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947284.4497037,
+    "pod": "shop-api-d89c79656-ch7nj",
+    "uid": "9cc7538d-c361-44cd-96dd-ab7b2413c85d",
+    "ip": "10.0.1.12",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947286.6695917,
+    "pod": "shop-api-d89c79656-49hgs",
+    "uid": "4a20b3b3-d18b-46db-ad8e-b56966f1ac6f",
+    "ip": "10.0.1.87",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947290.1073048,
+    "pod": "shop-api-d89c79656-tlx7n",
+    "uid": "9d4ac703-4c04-495e-b504-b52ffa5c83de",
+    "ip": "10.0.1.6",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947291.2175312,
+    "pod": "shop-api-d89c79656-pjcht",
+    "uid": "029b2cbc-9f8c-4a18-bdd7-fbb2a4874fb8",
+    "ip": "10.0.1.126",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947295.767947,
+    "pod": "shop-worker-d469cc64f-dnzl5",
+    "uid": "b1c9fdfb-8d7a-4e59-832d-b059a12ce855",
+    "ip": "10.0.1.216",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947297.9872222,
+    "pod": "shop-worker-d469cc64f-mrt2j",
+    "uid": "5a845a7f-5d50-402f-ad42-dc8db285921f",
+    "ip": "10.0.1.244",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947301.429116,
+    "pod": "shop-api-d89c79656-49hgs",
+    "uid": "4a20b3b3-d18b-46db-ad8e-b56966f1ac6f",
+    "ip": "10.0.1.87",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947303.649029,
+    "pod": "shop-api-d89c79656-ngq7w",
+    "uid": "29f801dc-2c72-4eb9-b1d2-b219541bf0fd",
+    "ip": "10.0.1.134",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947307.1154487,
+    "pod": "shop-worker-d469cc64f-mrt2j",
+    "uid": "5a845a7f-5d50-402f-ad42-dc8db285921f",
+    "ip": "10.0.1.244",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947308.2250333,
+    "pod": "shop-worker-d469cc64f-mpm2h",
+    "uid": "f5ab01fd-f963-4cfc-8502-5b83e5777ef4",
+    "ip": "10.0.1.146",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947312.7803812,
+    "pod": "shop-worker-d469cc64f-mpm2h",
+    "uid": "f5ab01fd-f963-4cfc-8502-5b83e5777ef4",
+    "ip": "10.0.1.146",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947315.0132442,
+    "pod": "shop-worker-d469cc64f-2xv8r",
+    "uid": "6ab00a99-726c-4d35-acc5-1723d01d6786",
+    "ip": "10.0.1.91",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947318.4442892,
+    "pod": "shop-api-d89c79656-cg5sb",
+    "uid": "0fa0d8c8-09e2-470e-b3ec-507723e22e62",
+    "ip": "10.0.1.163",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947319.5661895,
+    "pod": "shop-api-d89c79656-cthdw",
+    "uid": "c6b3b01d-4c6d-47e7-9a26-4f7d32583fe7",
+    "ip": "10.0.1.71",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947324.1091373,
+    "pod": "shop-worker-d469cc64f-n26pm",
+    "uid": "89bccdd7-02a7-4b96-bbf1-e964c686f4fb",
+    "ip": "10.0.1.42",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947325.2235827,
+    "pod": "shop-worker-d469cc64f-ddpj2",
+    "uid": "c8f6a043-b091-4630-af4d-ee003818addd",
+    "ip": "10.0.1.26",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947329.7838469,
+    "pod": "shop-api-d89c79656-pjcht",
+    "uid": "029b2cbc-9f8c-4a18-bdd7-fbb2a4874fb8",
+    "ip": "10.0.1.126",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947332.0082445,
+    "pod": "shop-api-d89c79656-pkv9n",
+    "uid": "51741f85-5bc9-4aa1-88a4-2b66ce7eb6e3",
+    "ip": "10.0.1.160",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947335.4386408,
+    "pod": "shop-api-d89c79656-ngq7w",
+    "uid": "29f801dc-2c72-4eb9-b1d2-b219541bf0fd",
+    "ip": "10.0.1.134",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947336.5614264,
+    "pod": "shop-api-d89c79656-txrz4",
+    "uid": "ed16fb22-448f-49d4-93cf-6867a45366f3",
+    "ip": "10.0.1.61",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947341.1401067,
+    "pod": "shop-api-d89c79656-pkv9n",
+    "uid": "51741f85-5bc9-4aa1-88a4-2b66ce7eb6e3",
+    "ip": "10.0.1.160",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947343.366712,
+    "pod": "shop-api-d89c79656-pv2nx",
+    "uid": "da8169ee-9812-428b-9f45-915b1313efde",
+    "ip": "10.0.1.233",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947346.801106,
+    "pod": "shop-api-d89c79656-pv2nx",
+    "uid": "da8169ee-9812-428b-9f45-915b1313efde",
+    "ip": "10.0.1.233",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947349.0230834,
+    "pod": "shop-api-d89c79656-bj5qm",
+    "uid": "90c8d8b1-1482-49d4-9874-c10990c625e1",
+    "ip": "10.0.1.102",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947352.4850614,
+    "pod": "shop-worker-d469cc64f-2xv8r",
+    "uid": "6ab00a99-726c-4d35-acc5-1723d01d6786",
+    "ip": "10.0.1.91",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947353.597405,
+    "pod": "shop-worker-d469cc64f-n76fg",
+    "uid": "0e065f52-1739-4b38-9046-6111cd98e7ce",
+    "ip": "10.0.1.236",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947358.1437063,
+    "pod": "shop-api-d89c79656-txrz4",
+    "uid": "ed16fb22-448f-49d4-93cf-6867a45366f3",
+    "ip": "10.0.1.61",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947360.3590667,
+    "pod": "shop-api-d89c79656-8pn56",
+    "uid": "c94dcf87-b169-41fa-9661-503cc21e04fc",
+    "ip": "10.0.1.42",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947363.8095245,
+    "pod": "shop-api-d89c79656-8pn56",
+    "uid": "c94dcf87-b169-41fa-9661-503cc21e04fc",
+    "ip": "10.0.1.42",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947364.9184923,
+    "pod": "shop-api-d89c79656-lmqtq",
+    "uid": "bda52fce-9742-4c88-a980-b08c22e218bb",
+    "ip": "10.0.1.22",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947369.4922853,
+    "pod": "shop-worker-d469cc64f-ddpj2",
+    "uid": "c8f6a043-b091-4630-af4d-ee003818addd",
+    "ip": "10.0.1.26",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947370.605921,
+    "pod": "shop-worker-d469cc64f-w5h5v",
+    "uid": "3ce46352-4cab-40c9-ad1e-a00d683cadbb",
+    "ip": "10.0.1.214",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947375.1886551,
+    "pod": "shop-api-d89c79656-bj5qm",
+    "uid": "90c8d8b1-1482-49d4-9874-c10990c625e1",
+    "ip": "10.0.1.102",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947377.4067922,
+    "pod": "shop-api-d89c79656-bxrxz",
+    "uid": "b2431f8e-2ee5-4e71-afc4-b2e365b99d4e",
+    "ip": "10.0.1.109",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947380.8662548,
+    "pod": "shop-api-d89c79656-bxrxz",
+    "uid": "b2431f8e-2ee5-4e71-afc4-b2e365b99d4e",
+    "ip": "10.0.1.109",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947381.9916751,
+    "pod": "shop-api-d89c79656-qjpxh",
+    "uid": "1f7b9e69-3bed-4896-973f-bed54a37f380",
+    "ip": "10.0.1.206",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947386.5614836,
+    "pod": "shop-worker-d469cc64f-n76fg",
+    "uid": "0e065f52-1739-4b38-9046-6111cd98e7ce",
+    "ip": "10.0.1.236",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947387.6687973,
+    "pod": "shop-worker-d469cc64f-xp2vc",
+    "uid": "12b2ec16-d22f-462f-9218-ad530c28d205",
+    "ip": "10.0.1.169",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947392.2334092,
+    "pod": "shop-api-d89c79656-qjpxh",
+    "uid": "1f7b9e69-3bed-4896-973f-bed54a37f380",
+    "ip": "10.0.1.206",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947394.4604354,
+    "pod": "shop-api-d89c79656-ks6lw",
+    "uid": "4133e01b-36e3-4f37-8e74-f6ae2cf775ff",
+    "ip": "10.0.1.229",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947397.8948364,
+    "pod": "shop-worker-d469cc64f-w5h5v",
+    "uid": "3ce46352-4cab-40c9-ad1e-a00d683cadbb",
+    "ip": "10.0.1.214",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947399.0065691,
+    "pod": "shop-worker-d469cc64f-mj4cc",
+    "uid": "fa9a81fc-4f74-4c2f-a712-a5cb4cd2221d",
+    "ip": "10.0.1.34",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947403.5629184,
+    "pod": "shop-api-d89c79656-ks6lw",
+    "uid": "4133e01b-36e3-4f37-8e74-f6ae2cf775ff",
+    "ip": "10.0.1.229",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947405.7897248,
+    "pod": "shop-api-d89c79656-glbx8",
+    "uid": "6441c46f-85b7-4f03-87ab-d11700650182",
+    "ip": "10.0.1.15",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947409.2378201,
+    "pod": "shop-api-d89c79656-cthdw",
+    "uid": "c6b3b01d-4c6d-47e7-9a26-4f7d32583fe7",
+    "ip": "10.0.1.71",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947411.469066,
+    "pod": "shop-api-d89c79656-wkwhc",
+    "uid": "82fd4e66-3890-4557-8739-694a672e159f",
+    "ip": "10.0.1.114",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947414.912307,
+    "pod": "shop-api-d89c79656-lmqtq",
+    "uid": "bda52fce-9742-4c88-a980-b08c22e218bb",
+    "ip": "10.0.1.22",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947416.0213742,
+    "pod": "shop-api-d89c79656-d4r59",
+    "uid": "017d285a-3c9c-4218-9bec-8be6b4d96a23",
+    "ip": "10.0.1.28",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947420.5670016,
+    "pod": "shop-worker-d469cc64f-xp2vc",
+    "uid": "12b2ec16-d22f-462f-9218-ad530c28d205",
+    "ip": "10.0.1.169",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947422.8047938,
+    "pod": "shop-worker-d469cc64f-7h64p",
+    "uid": "6c4115f4-eccb-4f38-982d-97b5ce9fdaa9",
+    "ip": "10.0.1.134",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947426.2460823,
+    "pod": "shop-api-d89c79656-d4r59",
+    "uid": "017d285a-3c9c-4218-9bec-8be6b4d96a23",
+    "ip": "10.0.1.28",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947427.3609955,
+    "pod": "shop-api-d89c79656-vw4jm",
+    "uid": "fd7810e5-a789-4d1c-9dc8-8b9f70017de4",
+    "ip": "10.0.1.112",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947431.9038262,
+    "pod": "shop-api-d89c79656-glbx8",
+    "uid": "6441c46f-85b7-4f03-87ab-d11700650182",
+    "ip": "10.0.1.15",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947434.1318474,
+    "pod": "shop-api-d89c79656-9xjp7",
+    "uid": "8af998c0-bf9e-466b-9410-6f3355ce848d",
+    "ip": "10.0.1.30",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947437.5577862,
+    "pod": "shop-worker-d469cc64f-7h64p",
+    "uid": "6c4115f4-eccb-4f38-982d-97b5ce9fdaa9",
+    "ip": "10.0.1.134",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947439.7765102,
+    "pod": "shop-worker-d469cc64f-kx9m8",
+    "uid": "16ad15cc-724e-4d0c-baee-e788171d2d1f",
+    "ip": "10.0.1.160",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947443.2118347,
+    "pod": "shop-worker-d469cc64f-mj4cc",
+    "uid": "fa9a81fc-4f74-4c2f-a712-a5cb4cd2221d",
+    "ip": "10.0.1.34",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947445.428651,
+    "pod": "shop-worker-d469cc64f-tvztt",
+    "uid": "a35e0203-233f-4b4d-830b-f16ccd835857",
+    "ip": "10.0.1.20",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947448.8756955,
+    "pod": "shop-api-d89c79656-9xjp7",
+    "uid": "8af998c0-bf9e-466b-9410-6f3355ce848d",
+    "ip": "10.0.1.30",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947451.0991058,
+    "pod": "shop-api-d89c79656-vc5cx",
+    "uid": "87fecf89-58da-42f8-93f6-51e51c12c504",
+    "ip": "10.0.1.64",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947454.5502107,
+    "pod": "shop-api-d89c79656-vw4jm",
+    "uid": "fd7810e5-a789-4d1c-9dc8-8b9f70017de4",
+    "ip": "10.0.1.112",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947455.6654546,
+    "pod": "shop-api-d89c79656-9ptw7",
+    "uid": "54ab01e6-ff3c-408b-99df-15404b887fd9",
+    "ip": "10.0.1.218",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947460.2525682,
+    "pod": "shop-api-d89c79656-vc5cx",
+    "uid": "87fecf89-58da-42f8-93f6-51e51c12c504",
+    "ip": "10.0.1.64",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947461.3605375,
+    "pod": "shop-api-d89c79656-gr6sx",
+    "uid": "1e153816-6f91-4c04-83b4-b1d4e967395e",
+    "ip": "10.0.1.1",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947465.9066045,
+    "pod": "shop-api-d89c79656-9ptw7",
+    "uid": "54ab01e6-ff3c-408b-99df-15404b887fd9",
+    "ip": "10.0.1.218",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947468.13273,
+    "pod": "shop-api-d89c79656-qcsnj",
+    "uid": "95851f99-4dde-490f-b483-3161beff03fe",
+    "ip": "10.0.1.57",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947471.576406,
+    "pod": "shop-api-d89c79656-gr6sx",
+    "uid": "1e153816-6f91-4c04-83b4-b1d4e967395e",
+    "ip": "10.0.1.1",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947472.685566,
+    "pod": "shop-api-d89c79656-9sdms",
+    "uid": "0c22d052-cca8-4c32-848c-d9be16b49bd3",
+    "ip": "10.0.1.14",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947477.2489321,
+    "pod": "shop-worker-d469cc64f-tvztt",
+    "uid": "a35e0203-233f-4b4d-830b-f16ccd835857",
+    "ip": "10.0.1.20",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947479.4713242,
+    "pod": "shop-worker-d469cc64f-6pq7s",
+    "uid": "b4713a52-fa67-47f7-a6b9-83ca98442a01",
+    "ip": "10.0.1.177",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947482.9063635,
+    "pod": "shop-api-d89c79656-wkwhc",
+    "uid": "82fd4e66-3890-4557-8739-694a672e159f",
+    "ip": "10.0.1.114",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947485.124196,
+    "pod": "shop-api-d89c79656-7mjh7",
+    "uid": "9e6636b2-c08f-49b1-b94e-b6621958a7a7",
+    "ip": "10.0.1.64",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947488.5737443,
+    "pod": "shop-worker-d469cc64f-kx9m8",
+    "uid": "16ad15cc-724e-4d0c-baee-e788171d2d1f",
+    "ip": "10.0.1.160",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947489.6979253,
+    "pod": "shop-worker-d469cc64f-hf64s",
+    "uid": "7c863b12-8bfd-4118-aade-60243f01ed81",
+    "ip": "10.0.1.155",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947494.2350848,
+    "pod": "shop-api-d89c79656-7mjh7",
+    "uid": "9e6636b2-c08f-49b1-b94e-b6621958a7a7",
+    "ip": "10.0.1.64",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947496.4628043,
+    "pod": "shop-api-d89c79656-fpsz5",
+    "uid": "80a90b82-87c1-4086-9eac-bf606ce65ef7",
+    "ip": "10.0.1.103",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947499.90335,
+    "pod": "shop-worker-d469cc64f-6pq7s",
+    "uid": "b4713a52-fa67-47f7-a6b9-83ca98442a01",
+    "ip": "10.0.1.177",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947502.1336946,
+    "pod": "shop-worker-d469cc64f-mbg69",
+    "uid": "2a1b3557-2683-49c9-b4eb-b506481183c9",
+    "ip": "10.0.1.10",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947505.5812187,
+    "pod": "shop-worker-d469cc64f-hf64s",
+    "uid": "7c863b12-8bfd-4118-aade-60243f01ed81",
+    "ip": "10.0.1.155",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947507.817601,
+    "pod": "shop-worker-d469cc64f-845dm",
+    "uid": "a597aef6-e86d-4281-87b8-e84a47350a20",
+    "ip": "10.0.1.75",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947511.2647405,
+    "pod": "shop-worker-d469cc64f-845dm",
+    "uid": "a597aef6-e86d-4281-87b8-e84a47350a20",
+    "ip": "10.0.1.75",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947513.495463,
+    "pod": "shop-worker-d469cc64f-rjzk4",
+    "uid": "cf30fe78-5d71-43f1-b529-232e42e6f318",
+    "ip": "10.0.1.56",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947516.9616404,
+    "pod": "shop-worker-d469cc64f-rjzk4",
+    "uid": "cf30fe78-5d71-43f1-b529-232e42e6f318",
+    "ip": "10.0.1.56",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947518.0727947,
+    "pod": "shop-worker-d469cc64f-fsslf",
+    "uid": "f6638c47-d97d-4228-b7a1-de650ff25cc8",
+    "ip": "10.0.1.111",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947522.7284567,
+    "pod": "shop-worker-d469cc64f-fsslf",
+    "uid": "f6638c47-d97d-4228-b7a1-de650ff25cc8",
+    "ip": "10.0.1.111",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947524.9640577,
+    "pod": "shop-worker-d469cc64f-vjkbj",
+    "uid": "b28deb8e-57a1-42b7-88a5-53c7f6860baa",
+    "ip": "10.0.1.215",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947528.4133673,
+    "pod": "shop-api-d89c79656-fpsz5",
+    "uid": "80a90b82-87c1-4086-9eac-bf606ce65ef7",
+    "ip": "10.0.1.103",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947530.644975,
+    "pod": "shop-api-d89c79656-k94cg",
+    "uid": "4dede984-aa8b-44ac-8e21-46730f551866",
+    "ip": "10.0.1.196",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947534.1032512,
+    "pod": "shop-worker-d469cc64f-mbg69",
+    "uid": "2a1b3557-2683-49c9-b4eb-b506481183c9",
+    "ip": "10.0.1.10",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947535.2262456,
+    "pod": "shop-worker-d469cc64f-l5ktg",
+    "uid": "fd215098-3175-48ff-aef7-262d8a845cc2",
+    "ip": "10.0.1.35",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947539.8257337,
+    "pod": "shop-worker-d469cc64f-vjkbj",
+    "uid": "b28deb8e-57a1-42b7-88a5-53c7f6860baa",
+    "ip": "10.0.1.215",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947542.0593147,
+    "pod": "shop-worker-d469cc64f-st8fp",
+    "uid": "2b96ef4c-1b13-48df-bd1f-a842a0528db6",
+    "ip": "10.0.1.241",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947545.518336,
+    "pod": "shop-worker-d469cc64f-l5ktg",
+    "uid": "fd215098-3175-48ff-aef7-262d8a845cc2",
+    "ip": "10.0.1.35",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947547.742231,
+    "pod": "shop-worker-d469cc64f-m5fgn",
+    "uid": "2ecc2bec-ea9b-4f63-b02b-4058cc74ef95",
+    "ip": "10.0.1.134",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947551.1793764,
+    "pod": "shop-api-d89c79656-9sdms",
+    "uid": "0c22d052-cca8-4c32-848c-d9be16b49bd3",
+    "ip": "10.0.1.14",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947552.292319,
+    "pod": "shop-api-d89c79656-mwf6g",
+    "uid": "666ceac3-24c2-4dde-8743-91eeffffd50f",
+    "ip": "10.0.1.146",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947556.8499568,
+    "pod": "shop-api-d89c79656-k94cg",
+    "uid": "4dede984-aa8b-44ac-8e21-46730f551866",
+    "ip": "10.0.1.196",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947559.0751839,
+    "pod": "shop-api-d89c79656-c2xvl",
+    "uid": "5dcd258b-771b-4f1d-b8b8-55913e2dd1fb",
+    "ip": "10.0.1.36",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947562.5133023,
+    "pod": "shop-api-d89c79656-c2xvl",
+    "uid": "5dcd258b-771b-4f1d-b8b8-55913e2dd1fb",
+    "ip": "10.0.1.36",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947564.743876,
+    "pod": "shop-api-d89c79656-lqmjh",
+    "uid": "06439ab5-fe4d-4674-9e74-1c536f9ab1e3",
+    "ip": "10.0.1.4",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947568.1952844,
+    "pod": "shop-worker-d469cc64f-m5fgn",
+    "uid": "2ecc2bec-ea9b-4f63-b02b-4058cc74ef95",
+    "ip": "10.0.1.134",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947570.4173255,
+    "pod": "shop-worker-d469cc64f-qc67n",
+    "uid": "10647339-d39b-4a52-9b16-4f95526a87ec",
+    "ip": "10.0.1.73",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947573.8813233,
+    "pod": "shop-api-d89c79656-qcsnj",
+    "uid": "95851f99-4dde-490f-b483-3161beff03fe",
+    "ip": "10.0.1.57",
+    "component": "api"
+  },
+  {
+    "event": "observed",
+    "time": 1792947576.113042,
+    "pod": "shop-api-d89c79656-fdw4b",
+    "uid": "d731969b-722a-4301-8be4-f7b74b959b91",
+    "ip": "10.0.1.163",
+    "component": "api"
+  },
+  {
+    "event": "delete",
+    "time": 1792947579.5479043,
+    "pod": "shop-worker-d469cc64f-st8fp",
+    "uid": "2b96ef4c-1b13-48df-bd1f-a842a0528db6",
+    "ip": "10.0.1.241",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947580.6560276,
+    "pod": "shop-worker-d469cc64f-2g4nw",
+    "uid": "07f00568-f6e9-40d3-8796-314c43cbd380",
+    "ip": "10.0.1.147",
+    "component": "worker"
+  },
+  {
+    "event": "delete",
+    "time": 1792947585.2338932,
+    "pod": "shop-worker-d469cc64f-2g4nw",
+    "uid": "07f00568-f6e9-40d3-8796-314c43cbd380",
+    "ip": "10.0.1.147",
+    "component": "worker"
+  },
+  {
+    "event": "observed",
+    "time": 1792947587.469572,
+    "pod": "shop-worker-d469cc64f-k5vbp",
+    "uid": "781bfd7a-3c59-492d-b2fc-45f076ea6ef5",
+    "ip": "10.0.1.81",
+    "component": "worker"
+  }
+]

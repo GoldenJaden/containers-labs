@@ -1,0 +1,319 @@
+{
+  "status": "success",
+  "data": {
+    "resultType": "vector",
+    "result": [
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.230:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics/probes",
+          "namespace": "kube-system",
+          "node": "k8s-ctrlr",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.232:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics",
+          "namespace": "kube-system",
+          "node": "k8s-node-2",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "0"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.232:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics/probes",
+          "namespace": "kube-system",
+          "node": "k8s-node-2",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "0"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.230:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics/cadvisor",
+          "namespace": "kube-system",
+          "node": "k8s-ctrlr",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.232:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics/cadvisor",
+          "namespace": "kube-system",
+          "node": "k8s-node-2",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "0"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.231:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics/cadvisor",
+          "namespace": "kube-system",
+          "node": "k8s-node-1",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "kube-scheduler",
+          "endpoint": "http-metrics",
+          "instance": "192.168.0.230:10259",
+          "job": "kube-scheduler",
+          "namespace": "kube-system",
+          "pod": "kube-scheduler-k8s-ctrlr",
+          "service": "kube-prometheus-stack-kube-scheduler"
+        },
+        "value": [
+          1792946707.727,
+          "0"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "kube-controller-manager",
+          "endpoint": "http-metrics",
+          "instance": "192.168.0.230:10257",
+          "job": "kube-controller-manager",
+          "namespace": "kube-system",
+          "pod": "kube-controller-manager-k8s-ctrlr",
+          "service": "kube-prometheus-stack-kube-controller-manager"
+        },
+        "value": [
+          1792946707.727,
+          "0"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.231:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics",
+          "namespace": "kube-system",
+          "node": "k8s-node-1",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.231:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics/probes",
+          "namespace": "kube-system",
+          "node": "k8s-node-1",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "endpoint": "https-metrics",
+          "instance": "192.168.0.230:10250",
+          "job": "kubelet",
+          "metrics_path": "/metrics",
+          "namespace": "kube-system",
+          "node": "k8s-ctrlr",
+          "service": "kube-prometheus-stack-kubelet"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "etcd",
+          "endpoint": "http-metrics",
+          "instance": "192.168.0.230:2381",
+          "job": "kube-etcd",
+          "namespace": "kube-system",
+          "pod": "etcd-k8s-ctrlr",
+          "service": "kube-prometheus-stack-kube-etcd"
+        },
+        "value": [
+          1792946707.727,
+          "0"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "coredns",
+          "endpoint": "http-metrics",
+          "instance": "10.0.0.136:9153",
+          "job": "coredns",
+          "namespace": "kube-system",
+          "pod": "coredns-66bc5c9577-pm57m",
+          "service": "kube-prometheus-stack-coredns"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "coredns",
+          "endpoint": "http-metrics",
+          "instance": "10.0.0.201:9153",
+          "job": "coredns",
+          "namespace": "kube-system",
+          "pod": "coredns-66bc5c9577-lbtdv",
+          "service": "kube-prometheus-stack-coredns"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "cilium-agent",
+          "endpoint": "hubble-metrics",
+          "instance": "192.168.0.230:9965",
+          "job": "hubble-metrics",
+          "namespace": "kube-system",
+          "node": "k8s-ctrlr",
+          "pod": "cilium-ljmvr",
+          "service": "hubble-metrics"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "cilium-agent",
+          "endpoint": "metrics",
+          "instance": "192.168.0.230:9962",
+          "job": "cilium-agent",
+          "k8s_app": "cilium",
+          "namespace": "kube-system",
+          "node": "k8s-ctrlr",
+          "pod": "cilium-ljmvr",
+          "service": "cilium-agent"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "cilium-operator",
+          "endpoint": "metrics",
+          "instance": "192.168.0.231:9963",
+          "io_cilium_app": "operator",
+          "job": "cilium-operator",
+          "namespace": "kube-system",
+          "pod": "cilium-operator-6549bdc457-vwr7s",
+          "service": "cilium-operator"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "cilium-agent",
+          "endpoint": "hubble-metrics",
+          "instance": "192.168.0.231:9965",
+          "job": "hubble-metrics",
+          "namespace": "kube-system",
+          "node": "k8s-node-1",
+          "pod": "cilium-kkdrc",
+          "service": "hubble-metrics"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "cilium-agent",
+          "endpoint": "metrics",
+          "instance": "192.168.0.231:9962",
+          "job": "cilium-agent",
+          "k8s_app": "cilium",
+          "namespace": "kube-system",
+          "node": "k8s-node-1",
+          "pod": "cilium-kkdrc",
+          "service": "cilium-agent"
+        },
+        "value": [
+          1792946707.727,
+          "1"
+        ]
+      }
+    ]
+  }
+}

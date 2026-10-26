@@ -1,0 +1,33 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Release.Name }}-network
+  labels:
+    {{- include "shop.labels" . | nindent 4 }}
+spec:
+  groups:
+    - name: lab5-network
+      rules:
+        - alert: Lab5PolicyDrops
+          expr: sum(rate(hubble_drop_total{reason="POLICY_DENIED",source_namespace="{{ .Release.Namespace }}"}[1m])) > 0
+          for: 30s
+          labels: {severity: warning, lab: lab5}
+          annotations:
+            summary: Lab5 traffic is blocked by network policy
+            description: Sustained policy drops may indicate a broken allow rule or an unauthorized client.
+        - alert: Lab5DNSFailures
+          expr: sum(rate(coredns_dns_responses_total{rcode="SERVFAIL"}[2m])) > 0
+          for: 1m
+          labels: {severity: warning, lab: lab5}
+          annotations:
+            summary: Cluster DNS returns SERVFAIL
+            description: DNS failures can prevent shop from resolving service names.
+        - alert: Lab5NetworkMetricsUnavailable
+          expr: absent(up{job="hubble-metrics"}) or min(up{job="hubble-metrics"}) == 0
+          for: 1m
+          labels: {severity: warning, lab: lab5}
+          annotations:
+            summary: Hubble metrics collection is unavailable
+            description: Network drops and flows cannot be reliably monitored.
+{{- end }}

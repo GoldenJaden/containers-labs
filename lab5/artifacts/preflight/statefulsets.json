@@ -1,0 +1,1781 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "StatefulSet",
+      "metadata": {
+        "annotations": {
+          "argocd.argoproj.io/tracking-id": "kube-prometheus-stack:monitoring.coreos.com/Alertmanager:monitoring/kube-prometheus-stack-alertmanager",
+          "prometheus-operator-input-hash": "17245536677398652393"
+        },
+        "creationTimestamp": "2026-03-08T09:53:17Z",
+        "generation": 3,
+        "labels": {
+          "alertmanager": "kube-prometheus-stack-alertmanager",
+          "app": "kube-prometheus-stack-alertmanager",
+          "app.kubernetes.io/instance": "kube-prometheus-stack-alertmanager",
+          "app.kubernetes.io/managed-by": "prometheus-operator",
+          "app.kubernetes.io/name": "alertmanager",
+          "app.kubernetes.io/part-of": "kube-prometheus-stack",
+          "app.kubernetes.io/version": "81.5.0",
+          "chart": "kube-prometheus-stack-81.5.0",
+          "heritage": "Helm",
+          "managed-by": "prometheus-operator",
+          "release": "kube-prometheus-stack"
+        },
+        "name": "alertmanager-kube-prometheus-stack-alertmanager",
+        "namespace": "monitoring",
+        "ownerReferences": [
+          {
+            "apiVersion": "monitoring.coreos.com/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Alertmanager",
+            "name": "kube-prometheus-stack-alertmanager",
+            "uid": "bfe00071-1562-436a-aaf5-b217d480b12f"
+          }
+        ],
+        "resourceVersion": "55793382",
+        "uid": "ffec9a0e-fd3d-43cc-9d4f-01c6bfbd1fae"
+      },
+      "spec": {
+        "persistentVolumeClaimRetentionPolicy": {
+          "whenDeleted": "Retain",
+          "whenScaled": "Retain"
+        },
+        "podManagementPolicy": "Parallel",
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "alertmanager": "kube-prometheus-stack-alertmanager",
+            "app.kubernetes.io/instance": "kube-prometheus-stack-alertmanager",
+            "app.kubernetes.io/managed-by": "prometheus-operator",
+            "app.kubernetes.io/name": "alertmanager"
+          }
+        },
+        "serviceName": "alertmanager-operated",
+        "template": {
+          "metadata": {
+            "annotations": {
+              "kubectl.kubernetes.io/default-container": "alertmanager"
+            },
+            "labels": {
+              "alertmanager": "kube-prometheus-stack-alertmanager",
+              "app.kubernetes.io/instance": "kube-prometheus-stack-alertmanager",
+              "app.kubernetes.io/managed-by": "prometheus-operator",
+              "app.kubernetes.io/name": "alertmanager",
+              "app.kubernetes.io/version": "0.31.0"
+            }
+          },
+          "spec": {
+            "affinity": {
+              "podAntiAffinity": {
+                "preferredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "podAffinityTerm": {
+                      "labelSelector": {
+                        "matchExpressions": [
+                          {
+                            "key": "app.kubernetes.io/name",
+                            "operator": "In",
+                            "values": [
+                              "alertmanager"
+                            ]
+                          },
+                          {
+                            "key": "alertmanager",
+                            "operator": "In",
+                            "values": [
+                              "kube-prometheus-stack-alertmanager"
+                            ]
+                          }
+                        ]
+                      },
+                      "topologyKey": "kubernetes.io/hostname"
+                    },
+                    "weight": 100
+                  }
+                ]
+              }
+            },
+            "automountServiceAccountToken": true,
+            "containers": [
+              {
+                "args": [
+                  "--config.file=/etc/alertmanager/config_out/alertmanager.env.yaml",
+                  "--storage.path=/alertmanager",
+                  "--data.retention=120h",
+                  "--cluster.listen-address=",
+                  "--web.listen-address=:9093",
+                  "--web.external-url=http://alertmanager.homelab.internal/",
+                  "--web.route-prefix=/",
+                  "--cluster.label=monitoring/kube-prometheus-stack-alertmanager",
+                  "--cluster.peer=alertmanager-kube-prometheus-stack-alertmanager-0.alertmanager-operated:9094",
+                  "--cluster.reconnect-timeout=5m",
+                  "--web.config.file=/etc/alertmanager/web_config/web-config.yaml"
+                ],
+                "env": [
+                  {
+                    "name": "POD_IP",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "status.podIP"
+                      }
+                    }
+                  }
+                ],
+                "image": "quay.io/prometheus/alertmanager:v0.31.0",
+                "imagePullPolicy": "IfNotPresent",
+                "livenessProbe": {
+                  "failureThreshold": 10,
+                  "httpGet": {
+                    "path": "/-/healthy",
+                    "port": "http-web",
+                    "scheme": "HTTP"
+                  },
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 3
+                },
+                "name": "alertmanager",
+                "ports": [
+                  {
+                    "containerPort": 9093,
+                    "name": "http-web",
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 9094,
+                    "name": "mesh-tcp",
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 9094,
+                    "name": "mesh-udp",
+                    "protocol": "UDP"
+                  }
+                ],
+                "readinessProbe": {
+                  "failureThreshold": 10,
+                  "httpGet": {
+                    "path": "/-/ready",
+                    "port": "http-web",
+                    "scheme": "HTTP"
+                  },
+                  "initialDelaySeconds": 3,
+                  "periodSeconds": 5,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 3
+                },
+                "resources": {
+                  "requests": {
+                    "memory": "200Mi"
+                  }
+                },
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": true
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "FallbackToLogsOnError",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/alertmanager/config",
+                    "name": "config-volume"
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/config_out",
+                    "name": "config-out",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/certs",
+                    "name": "tls-assets",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/alertmanager",
+                    "name": "alertmanager-kube-prometheus-stack-alertmanager-db"
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/secrets/alertmanager-telegram",
+                    "name": "secret-alertmanager-telegram",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/web_config/web-config.yaml",
+                    "name": "web-config",
+                    "readOnly": true,
+                    "subPath": "web-config.yaml"
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/cluster_tls_config/cluster-tls-config.yaml",
+                    "name": "cluster-tls-config",
+                    "readOnly": true,
+                    "subPath": "cluster-tls-config.yaml"
+                  }
+                ]
+              },
+              {
+                "args": [
+                  "--listen-address=:8080",
+                  "--web-config-file=/etc/alertmanager/web_config/web-config.yaml",
+                  "--reload-url=http://127.0.0.1:9093/-/reload",
+                  "--config-file=/etc/alertmanager/config/alertmanager.yaml.gz",
+                  "--config-envsubst-file=/etc/alertmanager/config_out/alertmanager.env.yaml",
+                  "--watched-dir=/etc/alertmanager/config",
+                  "--watched-dir=/etc/alertmanager/secrets/alertmanager-telegram"
+                ],
+                "command": [
+                  "/bin/prometheus-config-reloader"
+                ],
+                "env": [
+                  {
+                    "name": "POD_NAME",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "metadata.name"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SHARD",
+                    "value": "-1"
+                  }
+                ],
+                "image": "quay.io/prometheus-operator/prometheus-config-reloader:v0.88.1",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "config-reloader",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "name": "reloader-web",
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": true
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "FallbackToLogsOnError",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/alertmanager/config",
+                    "name": "config-volume",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/config_out",
+                    "name": "config-out"
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/secrets/alertmanager-telegram",
+                    "name": "secret-alertmanager-telegram",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/web_config/web-config.yaml",
+                    "name": "web-config",
+                    "readOnly": true,
+                    "subPath": "web-config.yaml"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "initContainers": [
+              {
+                "args": [
+                  "--watch-interval=0",
+                  "--listen-address=:8081",
+                  "--config-file=/etc/alertmanager/config/alertmanager.yaml.gz",
+                  "--config-envsubst-file=/etc/alertmanager/config_out/alertmanager.env.yaml",
+                  "--watched-dir=/etc/alertmanager/config",
+                  "--watched-dir=/etc/alertmanager/secrets/alertmanager-telegram"
+                ],
+                "command": [
+                  "/bin/prometheus-config-reloader"
+                ],
+                "env": [
+                  {
+                    "name": "POD_NAME",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "metadata.name"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SHARD",
+                    "value": "-1"
+                  }
+                ],
+                "image": "quay.io/prometheus-operator/prometheus-config-reloader:v0.88.1",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "init-config-reloader",
+                "ports": [
+                  {
+                    "containerPort": 8081,
+                    "name": "reloader-init",
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": true
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "FallbackToLogsOnError",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/alertmanager/config",
+                    "name": "config-volume",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/config_out",
+                    "name": "config-out"
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/secrets/alertmanager-telegram",
+                    "name": "secret-alertmanager-telegram",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/alertmanager/web_config/web-config.yaml",
+                    "name": "web-config",
+                    "readOnly": true,
+                    "subPath": "web-config.yaml"
+                  }
+                ]
+              }
+            ],
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {
+              "fsGroup": 2000,
+              "runAsGroup": 2000,
+              "runAsNonRoot": true,
+              "runAsUser": 1000,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "serviceAccount": "kube-prometheus-stack-alertmanager",
+            "serviceAccountName": "kube-prometheus-stack-alertmanager",
+            "terminationGracePeriodSeconds": 120,
+            "volumes": [
+              {
+                "name": "config-volume",
+                "secret": {
+                  "defaultMode": 420,
+                  "secretName": "alertmanager-kube-prometheus-stack-alertmanager-generated"
+                }
+              },
+              {
+                "name": "tls-assets",
+                "projected": {
+                  "defaultMode": 420,
+                  "sources": [
+                    {
+                      "secret": {
+                        "name": "alertmanager-kube-prometheus-stack-alertmanager-tls-assets-0"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "emptyDir": {
+                  "medium": "Memory"
+                },
+                "name": "config-out"
+              },
+              {
+                "name": "secret-alertmanager-telegram",
+                "secret": {
+                  "defaultMode": 420,
+                  "secretName": "alertmanager-telegram"
+                }
+              },
+              {
+                "name": "web-config",
+                "secret": {
+                  "defaultMode": 420,
+                  "secretName": "alertmanager-kube-prometheus-stack-alertmanager-web-config"
+                }
+              },
+              {
+                "name": "cluster-tls-config",
+                "secret": {
+                  "defaultMode": 420,
+                  "secretName": "alertmanager-kube-prometheus-stack-alertmanager-cluster-tls-config"
+                }
+              },
+              {
+                "emptyDir": {},
+                "name": "alertmanager-kube-prometheus-stack-alertmanager-db"
+              }
+            ]
+          }
+        },
+        "updateStrategy": {
+          "type": "RollingUpdate"
+        }
+      },
+      "status": {
+        "availableReplicas": 1,
+        "collisionCount": 0,
+        "currentReplicas": 1,
+        "currentRevision": "alertmanager-kube-prometheus-stack-alertmanager-c9c87bc76",
+        "observedGeneration": 3,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "updateRevision": "alertmanager-kube-prometheus-stack-alertmanager-c9c87bc76",
+        "updatedReplicas": 1
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "StatefulSet",
+      "metadata": {
+        "annotations": {
+          "argocd.argoproj.io/tracking-id": "kube-prometheus-stack:apps/StatefulSet:monitoring/kube-prometheus-stack-grafana"
+        },
+        "creationTimestamp": "2026-03-08T10:03:10Z",
+        "generation": 207,
+        "labels": {
+          "app.kubernetes.io/instance": "kube-prometheus-stack",
+          "app.kubernetes.io/name": "grafana",
+          "app.kubernetes.io/version": "12.3.2",
+          "helm.sh/chart": "grafana-11.0.1"
+        },
+        "name": "kube-prometheus-stack-grafana",
+        "namespace": "monitoring",
+        "resourceVersion": "60205609",
+        "uid": "16b1f4ec-f76b-45d7-b07d-4bf4bb4caca8"
+      },
+      "spec": {
+        "persistentVolumeClaimRetentionPolicy": {
+          "whenDeleted": "Retain",
+          "whenScaled": "Retain"
+        },
+        "podManagementPolicy": "OrderedReady",
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app.kubernetes.io/instance": "kube-prometheus-stack",
+            "app.kubernetes.io/name": "grafana"
+          }
+        },
+        "serviceName": "kube-prometheus-stack-grafana-headless",
+        "template": {
+          "metadata": {
+            "annotations": {
+              "checksum/config": "a914b27321e35bdc7b0ca9904bb5975238dae853267c56bb3591bba4bc998d3c",
+              "checksum/dashboards-json-config": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+              "checksum/sc-dashboard-provider-config": "d5c4e9da614ed0b992ba6f934ddf07b96a9e57e626bceedd20238d153cdf09bd",
+              "checksum/secret": "533d00110fb872302c7689e856556042241adf23e04a43bbf965aab77060f685",
+              "kubectl.kubernetes.io/default-container": "grafana"
+            },
+            "labels": {
+              "app.kubernetes.io/instance": "kube-prometheus-stack",
+              "app.kubernetes.io/name": "grafana",
+              "app.kubernetes.io/version": "12.3.2",
+              "helm.sh/chart": "grafana-11.0.1"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": true,
+            "containers": [
+              {
+                "env": [
+                  {
+                    "name": "METHOD",
+                    "value": "WATCH"
+                  },
+                  {
+                    "name": "LABEL",
+                    "value": "grafana_dashboard"
+                  },
+                  {
+                    "name": "LABEL_VALUE",
+                    "value": "1"
+                  },
+                  {
+                    "name": "FOLDER",
+                    "value": "/tmp/dashboards"
+                  },
+                  {
+                    "name": "RESOURCE",
+                    "value": "both"
+                  },
+                  {
+                    "name": "NAMESPACE",
+                    "value": "ALL"
+                  },
+                  {
+                    "name": "REQ_USERNAME",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "admin-user",
+                        "name": "kube-prometheus-stack-grafana"
+                      }
+                    }
+                  },
+                  {
+                    "name": "REQ_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "admin-password",
+                        "name": "kube-prometheus-stack-grafana"
+                      }
+                    }
+                  },
+                  {
+                    "name": "REQ_URL",
+                    "value": "http://localhost:3000/api/admin/provisioning/dashboards/reload"
+                  },
+                  {
+                    "name": "REQ_METHOD",
+                    "value": "POST"
+                  }
+                ],
+                "image": "quay.io/kiwigrid/k8s-sidecar:2.5.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "grafana-sc-dashboard",
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/tmp/dashboards",
+                    "name": "sc-dashboard-volume"
+                  }
+                ]
+              },
+              {
+                "env": [
+                  {
+                    "name": "METHOD",
+                    "value": "WATCH"
+                  },
+                  {
+                    "name": "LABEL",
+                    "value": "grafana_datasource"
+                  },
+                  {
+                    "name": "LABEL_VALUE",
+                    "value": "1"
+                  },
+                  {
+                    "name": "FOLDER",
+                    "value": "/etc/grafana/provisioning/datasources"
+                  },
+                  {
+                    "name": "RESOURCE",
+                    "value": "both"
+                  },
+                  {
+                    "name": "REQ_USERNAME",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "admin-user",
+                        "name": "kube-prometheus-stack-grafana"
+                      }
+                    }
+                  },
+                  {
+                    "name": "REQ_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "admin-password",
+                        "name": "kube-prometheus-stack-grafana"
+                      }
+                    }
+                  },
+                  {
+                    "name": "REQ_URL",
+                    "value": "http://localhost:3000/api/admin/provisioning/datasources/reload"
+                  },
+                  {
+                    "name": "REQ_METHOD",
+                    "value": "POST"
+                  }
+                ],
+                "image": "quay.io/kiwigrid/k8s-sidecar:2.5.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "grafana-sc-datasources",
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/grafana/provisioning/datasources",
+                    "name": "sc-datasources-volume"
+                  }
+                ]
+              },
+              {
+                "env": [
+                  {
+                    "name": "POD_IP",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "status.podIP"
+                      }
+                    }
+                  },
+                  {
+                    "name": "GF_SECURITY_ADMIN_USER",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "admin-user",
+                        "name": "kube-prometheus-stack-grafana"
+                      }
+                    }
+                  },
+                  {
+                    "name": "GF_SECURITY_ADMIN_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "admin-password",
+                        "name": "kube-prometheus-stack-grafana"
+                      }
+                    }
+                  },
+                  {
+                    "name": "GF_PATHS_DATA",
+                    "value": "/var/lib/grafana/"
+                  },
+                  {
+                    "name": "GF_PATHS_LOGS",
+                    "value": "/var/log/grafana"
+                  },
+                  {
+                    "name": "GF_PATHS_PLUGINS",
+                    "value": "/var/lib/grafana/plugins"
+                  },
+                  {
+                    "name": "GF_PATHS_PROVISIONING",
+                    "value": "/etc/grafana/provisioning"
+                  },
+                  {
+                    "name": "GF_UNIFIED_STORAGE_INDEX_PATH",
+                    "value": "/var/lib/grafana-search/bleve"
+                  }
+                ],
+                "image": "docker.io/grafana/grafana:12.3.2",
+                "imagePullPolicy": "IfNotPresent",
+                "livenessProbe": {
+                  "failureThreshold": 10,
+                  "httpGet": {
+                    "path": "/api/health",
+                    "port": "grafana",
+                    "scheme": "HTTP"
+                  },
+                  "initialDelaySeconds": 60,
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 30
+                },
+                "name": "grafana",
+                "ports": [
+                  {
+                    "containerPort": 3000,
+                    "name": "grafana",
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 9094,
+                    "name": "gossip-tcp",
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 9094,
+                    "name": "gossip-udp",
+                    "protocol": "UDP"
+                  },
+                  {
+                    "containerPort": 6060,
+                    "name": "profiling",
+                    "protocol": "TCP"
+                  }
+                ],
+                "readinessProbe": {
+                  "failureThreshold": 3,
+                  "httpGet": {
+                    "path": "/api/health",
+                    "port": "grafana",
+                    "scheme": "HTTP"
+                  },
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 1
+                },
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "privileged": false,
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/grafana/grafana.ini",
+                    "name": "config",
+                    "subPath": "grafana.ini"
+                  },
+                  {
+                    "mountPath": "/var/lib/grafana",
+                    "name": "storage"
+                  },
+                  {
+                    "mountPath": "/var/lib/grafana-search",
+                    "name": "search"
+                  },
+                  {
+                    "mountPath": "/tmp/dashboards",
+                    "name": "sc-dashboard-volume"
+                  },
+                  {
+                    "mountPath": "/etc/grafana/provisioning/dashboards/sc-dashboardproviders.yaml",
+                    "name": "sc-dashboard-provider",
+                    "subPath": "provider.yaml"
+                  },
+                  {
+                    "mountPath": "/etc/grafana/provisioning/datasources",
+                    "name": "sc-datasources-volume"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "enableServiceLinks": true,
+            "initContainers": [
+              {
+                "command": [
+                  "chown",
+                  "-R",
+                  "472:472",
+                  "/var/lib/grafana"
+                ],
+                "image": "docker.io/library/busybox:1.37.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "init-chown-data",
+                "resources": {},
+                "securityContext": {
+                  "capabilities": {
+                    "add": [
+                      "CHOWN"
+                    ],
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": false,
+                  "runAsNonRoot": false,
+                  "runAsUser": 0,
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/var/lib/grafana",
+                    "name": "storage"
+                  }
+                ]
+              }
+            ],
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {
+              "fsGroup": 472,
+              "runAsGroup": 472,
+              "runAsNonRoot": true,
+              "runAsUser": 472
+            },
+            "serviceAccount": "kube-prometheus-stack-grafana",
+            "serviceAccountName": "kube-prometheus-stack-grafana",
+            "shareProcessNamespace": false,
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "kube-prometheus-stack-grafana"
+                },
+                "name": "config"
+              },
+              {
+                "emptyDir": {},
+                "name": "search"
+              },
+              {
+                "emptyDir": {},
+                "name": "sc-dashboard-volume"
+              },
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "kube-prometheus-stack-grafana-config-dashboards"
+                },
+                "name": "sc-dashboard-provider"
+              },
+              {
+                "emptyDir": {},
+                "name": "sc-datasources-volume"
+              }
+            ]
+          }
+        },
+        "updateStrategy": {
+          "rollingUpdate": {
+            "partition": 0
+          },
+          "type": "RollingUpdate"
+        },
+        "volumeClaimTemplates": [
+          {
+            "apiVersion": "v1",
+            "kind": "PersistentVolumeClaim",
+            "metadata": {
+              "name": "storage"
+            },
+            "spec": {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "resources": {
+                "requests": {
+                  "storage": "2Gi"
+                }
+              },
+              "volumeMode": "Filesystem"
+            },
+            "status": {
+              "phase": "Pending"
+            }
+          }
+        ]
+      },
+      "status": {
+        "availableReplicas": 1,
+        "collisionCount": 0,
+        "currentReplicas": 1,
+        "currentRevision": "kube-prometheus-stack-grafana-5b9fd47956",
+        "observedGeneration": 207,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "updateRevision": "kube-prometheus-stack-grafana-5b9fd47956",
+        "updatedReplicas": 1
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "StatefulSet",
+      "metadata": {
+        "annotations": {
+          "argocd.argoproj.io/tracking-id": "loki:apps/StatefulSet:monitoring/loki"
+        },
+        "creationTimestamp": "2026-09-26T16:00:42Z",
+        "generation": 3,
+        "labels": {
+          "app.kubernetes.io/component": "single-binary",
+          "app.kubernetes.io/instance": "loki",
+          "app.kubernetes.io/name": "loki",
+          "app.kubernetes.io/version": "3.7.8",
+          "helm.sh/chart": "loki-18.13.5"
+        },
+        "name": "loki",
+        "namespace": "monitoring",
+        "resourceVersion": "55799376",
+        "uid": "018383c1-eb1e-4117-9cdd-820d5637cfb9"
+      },
+      "spec": {
+        "persistentVolumeClaimRetentionPolicy": {
+          "whenDeleted": "Retain",
+          "whenScaled": "Retain"
+        },
+        "podManagementPolicy": "Parallel",
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app.kubernetes.io/component": "single-binary",
+            "app.kubernetes.io/instance": "loki",
+            "app.kubernetes.io/name": "loki"
+          }
+        },
+        "serviceName": "loki-headless",
+        "template": {
+          "metadata": {
+            "annotations": {
+              "checksum/config": "9f1392b9ae17d72a150b4022d65626c3b652701bdac26e698cfb281c30f1c3d4",
+              "kubectl.kubernetes.io/default-container": "loki",
+              "storage/size": "10Gi"
+            },
+            "labels": {
+              "app.kubernetes.io/component": "single-binary",
+              "app.kubernetes.io/instance": "loki",
+              "app.kubernetes.io/name": "loki",
+              "app.kubernetes.io/part-of": "memberlist",
+              "app.kubernetes.io/version": "3.7.8",
+              "helm.sh/chart": "loki-18.13.5"
+            }
+          },
+          "spec": {
+            "affinity": {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchLabels": {
+                        "app.kubernetes.io/component": "single-binary",
+                        "app.kubernetes.io/instance": "loki",
+                        "app.kubernetes.io/name": "loki"
+                      }
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                  }
+                ]
+              }
+            },
+            "automountServiceAccountToken": true,
+            "containers": [
+              {
+                "args": [
+                  "-config.file=/etc/loki/config/config.yaml",
+                  "-config.expand-env=true",
+                  "-memberlist.advertise-addr=$(POD_IP)",
+                  "-target=all"
+                ],
+                "env": [
+                  {
+                    "name": "GOGC",
+                    "value": "80"
+                  },
+                  {
+                    "name": "POD_IP",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "status.podIP"
+                      }
+                    }
+                  }
+                ],
+                "image": "docker.io/grafana/loki:3.7.8",
+                "imagePullPolicy": "IfNotPresent",
+                "livenessProbe": {
+                  "failureThreshold": 10,
+                  "httpGet": {
+                    "path": "/loki/api/v1/status/buildinfo",
+                    "port": "http-metrics",
+                    "scheme": "HTTP"
+                  },
+                  "periodSeconds": 30,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 1
+                },
+                "name": "loki",
+                "ports": [
+                  {
+                    "containerPort": 3100,
+                    "name": "http-metrics",
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 9095,
+                    "name": "grpc",
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 7946,
+                    "name": "http-memberlist",
+                    "protocol": "TCP"
+                  }
+                ],
+                "readinessProbe": {
+                  "failureThreshold": 3,
+                  "httpGet": {
+                    "path": "/ready",
+                    "port": "http-metrics",
+                    "scheme": "HTTP"
+                  },
+                  "initialDelaySeconds": 15,
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 1
+                },
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": true,
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/loki/config",
+                    "name": "config"
+                  },
+                  {
+                    "mountPath": "/etc/loki/runtime-config",
+                    "name": "runtime-config"
+                  },
+                  {
+                    "mountPath": "/var/loki",
+                    "name": "storage"
+                  },
+                  {
+                    "mountPath": "/tmp",
+                    "name": "temp"
+                  },
+                  {
+                    "mountPath": "/rules",
+                    "name": "sc-rules-volume"
+                  }
+                ]
+              },
+              {
+                "env": [
+                  {
+                    "name": "METHOD",
+                    "value": "WATCH"
+                  },
+                  {
+                    "name": "LABEL",
+                    "value": "loki_rule"
+                  },
+                  {
+                    "name": "FOLDER",
+                    "value": "/rules"
+                  },
+                  {
+                    "name": "RESOURCE",
+                    "value": "both"
+                  },
+                  {
+                    "name": "WATCH_SERVER_TIMEOUT",
+                    "value": "60"
+                  },
+                  {
+                    "name": "WATCH_CLIENT_TIMEOUT",
+                    "value": "60"
+                  },
+                  {
+                    "name": "LOG_LEVEL",
+                    "value": "INFO"
+                  },
+                  {
+                    "name": "HEALTH_PORT",
+                    "value": "8080"
+                  }
+                ],
+                "image": "docker.io/kiwigrid/k8s-sidecar:2.11.2",
+                "imagePullPolicy": "IfNotPresent",
+                "livenessProbe": {
+                  "failureThreshold": 3,
+                  "httpGet": {
+                    "path": "/healthz",
+                    "port": "http-sidecar",
+                    "scheme": "HTTP"
+                  },
+                  "initialDelaySeconds": 30,
+                  "periodSeconds": 30,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 1
+                },
+                "name": "loki-sc-rules",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "name": "http-sidecar",
+                    "protocol": "TCP"
+                  }
+                ],
+                "readinessProbe": {
+                  "failureThreshold": 3,
+                  "httpGet": {
+                    "path": "/healthz",
+                    "port": "http-sidecar",
+                    "scheme": "HTTP"
+                  },
+                  "initialDelaySeconds": 3,
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 1
+                },
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": true,
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/tmp",
+                    "name": "sc-rules-temp"
+                  },
+                  {
+                    "mountPath": "/rules",
+                    "name": "sc-rules-volume"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "enableServiceLinks": true,
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {
+              "fsGroup": 10001,
+              "fsGroupChangePolicy": "OnRootMismatch",
+              "runAsGroup": 10001,
+              "runAsNonRoot": true,
+              "runAsUser": 10001,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "serviceAccount": "loki",
+            "serviceAccountName": "loki",
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "emptyDir": {},
+                "name": "temp"
+              },
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "items": [
+                    {
+                      "key": "config.yaml",
+                      "path": "config.yaml"
+                    }
+                  ],
+                  "name": "loki"
+                },
+                "name": "config"
+              },
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "loki-runtime"
+                },
+                "name": "runtime-config"
+              },
+              {
+                "emptyDir": {},
+                "name": "sc-rules-volume"
+              },
+              {
+                "emptyDir": {},
+                "name": "sc-rules-temp"
+              }
+            ]
+          }
+        },
+        "updateStrategy": {
+          "rollingUpdate": {
+            "partition": 0
+          },
+          "type": "RollingUpdate"
+        },
+        "volumeClaimTemplates": [
+          {
+            "apiVersion": "v1",
+            "kind": "PersistentVolumeClaim",
+            "metadata": {
+              "name": "storage"
+            },
+            "spec": {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "resources": {
+                "requests": {
+                  "storage": "10Gi"
+                }
+              },
+              "volumeMode": "Filesystem"
+            },
+            "status": {
+              "phase": "Pending"
+            }
+          }
+        ]
+      },
+      "status": {
+        "availableReplicas": 1,
+        "collisionCount": 0,
+        "currentReplicas": 1,
+        "currentRevision": "loki-77dfdc5678",
+        "observedGeneration": 3,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "updateRevision": "loki-77dfdc5678",
+        "updatedReplicas": 1
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "StatefulSet",
+      "metadata": {
+        "annotations": {
+          "argocd.argoproj.io/tracking-id": "kube-prometheus-stack:monitoring.coreos.com/Prometheus:monitoring/kube-prometheus-stack-prometheus",
+          "prometheus-operator-input-hash": "17732504207392313996"
+        },
+        "creationTimestamp": "2026-03-08T10:08:04Z",
+        "generation": 1,
+        "labels": {
+          "app": "kube-prometheus-stack-prometheus",
+          "app.kubernetes.io/instance": "kube-prometheus-stack-prometheus",
+          "app.kubernetes.io/managed-by": "prometheus-operator",
+          "app.kubernetes.io/name": "prometheus",
+          "app.kubernetes.io/part-of": "kube-prometheus-stack",
+          "app.kubernetes.io/version": "81.5.0",
+          "chart": "kube-prometheus-stack-81.5.0",
+          "heritage": "Helm",
+          "managed-by": "prometheus-operator",
+          "operator.prometheus.io/mode": "server",
+          "operator.prometheus.io/name": "kube-prometheus-stack-prometheus",
+          "operator.prometheus.io/shard": "0",
+          "prometheus": "kube-prometheus-stack-prometheus",
+          "release": "kube-prometheus-stack"
+        },
+        "name": "prometheus-kube-prometheus-stack-prometheus",
+        "namespace": "monitoring",
+        "ownerReferences": [
+          {
+            "apiVersion": "monitoring.coreos.com/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Prometheus",
+            "name": "kube-prometheus-stack-prometheus",
+            "uid": "92a6f510-82c3-4d78-91ba-e7d71d41b603"
+          }
+        ],
+        "resourceVersion": "55799717",
+        "uid": "b31fa861-e2d2-440a-bbb0-28976f57b7af"
+      },
+      "spec": {
+        "persistentVolumeClaimRetentionPolicy": {
+          "whenDeleted": "Retain",
+          "whenScaled": "Retain"
+        },
+        "podManagementPolicy": "Parallel",
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app.kubernetes.io/instance": "kube-prometheus-stack-prometheus",
+            "app.kubernetes.io/managed-by": "prometheus-operator",
+            "app.kubernetes.io/name": "prometheus",
+            "operator.prometheus.io/name": "kube-prometheus-stack-prometheus",
+            "operator.prometheus.io/shard": "0",
+            "prometheus": "kube-prometheus-stack-prometheus"
+          }
+        },
+        "serviceName": "prometheus-operated",
+        "template": {
+          "metadata": {
+            "annotations": {
+              "kubectl.kubernetes.io/default-container": "prometheus"
+            },
+            "labels": {
+              "app.kubernetes.io/instance": "kube-prometheus-stack-prometheus",
+              "app.kubernetes.io/managed-by": "prometheus-operator",
+              "app.kubernetes.io/name": "prometheus",
+              "app.kubernetes.io/version": "3.9.1",
+              "operator.prometheus.io/name": "kube-prometheus-stack-prometheus",
+              "operator.prometheus.io/shard": "0",
+              "prometheus": "kube-prometheus-stack-prometheus"
+            }
+          },
+          "spec": {
+            "affinity": {
+              "podAntiAffinity": {
+                "preferredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "podAffinityTerm": {
+                      "labelSelector": {
+                        "matchExpressions": [
+                          {
+                            "key": "app.kubernetes.io/name",
+                            "operator": "In",
+                            "values": [
+                              "prometheus"
+                            ]
+                          },
+                          {
+                            "key": "app.kubernetes.io/instance",
+                            "operator": "In",
+                            "values": [
+                              "kube-prometheus-stack-prometheus"
+                            ]
+                          }
+                        ]
+                      },
+                      "topologyKey": "kubernetes.io/hostname"
+                    },
+                    "weight": 100
+                  }
+                ]
+              }
+            },
+            "automountServiceAccountToken": true,
+            "containers": [
+              {
+                "args": [
+                  "--config.file=/etc/prometheus/config_out/prometheus.env.yaml",
+                  "--web.enable-lifecycle",
+                  "--web.external-url=http://prometheus.homelab.internal/",
+                  "--web.route-prefix=/",
+                  "--storage.tsdb.retention.time=10d",
+                  "--storage.tsdb.path=/prometheus",
+                  "--storage.tsdb.wal-compression",
+                  "--web.config.file=/etc/prometheus/web_config/web-config.yaml"
+                ],
+                "image": "quay.io/prometheus/prometheus:v3.9.1",
+                "imagePullPolicy": "IfNotPresent",
+                "livenessProbe": {
+                  "failureThreshold": 6,
+                  "httpGet": {
+                    "path": "/-/healthy",
+                    "port": "http-web",
+                    "scheme": "HTTP"
+                  },
+                  "periodSeconds": 5,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 3
+                },
+                "name": "prometheus",
+                "ports": [
+                  {
+                    "containerPort": 9090,
+                    "name": "http-web",
+                    "protocol": "TCP"
+                  }
+                ],
+                "readinessProbe": {
+                  "failureThreshold": 3,
+                  "httpGet": {
+                    "path": "/-/ready",
+                    "port": "http-web",
+                    "scheme": "HTTP"
+                  },
+                  "periodSeconds": 5,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 3
+                },
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": true
+                },
+                "startupProbe": {
+                  "failureThreshold": 60,
+                  "httpGet": {
+                    "path": "/-/ready",
+                    "port": "http-web",
+                    "scheme": "HTTP"
+                  },
+                  "periodSeconds": 15,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 3
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "FallbackToLogsOnError",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/prometheus/config_out",
+                    "name": "config-out",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/certs",
+                    "name": "tls-assets",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/prometheus",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-db",
+                    "subPath": "prometheus-db"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-0",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-0",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-1",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-1",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-2",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-2",
+                    "readOnly": true
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/web_config/web-config.yaml",
+                    "name": "web-config",
+                    "readOnly": true,
+                    "subPath": "web-config.yaml"
+                  }
+                ]
+              },
+              {
+                "args": [
+                  "--listen-address=:8080",
+                  "--reload-url=http://127.0.0.1:9090/-/reload",
+                  "--config-file=/etc/prometheus/config/prometheus.yaml.gz",
+                  "--config-envsubst-file=/etc/prometheus/config_out/prometheus.env.yaml",
+                  "--watched-dir=/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-0",
+                  "--watched-dir=/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-1",
+                  "--watched-dir=/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-2"
+                ],
+                "command": [
+                  "/bin/prometheus-config-reloader"
+                ],
+                "env": [
+                  {
+                    "name": "POD_NAME",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "metadata.name"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SHARD",
+                    "value": "0"
+                  }
+                ],
+                "image": "quay.io/prometheus-operator/prometheus-config-reloader:v0.88.1",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "config-reloader",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "name": "reloader-web",
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": true
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "FallbackToLogsOnError",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/prometheus/config",
+                    "name": "config"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/config_out",
+                    "name": "config-out"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-0",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-0"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-1",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-1"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-2",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-2"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "initContainers": [
+              {
+                "args": [
+                  "--watch-interval=0",
+                  "--listen-address=:8081",
+                  "--config-file=/etc/prometheus/config/prometheus.yaml.gz",
+                  "--config-envsubst-file=/etc/prometheus/config_out/prometheus.env.yaml",
+                  "--watched-dir=/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-0",
+                  "--watched-dir=/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-1",
+                  "--watched-dir=/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-2"
+                ],
+                "command": [
+                  "/bin/prometheus-config-reloader"
+                ],
+                "env": [
+                  {
+                    "name": "POD_NAME",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "metadata.name"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SHARD",
+                    "value": "0"
+                  }
+                ],
+                "image": "quay.io/prometheus-operator/prometheus-config-reloader:v0.88.1",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "init-config-reloader",
+                "ports": [
+                  {
+                    "containerPort": 8081,
+                    "name": "reloader-init",
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "readOnlyRootFilesystem": true
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "FallbackToLogsOnError",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/prometheus/config",
+                    "name": "config"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/config_out",
+                    "name": "config-out"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-0",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-0"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-1",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-1"
+                  },
+                  {
+                    "mountPath": "/etc/prometheus/rules/prometheus-kube-prometheus-stack-prometheus-rulefiles-2",
+                    "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-2"
+                  }
+                ]
+              }
+            ],
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {
+              "fsGroup": 2000,
+              "runAsGroup": 2000,
+              "runAsNonRoot": true,
+              "runAsUser": 1000,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "serviceAccount": "kube-prometheus-stack-prometheus",
+            "serviceAccountName": "kube-prometheus-stack-prometheus",
+            "shareProcessNamespace": false,
+            "terminationGracePeriodSeconds": 600,
+            "volumes": [
+              {
+                "name": "config",
+                "secret": {
+                  "defaultMode": 420,
+                  "secretName": "prometheus-kube-prometheus-stack-prometheus"
+                }
+              },
+              {
+                "name": "tls-assets",
+                "projected": {
+                  "defaultMode": 420,
+                  "sources": [
+                    {
+                      "secret": {
+                        "name": "prometheus-kube-prometheus-stack-prometheus-tls-assets-0"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "emptyDir": {
+                  "medium": "Memory"
+                },
+                "name": "config-out"
+              },
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-0",
+                  "optional": true
+                },
+                "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-0"
+              },
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-1",
+                  "optional": true
+                },
+                "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-1"
+              },
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-2",
+                  "optional": true
+                },
+                "name": "prometheus-kube-prometheus-stack-prometheus-rulefiles-2"
+              },
+              {
+                "name": "web-config",
+                "secret": {
+                  "defaultMode": 420,
+                  "secretName": "prometheus-kube-prometheus-stack-prometheus-web-config"
+                }
+              }
+            ]
+          }
+        },
+        "updateStrategy": {
+          "type": "RollingUpdate"
+        },
+        "volumeClaimTemplates": [
+          {
+            "apiVersion": "v1",
+            "kind": "PersistentVolumeClaim",
+            "metadata": {
+              "name": "prometheus-kube-prometheus-stack-prometheus-db"
+            },
+            "spec": {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "resources": {
+                "requests": {
+                  "storage": "10Gi"
+                }
+              },
+              "volumeMode": "Filesystem"
+            },
+            "status": {
+              "phase": "Pending"
+            }
+          }
+        ]
+      },
+      "status": {
+        "availableReplicas": 1,
+        "collisionCount": 0,
+        "currentReplicas": 1,
+        "currentRevision": "prometheus-kube-prometheus-stack-prometheus-685588549c",
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "updateRevision": "prometheus-kube-prometheus-stack-prometheus-685588549c",
+        "updatedReplicas": 1
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

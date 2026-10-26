@@ -1,0 +1,118 @@
+[
+  {
+    "destination": "kubernetes-api",
+    "host": "192.168.0.230",
+    "port": 6443,
+    "expected": true,
+    "actual": true,
+    "time": 1792948439.76254,
+    "pass": true,
+    "source_namespace": "lab5",
+    "source_pod": "shop-db-1"
+  },
+  {
+    "destination": "api",
+    "host": "10.0.1.163",
+    "port": 8080,
+    "expected": false,
+    "actual": false,
+    "time": 1792948439.7704885,
+    "detail": "TimeoutError('timed out')",
+    "pass": true,
+    "source_namespace": "lab5",
+    "source_pod": "shop-db-1"
+  },
+  {
+    "destination": "client",
+    "host": "10.0.0.189",
+    "port": 8082,
+    "expected": false,
+    "actual": false,
+    "time": 1792948442.7737632,
+    "detail": "TimeoutError('timed out')",
+    "pass": true,
+    "source_namespace": "lab5",
+    "source_pod": "shop-db-1"
+  },
+  {
+    "destination": "database-management",
+    "host": "10.0.1.55",
+    "port": 8000,
+    "expected": true,
+    "actual": true,
+    "time": 1792948439.7422955,
+    "pass": true,
+    "source_namespace": "cnpg-system",
+    "source_pod": "cloudnative-pg-bb89bc57f-tpxmv"
+  },
+  {
+    "destination": "database-sql",
+    "host": "10.0.1.55",
+    "port": 5432,
+    "expected": false,
+    "actual": false,
+    "time": 1792948439.758068,
+    "detail": "TimeoutError('timed out')",
+    "pass": true,
+    "source_namespace": "cnpg-system",
+    "source_pod": "cloudnative-pg-bb89bc57f-tpxmv"
+  },
+  {
+    "destination": "api",
+    "host": "10.0.1.163",
+    "port": 8080,
+    "expected": false,
+    "actual": false,
+    "time": 1792948442.7619903,
+    "detail": "TimeoutError('timed out')",
+    "pass": true,
+    "source_namespace": "cnpg-system",
+    "source_pod": "cloudnative-pg-bb89bc57f-tpxmv"
+  },
+  {
+    "destination": "api-metrics",
+    "host": "10.0.1.163",
+    "port": 8080,
+    "expected": true,
+    "actual": true,
+    "time": 1792948439.86823,
+    "pass": true,
+    "source_namespace": "monitoring",
+    "source_pod": "prometheus-kube-prometheus-stack-prometheus-0"
+  },
+  {
+    "destination": "database-metrics",
+    "host": "10.0.1.55",
+    "port": 9187,
+    "expected": true,
+    "actual": true,
+    "time": 1792948439.876235,
+    "pass": true,
+    "source_namespace": "monitoring",
+    "source_pod": "prometheus-kube-prometheus-stack-prometheus-0"
+  },
+  {
+    "destination": "database-sql",
+    "host": "10.0.1.55",
+    "port": 5432,
+    "expected": false,
+    "actual": false,
+    "time": 1792948439.8768256,
+    "detail": "TimeoutError('timed out')",
+    "pass": true,
+    "source_namespace": "monitoring",
+    "source_pod": "prometheus-kube-prometheus-stack-prometheus-0"
+  },
+  {
+    "destination": "worker",
+    "host": "10.0.1.81",
+    "port": 8081,
+    "expected": false,
+    "actual": false,
+    "time": 1792948442.8795083,
+    "detail": "TimeoutError('timed out')",
+    "pass": true,
+    "source_namespace": "monitoring",
+    "source_pod": "prometheus-kube-prometheus-stack-prometheus-0"
+  }
+]

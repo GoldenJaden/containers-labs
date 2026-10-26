@@ -1,0 +1,32 @@
+NAME                          READY   STATUS        RESTARTS   AGE   IP           NODE         NOMINATED NODE   READINESS GATES
+lab5-client                   1/1     Running       0          15m   10.0.0.189   k8s-ctrlr    <none>           <none>
+lab5-stray                    1/1     Running       0          15m   10.0.1.204   k8s-node-1   <none>           <none>
+shop-api-d89c79656-fdw4b      1/1     Running       0          14s   10.0.1.163   k8s-node-1   <none>           <none>
+shop-api-d89c79656-lqmjh      1/1     Running       0          25s   10.0.1.4     k8s-node-1   <none>           <none>
+shop-api-d89c79656-mwf6g      1/1     Running       0          37s   10.0.1.146   k8s-node-1   <none>           <none>
+shop-db-1                     1/1     Running       0          17m   10.0.1.55    k8s-node-1   <none>           <none>
+shop-worker-d469cc64f-2g4nw   1/1     Terminating   0          8s    10.0.1.147   k8s-node-1   <none>           <none>
+shop-worker-d469cc64f-k5vbp   0/1     Running       0          3s    10.0.1.81    k8s-node-1   <none>           <none>
+shop-worker-d469cc64f-m5fgn   1/1     Terminating   0          42s   10.0.1.134   k8s-node-1   <none>           <none>
+shop-worker-d469cc64f-qc67n   1/1     Running       0          20s   10.0.1.73    k8s-node-1   <none>           <none>
+shop-worker-d469cc64f-st8fp   1/1     Terminating   0          48s   10.0.1.241   k8s-node-1   <none>           <none>
+
+hostname= shop-api-d89c79656-fdw4b
+IP= 10.0.1.163
+eth0 ifindex= 1560
+eth0 iflink= 1561
+MAC= 3e:95:a3:a2:70:e8
+
+Node peer: 1561: lxc93f11bf058ac@if1560: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\    link/ether be:cb:36:b9:44:84 brd ff:ff:ff:ff:ff:ff link-netnsid 13
+hostname= lab5-client
+IP= 10.0.0.189
+eth0 ifindex= 46
+eth0 iflink= 47
+MAC= 92:a6:50:6a:8a:a9
+
+Node peer: 47: lxc624aded49792@if46: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\    link/ether ba:bc:14:27:ef:8d brd ff:ff:ff:ff:ff:ff link-netnsid 5
+lab5-client -> http://10.0.1.163:8080/health: 200
+
+shop-api-d89c79656-fdw4b -> http://10.0.0.189:8082/: 200
+
+External NodePort 192.168.0.231:30085 -> HTTP 200

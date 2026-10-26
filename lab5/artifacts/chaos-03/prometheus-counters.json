@@ -1,0 +1,74 @@
+{
+  "success": {
+    "query": "sum(max_over_time(lab5_client_requests_total{run=\"chaos-03\",result=\"success\"}[30m]))",
+    "response": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1792949562.726,
+              "3000"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "failed": {
+    "query": "sum(max_over_time(lab5_client_requests_total{run=\"chaos-03\",result=\"failed\"}[30m]))",
+    "response": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1792949562.726,
+              "0"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "deletions": {
+    "query": "sum(max_over_time(lab5_chaos_deleted_pods_total{run=\"chaos-03\"}[30m]))",
+    "response": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1792949562.726,
+              "97"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "unique_ips": {
+    "query": "max(max_over_time(lab5_chaos_unique_pod_ips{run=\"chaos-03\"}[30m]))",
+    "response": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1792949562.726,
+              "78"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

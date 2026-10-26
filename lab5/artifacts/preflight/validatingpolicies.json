@@ -1,0 +1,1177 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "policies.kyverno.io/v1",
+      "kind": "ValidatingPolicy",
+      "metadata": {
+        "annotations": {
+          "argocd.argoproj.io/tracking-id": "kyverno-policies:policies.kyverno.io/ValidatingPolicy:kyverno-policies/validate-disallow-privileged",
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"policies.kyverno.io/v1\",\"kind\":\"ValidatingPolicy\",\"metadata\":{\"annotations\":{\"argocd.argoproj.io/tracking-id\":\"kyverno-policies:policies.kyverno.io/ValidatingPolicy:kyverno-policies/validate-disallow-privileged\"},\"name\":\"validate-disallow-privileged\"},\"spec\":{\"autogen\":{\"podControllers\":{\"controllers\":[\"deployments\",\"statefulsets\",\"daemonsets\",\"jobs\",\"cronjobs\"]}},\"evaluation\":{\"admission\":{\"enabled\":true},\"background\":{\"enabled\":true}},\"failurePolicy\":\"Fail\",\"matchConstraints\":{\"namespaceSelector\":{\"matchLabels\":{\"kubernetes.io/metadata.name\":\"labs\"}},\"resourceRules\":[{\"apiGroups\":[\"\"],\"apiVersions\":[\"v1\"],\"operations\":[\"CREATE\",\"UPDATE\"],\"resources\":[\"pods\"]}]},\"validationActions\":[\"Deny\"],\"validations\":[{\"expression\":\"variables.allContainers.all(container,\\n  container.?securityContext.?privileged.orValue(false) == false\\n)\\n\",\"message\":\"Privileged mode is forbidden. Every container must leave securityContext.privileged unset or set it to false.\"}],\"variables\":[{\"expression\":\"object.spec.containers +\\nobject.spec.?initContainers.orValue([]) +\\nobject.spec.?ephemeralContainers.orValue([])\\n\",\"name\":\"allContainers\"}]}}\n"
+        },
+        "creationTimestamp": "2026-10-12T21:20:15Z",
+        "generation": 2,
+        "name": "validate-disallow-privileged",
+        "resourceVersion": "55301311",
+        "uid": "90ec93ef-04a9-4dd5-b418-23b44ca72160"
+      },
+      "spec": {
+        "autogen": {
+          "podControllers": {
+            "controllers": [
+              "deployments",
+              "statefulsets",
+              "daemonsets",
+              "jobs",
+              "cronjobs"
+            ]
+          }
+        },
+        "evaluation": {
+          "admission": {
+            "enabled": true
+          },
+          "background": {
+            "enabled": true
+          }
+        },
+        "failurePolicy": "Fail",
+        "matchConstraints": {
+          "namespaceSelector": {
+            "matchLabels": {
+              "kubernetes.io/metadata.name": "labs"
+            }
+          },
+          "resourceRules": [
+            {
+              "apiGroups": [
+                ""
+              ],
+              "apiVersions": [
+                "v1"
+              ],
+              "operations": [
+                "CREATE",
+                "UPDATE"
+              ],
+              "resources": [
+                "pods"
+              ]
+            }
+          ]
+        },
+        "validationActions": [
+          "Deny"
+        ],
+        "validations": [
+          {
+            "expression": "variables.allContainers.all(container,\n  container.?securityContext.?privileged.orValue(false) == false\n)\n",
+            "message": "Privileged mode is forbidden. Every container must leave securityContext.privileged unset or set it to false."
+          }
+        ],
+        "variables": [
+          {
+            "expression": "object.spec.containers +\nobject.spec.?initContainers.orValue([]) +\nobject.spec.?ephemeralContainers.orValue([])\n",
+            "name": "allContainers"
+          }
+        ]
+      },
+      "status": {
+        "autogen": {
+          "configs": {
+            "cronjobs": {
+              "spec": {
+                "autogen": {
+                  "podControllers": {
+                    "controllers": [
+                      "deployments",
+                      "statefulsets",
+                      "daemonsets",
+                      "jobs",
+                      "cronjobs"
+                    ]
+                  }
+                },
+                "evaluation": {
+                  "admission": {
+                    "enabled": true
+                  },
+                  "background": {
+                    "enabled": true
+                  }
+                },
+                "failurePolicy": "Fail",
+                "matchConstraints": {
+                  "namespaceSelector": {
+                    "matchLabels": {
+                      "kubernetes.io/metadata.name": "labs"
+                    }
+                  },
+                  "resourceRules": [
+                    {
+                      "apiGroups": [
+                        "batch"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "cronjobs"
+                      ]
+                    }
+                  ]
+                },
+                "validationActions": [
+                  "Deny"
+                ],
+                "validations": [
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?securityContext.?privileged.orValue(false) == false\n)\n",
+                    "message": "Privileged mode is forbidden. Every container must leave securityContext.privileged unset or set it to false."
+                  }
+                ],
+                "variables": [
+                  {
+                    "expression": "object.spec.jobTemplate.spec.template.spec.containers +\nobject.spec.jobTemplate.spec.template.spec.?initContainers.orValue([]) +\nobject.spec.jobTemplate.spec.template.spec.?ephemeralContainers.orValue([])\n",
+                    "name": "allContainers"
+                  }
+                ]
+              },
+              "targets": [
+                {
+                  "group": "batch",
+                  "kind": "CronJob",
+                  "resource": "cronjobs",
+                  "version": "v1"
+                }
+              ]
+            },
+            "defaults": {
+              "spec": {
+                "autogen": {
+                  "podControllers": {
+                    "controllers": [
+                      "deployments",
+                      "statefulsets",
+                      "daemonsets",
+                      "jobs",
+                      "cronjobs"
+                    ]
+                  }
+                },
+                "evaluation": {
+                  "admission": {
+                    "enabled": true
+                  },
+                  "background": {
+                    "enabled": true
+                  }
+                },
+                "failurePolicy": "Fail",
+                "matchConstraints": {
+                  "namespaceSelector": {
+                    "matchLabels": {
+                      "kubernetes.io/metadata.name": "labs"
+                    }
+                  },
+                  "resourceRules": [
+                    {
+                      "apiGroups": [
+                        "apps"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "daemonsets",
+                        "deployments",
+                        "statefulsets"
+                      ]
+                    },
+                    {
+                      "apiGroups": [
+                        "batch"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "jobs"
+                      ]
+                    }
+                  ]
+                },
+                "validationActions": [
+                  "Deny"
+                ],
+                "validations": [
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?securityContext.?privileged.orValue(false) == false\n)\n",
+                    "message": "Privileged mode is forbidden. Every container must leave securityContext.privileged unset or set it to false."
+                  }
+                ],
+                "variables": [
+                  {
+                    "expression": "object.spec.template.spec.containers +\nobject.spec.template.spec.?initContainers.orValue([]) +\nobject.spec.template.spec.?ephemeralContainers.orValue([])\n",
+                    "name": "allContainers"
+                  }
+                ]
+              },
+              "targets": [
+                {
+                  "group": "apps",
+                  "kind": "DaemonSet",
+                  "resource": "daemonsets",
+                  "version": "v1"
+                },
+                {
+                  "group": "apps",
+                  "kind": "Deployment",
+                  "resource": "deployments",
+                  "version": "v1"
+                },
+                {
+                  "group": "apps",
+                  "kind": "StatefulSet",
+                  "resource": "statefulsets",
+                  "version": "v1"
+                },
+                {
+                  "group": "batch",
+                  "kind": "Job",
+                  "resource": "jobs",
+                  "version": "v1"
+                }
+              ]
+            }
+          }
+        },
+        "conditionStatus": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-12T21:20:16Z",
+              "message": "Webhook configured.",
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "WebhookConfigured"
+            },
+            {
+              "lastTransitionTime": "2026-10-12T21:20:16Z",
+              "message": "Policy is ready for reporting.",
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "RBACPermissionsGranted"
+            }
+          ],
+          "message": "skip generating ValidatingAdmissionPolicy: not enabled.",
+          "ready": true
+        },
+        "generated": false
+      }
+    },
+    {
+      "apiVersion": "policies.kyverno.io/v1",
+      "kind": "ValidatingPolicy",
+      "metadata": {
+        "annotations": {
+          "argocd.argoproj.io/tracking-id": "kyverno-policies:policies.kyverno.io/ValidatingPolicy:kyverno-policies/validate-requests-limits",
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"policies.kyverno.io/v1\",\"kind\":\"ValidatingPolicy\",\"metadata\":{\"annotations\":{\"argocd.argoproj.io/tracking-id\":\"kyverno-policies:policies.kyverno.io/ValidatingPolicy:kyverno-policies/validate-requests-limits\"},\"name\":\"validate-requests-limits\"},\"spec\":{\"autogen\":{\"podControllers\":{\"controllers\":[\"deployments\",\"statefulsets\",\"daemonsets\",\"jobs\",\"cronjobs\"]}},\"failurePolicy\":\"Fail\",\"matchConstraints\":{\"namespaceSelector\":{\"matchLabels\":{\"kubernetes.io/metadata.name\":\"labs\"}},\"resourceRules\":[{\"apiGroups\":[\"\"],\"apiVersions\":[\"v1\"],\"operations\":[\"CREATE\",\"UPDATE\"],\"resources\":[\"pods\"]}]},\"validationActions\":[\"Deny\"],\"validations\":[{\"expression\":\"variables.allContainers.all(container,\\n  container.?resources.?requests[?'cpu'].hasValue() \\u0026\\u0026\\n  container.?resources.?requests[?'memory'].hasValue() \\u0026\\u0026\\n  container.?resources.?requests[?'ephemeral-storage'].hasValue() \\u0026\\u0026\\n  container.?resources.?limits[?'memory'].hasValue() \\u0026\\u0026\\n  container.?resources.?limits[?'ephemeral-storage'].hasValue()\\n)\\n\",\"message\":\"All containers must define CPU, memory, and ephemeral-storage requests, plus memory and ephemeral-storage limits.\"},{\"expression\":\"variables.allContainers.all(container,\\n  container.?resources.?limits[?'memory'].hasValue()\\n  ? quantity(container.?resources.?limits[?'memory'].value()).compareTo(variables.maximumLimits[\\\"memory\\\"]) \\u003c= 0\\n  : true\\n)\\n\",\"message\":\"Memory limit must not exceed 2Gi.\"},{\"expression\":\"variables.allContainers.all(container,\\n  container.?resources.?limits[?'ephemeral-storage'].hasValue()\\n  ? quantity(container.?resources.?limits[?'ephemeral-storage'].value()).compareTo(variables.maximumLimits[\\\"ephemeral-storage\\\"]) \\u003c= 0\\n  : true\\n)\\n\",\"message\":\"Ephemeral-storage limit must not exceed 1Gi.\"},{\"expression\":\"variables.allContainers.all(container,\\n  container.?resources.?requests[?'memory'].hasValue() \\u0026\\u0026 container.?resources.?limits[?'memory'].hasValue()\\n  ? quantity(container.?resources.?requests[?'memory'].value()).compareTo(quantity(container.?resources.?limits[?'memory'].value())) \\u003c= 0\\n  : true\\n)\\n\",\"message\":\"Memory request must not exceed memory limit.\"},{\"expression\":\"variables.allContainers.all(container,\\n  container.?resources.?requests[?'ephemeral-storage'].hasValue() \\u0026\\u0026 container.?resources.?limits[?'ephemeral-storage'].hasValue()\\n  ? quantity(container.?resources.?requests[?'ephemeral-storage'].value()).compareTo(quantity(container.?resources.?limits[?'ephemeral-storage'].value())) \\u003c= 0\\n  : true\\n)\\n\",\"message\":\"Ephemeral-storage request must not exceed ephemeral-storage limit.\"}],\"variables\":[{\"expression\":\"object.spec.containers + object.spec.?initContainers.orValue([])\\n\",\"name\":\"allContainers\"},{\"expression\":\"{\\n  \\\"memory\\\": quantity(\\\"2Gi\\\"),\\n  \\\"ephemeral-storage\\\": quantity(\\\"1Gi\\\")\\n}\\n\",\"name\":\"maximumLimits\"}]}}\n"
+        },
+        "creationTimestamp": "2026-10-12T21:20:15Z",
+        "generation": 5,
+        "name": "validate-requests-limits",
+        "resourceVersion": "55301309",
+        "uid": "fdc93a66-dc59-487d-990b-6526107bb567"
+      },
+      "spec": {
+        "autogen": {
+          "podControllers": {
+            "controllers": [
+              "deployments",
+              "statefulsets",
+              "daemonsets",
+              "jobs",
+              "cronjobs"
+            ]
+          }
+        },
+        "failurePolicy": "Fail",
+        "matchConstraints": {
+          "namespaceSelector": {
+            "matchLabels": {
+              "kubernetes.io/metadata.name": "labs"
+            }
+          },
+          "resourceRules": [
+            {
+              "apiGroups": [
+                ""
+              ],
+              "apiVersions": [
+                "v1"
+              ],
+              "operations": [
+                "CREATE",
+                "UPDATE"
+              ],
+              "resources": [
+                "pods"
+              ]
+            }
+          ]
+        },
+        "validationActions": [
+          "Deny"
+        ],
+        "validations": [
+          {
+            "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'cpu'].hasValue() &&\n  container.?resources.?requests[?'memory'].hasValue() &&\n  container.?resources.?requests[?'ephemeral-storage'].hasValue() &&\n  container.?resources.?limits[?'memory'].hasValue() &&\n  container.?resources.?limits[?'ephemeral-storage'].hasValue()\n)\n",
+            "message": "All containers must define CPU, memory, and ephemeral-storage requests, plus memory and ephemeral-storage limits."
+          },
+          {
+            "expression": "variables.allContainers.all(container,\n  container.?resources.?limits[?'memory'].hasValue()\n  ? quantity(container.?resources.?limits[?'memory'].value()).compareTo(variables.maximumLimits[\"memory\"]) <= 0\n  : true\n)\n",
+            "message": "Memory limit must not exceed 2Gi."
+          },
+          {
+            "expression": "variables.allContainers.all(container,\n  container.?resources.?limits[?'ephemeral-storage'].hasValue()\n  ? quantity(container.?resources.?limits[?'ephemeral-storage'].value()).compareTo(variables.maximumLimits[\"ephemeral-storage\"]) <= 0\n  : true\n)\n",
+            "message": "Ephemeral-storage limit must not exceed 1Gi."
+          },
+          {
+            "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'memory'].hasValue() && container.?resources.?limits[?'memory'].hasValue()\n  ? quantity(container.?resources.?requests[?'memory'].value()).compareTo(quantity(container.?resources.?limits[?'memory'].value())) <= 0\n  : true\n)\n",
+            "message": "Memory request must not exceed memory limit."
+          },
+          {
+            "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'ephemeral-storage'].hasValue() && container.?resources.?limits[?'ephemeral-storage'].hasValue()\n  ? quantity(container.?resources.?requests[?'ephemeral-storage'].value()).compareTo(quantity(container.?resources.?limits[?'ephemeral-storage'].value())) <= 0\n  : true\n)\n",
+            "message": "Ephemeral-storage request must not exceed ephemeral-storage limit."
+          }
+        ],
+        "variables": [
+          {
+            "expression": "object.spec.containers + object.spec.?initContainers.orValue([])\n",
+            "name": "allContainers"
+          },
+          {
+            "expression": "{\n  \"memory\": quantity(\"2Gi\"),\n  \"ephemeral-storage\": quantity(\"1Gi\")\n}\n",
+            "name": "maximumLimits"
+          }
+        ]
+      },
+      "status": {
+        "autogen": {
+          "configs": {
+            "cronjobs": {
+              "spec": {
+                "autogen": {
+                  "podControllers": {
+                    "controllers": [
+                      "deployments",
+                      "statefulsets",
+                      "daemonsets",
+                      "jobs",
+                      "cronjobs"
+                    ]
+                  }
+                },
+                "failurePolicy": "Fail",
+                "matchConstraints": {
+                  "namespaceSelector": {
+                    "matchLabels": {
+                      "kubernetes.io/metadata.name": "labs"
+                    }
+                  },
+                  "resourceRules": [
+                    {
+                      "apiGroups": [
+                        "batch"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "cronjobs"
+                      ]
+                    }
+                  ]
+                },
+                "validationActions": [
+                  "Deny"
+                ],
+                "validations": [
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'cpu'].hasValue() &&\n  container.?resources.?requests[?'memory'].hasValue() &&\n  container.?resources.?requests[?'ephemeral-storage'].hasValue() &&\n  container.?resources.?limits[?'memory'].hasValue() &&\n  container.?resources.?limits[?'ephemeral-storage'].hasValue()\n)\n",
+                    "message": "All containers must define CPU, memory, and ephemeral-storage requests, plus memory and ephemeral-storage limits."
+                  },
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?limits[?'memory'].hasValue()\n  ? quantity(container.?resources.?limits[?'memory'].value()).compareTo(variables.maximumLimits[\"memory\"]) <= 0\n  : true\n)\n",
+                    "message": "Memory limit must not exceed 2Gi."
+                  },
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?limits[?'ephemeral-storage'].hasValue()\n  ? quantity(container.?resources.?limits[?'ephemeral-storage'].value()).compareTo(variables.maximumLimits[\"ephemeral-storage\"]) <= 0\n  : true\n)\n",
+                    "message": "Ephemeral-storage limit must not exceed 1Gi."
+                  },
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'memory'].hasValue() && container.?resources.?limits[?'memory'].hasValue()\n  ? quantity(container.?resources.?requests[?'memory'].value()).compareTo(quantity(container.?resources.?limits[?'memory'].value())) <= 0\n  : true\n)\n",
+                    "message": "Memory request must not exceed memory limit."
+                  },
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'ephemeral-storage'].hasValue() && container.?resources.?limits[?'ephemeral-storage'].hasValue()\n  ? quantity(container.?resources.?requests[?'ephemeral-storage'].value()).compareTo(quantity(container.?resources.?limits[?'ephemeral-storage'].value())) <= 0\n  : true\n)\n",
+                    "message": "Ephemeral-storage request must not exceed ephemeral-storage limit."
+                  }
+                ],
+                "variables": [
+                  {
+                    "expression": "object.spec.jobTemplate.spec.template.spec.containers + object.spec.jobTemplate.spec.template.spec.?initContainers.orValue([])\n",
+                    "name": "allContainers"
+                  },
+                  {
+                    "expression": "{\n  \"memory\": quantity(\"2Gi\"),\n  \"ephemeral-storage\": quantity(\"1Gi\")\n}\n",
+                    "name": "maximumLimits"
+                  }
+                ]
+              },
+              "targets": [
+                {
+                  "group": "batch",
+                  "kind": "CronJob",
+                  "resource": "cronjobs",
+                  "version": "v1"
+                }
+              ]
+            },
+            "defaults": {
+              "spec": {
+                "autogen": {
+                  "podControllers": {
+                    "controllers": [
+                      "deployments",
+                      "statefulsets",
+                      "daemonsets",
+                      "jobs",
+                      "cronjobs"
+                    ]
+                  }
+                },
+                "failurePolicy": "Fail",
+                "matchConstraints": {
+                  "namespaceSelector": {
+                    "matchLabels": {
+                      "kubernetes.io/metadata.name": "labs"
+                    }
+                  },
+                  "resourceRules": [
+                    {
+                      "apiGroups": [
+                        "apps"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "daemonsets",
+                        "deployments",
+                        "statefulsets"
+                      ]
+                    },
+                    {
+                      "apiGroups": [
+                        "batch"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "jobs"
+                      ]
+                    }
+                  ]
+                },
+                "validationActions": [
+                  "Deny"
+                ],
+                "validations": [
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'cpu'].hasValue() &&\n  container.?resources.?requests[?'memory'].hasValue() &&\n  container.?resources.?requests[?'ephemeral-storage'].hasValue() &&\n  container.?resources.?limits[?'memory'].hasValue() &&\n  container.?resources.?limits[?'ephemeral-storage'].hasValue()\n)\n",
+                    "message": "All containers must define CPU, memory, and ephemeral-storage requests, plus memory and ephemeral-storage limits."
+                  },
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?limits[?'memory'].hasValue()\n  ? quantity(container.?resources.?limits[?'memory'].value()).compareTo(variables.maximumLimits[\"memory\"]) <= 0\n  : true\n)\n",
+                    "message": "Memory limit must not exceed 2Gi."
+                  },
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?limits[?'ephemeral-storage'].hasValue()\n  ? quantity(container.?resources.?limits[?'ephemeral-storage'].value()).compareTo(variables.maximumLimits[\"ephemeral-storage\"]) <= 0\n  : true\n)\n",
+                    "message": "Ephemeral-storage limit must not exceed 1Gi."
+                  },
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'memory'].hasValue() && container.?resources.?limits[?'memory'].hasValue()\n  ? quantity(container.?resources.?requests[?'memory'].value()).compareTo(quantity(container.?resources.?limits[?'memory'].value())) <= 0\n  : true\n)\n",
+                    "message": "Memory request must not exceed memory limit."
+                  },
+                  {
+                    "expression": "variables.allContainers.all(container,\n  container.?resources.?requests[?'ephemeral-storage'].hasValue() && container.?resources.?limits[?'ephemeral-storage'].hasValue()\n  ? quantity(container.?resources.?requests[?'ephemeral-storage'].value()).compareTo(quantity(container.?resources.?limits[?'ephemeral-storage'].value())) <= 0\n  : true\n)\n",
+                    "message": "Ephemeral-storage request must not exceed ephemeral-storage limit."
+                  }
+                ],
+                "variables": [
+                  {
+                    "expression": "object.spec.template.spec.containers + object.spec.template.spec.?initContainers.orValue([])\n",
+                    "name": "allContainers"
+                  },
+                  {
+                    "expression": "{\n  \"memory\": quantity(\"2Gi\"),\n  \"ephemeral-storage\": quantity(\"1Gi\")\n}\n",
+                    "name": "maximumLimits"
+                  }
+                ]
+              },
+              "targets": [
+                {
+                  "group": "apps",
+                  "kind": "DaemonSet",
+                  "resource": "daemonsets",
+                  "version": "v1"
+                },
+                {
+                  "group": "apps",
+                  "kind": "Deployment",
+                  "resource": "deployments",
+                  "version": "v1"
+                },
+                {
+                  "group": "apps",
+                  "kind": "StatefulSet",
+                  "resource": "statefulsets",
+                  "version": "v1"
+                },
+                {
+                  "group": "batch",
+                  "kind": "Job",
+                  "resource": "jobs",
+                  "version": "v1"
+                }
+              ]
+            }
+          }
+        },
+        "conditionStatus": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-12T21:20:16Z",
+              "message": "Webhook configured.",
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "WebhookConfigured"
+            },
+            {
+              "lastTransitionTime": "2026-10-12T21:20:16Z",
+              "message": "Policy is ready for reporting.",
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "RBACPermissionsGranted"
+            }
+          ],
+          "message": "skip generating ValidatingAdmissionPolicy: not enabled.",
+          "ready": true
+        },
+        "generated": false
+      }
+    },
+    {
+      "apiVersion": "policies.kyverno.io/v1",
+      "kind": "ValidatingPolicy",
+      "metadata": {
+        "annotations": {
+          "argocd.argoproj.io/tracking-id": "kyverno-policies:policies.kyverno.io/ValidatingPolicy:kyverno-policies/validate-run-as-non-root",
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"policies.kyverno.io/v1\",\"kind\":\"ValidatingPolicy\",\"metadata\":{\"annotations\":{\"argocd.argoproj.io/tracking-id\":\"kyverno-policies:policies.kyverno.io/ValidatingPolicy:kyverno-policies/validate-run-as-non-root\"},\"name\":\"validate-run-as-non-root\"},\"spec\":{\"autogen\":{\"podControllers\":{\"controllers\":[\"deployments\",\"statefulsets\",\"daemonsets\",\"jobs\",\"cronjobs\"]}},\"evaluation\":{\"admission\":{\"enabled\":true},\"background\":{\"enabled\":true}},\"failurePolicy\":\"Fail\",\"matchConstraints\":{\"namespaceSelector\":{\"matchLabels\":{\"kubernetes.io/metadata.name\":\"labs\"}},\"resourceRules\":[{\"apiGroups\":[\"\"],\"apiVersions\":[\"v1\"],\"operations\":[\"CREATE\",\"UPDATE\"],\"resources\":[\"pods\"]}]},\"validationActions\":[\"Deny\"],\"validations\":[{\"expression\":\"(\\n  object.spec.?securityContext.?runAsNonRoot.orValue(false) == true \\u0026\\u0026\\n  variables.allContainers.all(container,\\n    container.?securityContext.?runAsNonRoot.orValue(true) == true\\n  )\\n) || variables.allContainers.all(container,\\n  container.?securityContext.?runAsNonRoot.orValue(false) == true\\n)\\n\",\"message\":\"Every container must run as non-root. Set spec.securityContext.runAsNonRoot to true, or set securityContext.runAsNonRoot to true on every container.\"}],\"variables\":[{\"expression\":\"object.spec.containers +\\nobject.spec.?initContainers.orValue([]) +\\nobject.spec.?ephemeralContainers.orValue([])\\n\",\"name\":\"allContainers\"}]}}\n"
+        },
+        "creationTimestamp": "2026-10-12T21:20:15Z",
+        "generation": 2,
+        "name": "validate-run-as-non-root",
+        "resourceVersion": "55301307",
+        "uid": "678acc66-03f4-4563-9958-d1f658ad5f24"
+      },
+      "spec": {
+        "autogen": {
+          "podControllers": {
+            "controllers": [
+              "deployments",
+              "statefulsets",
+              "daemonsets",
+              "jobs",
+              "cronjobs"
+            ]
+          }
+        },
+        "evaluation": {
+          "admission": {
+            "enabled": true
+          },
+          "background": {
+            "enabled": true
+          }
+        },
+        "failurePolicy": "Fail",
+        "matchConstraints": {
+          "namespaceSelector": {
+            "matchLabels": {
+              "kubernetes.io/metadata.name": "labs"
+            }
+          },
+          "resourceRules": [
+            {
+              "apiGroups": [
+                ""
+              ],
+              "apiVersions": [
+                "v1"
+              ],
+              "operations": [
+                "CREATE",
+                "UPDATE"
+              ],
+              "resources": [
+                "pods"
+              ]
+            }
+          ]
+        },
+        "validationActions": [
+          "Deny"
+        ],
+        "validations": [
+          {
+            "expression": "(\n  object.spec.?securityContext.?runAsNonRoot.orValue(false) == true &&\n  variables.allContainers.all(container,\n    container.?securityContext.?runAsNonRoot.orValue(true) == true\n  )\n) || variables.allContainers.all(container,\n  container.?securityContext.?runAsNonRoot.orValue(false) == true\n)\n",
+            "message": "Every container must run as non-root. Set spec.securityContext.runAsNonRoot to true, or set securityContext.runAsNonRoot to true on every container."
+          }
+        ],
+        "variables": [
+          {
+            "expression": "object.spec.containers +\nobject.spec.?initContainers.orValue([]) +\nobject.spec.?ephemeralContainers.orValue([])\n",
+            "name": "allContainers"
+          }
+        ]
+      },
+      "status": {
+        "autogen": {
+          "configs": {
+            "cronjobs": {
+              "spec": {
+                "autogen": {
+                  "podControllers": {
+                    "controllers": [
+                      "deployments",
+                      "statefulsets",
+                      "daemonsets",
+                      "jobs",
+                      "cronjobs"
+                    ]
+                  }
+                },
+                "evaluation": {
+                  "admission": {
+                    "enabled": true
+                  },
+                  "background": {
+                    "enabled": true
+                  }
+                },
+                "failurePolicy": "Fail",
+                "matchConstraints": {
+                  "namespaceSelector": {
+                    "matchLabels": {
+                      "kubernetes.io/metadata.name": "labs"
+                    }
+                  },
+                  "resourceRules": [
+                    {
+                      "apiGroups": [
+                        "batch"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "cronjobs"
+                      ]
+                    }
+                  ]
+                },
+                "validationActions": [
+                  "Deny"
+                ],
+                "validations": [
+                  {
+                    "expression": "(\n  object.spec.jobTemplate.spec.template.spec.?securityContext.?runAsNonRoot.orValue(false) == true &&\n  variables.allContainers.all(container,\n    container.?securityContext.?runAsNonRoot.orValue(true) == true\n  )\n) || variables.allContainers.all(container,\n  container.?securityContext.?runAsNonRoot.orValue(false) == true\n)\n",
+                    "message": "Every container must run as non-root. Set spec.securityContext.runAsNonRoot to true, or set securityContext.runAsNonRoot to true on every container."
+                  }
+                ],
+                "variables": [
+                  {
+                    "expression": "object.spec.jobTemplate.spec.template.spec.containers +\nobject.spec.jobTemplate.spec.template.spec.?initContainers.orValue([]) +\nobject.spec.jobTemplate.spec.template.spec.?ephemeralContainers.orValue([])\n",
+                    "name": "allContainers"
+                  }
+                ]
+              },
+              "targets": [
+                {
+                  "group": "batch",
+                  "kind": "CronJob",
+                  "resource": "cronjobs",
+                  "version": "v1"
+                }
+              ]
+            },
+            "defaults": {
+              "spec": {
+                "autogen": {
+                  "podControllers": {
+                    "controllers": [
+                      "deployments",
+                      "statefulsets",
+                      "daemonsets",
+                      "jobs",
+                      "cronjobs"
+                    ]
+                  }
+                },
+                "evaluation": {
+                  "admission": {
+                    "enabled": true
+                  },
+                  "background": {
+                    "enabled": true
+                  }
+                },
+                "failurePolicy": "Fail",
+                "matchConstraints": {
+                  "namespaceSelector": {
+                    "matchLabels": {
+                      "kubernetes.io/metadata.name": "labs"
+                    }
+                  },
+                  "resourceRules": [
+                    {
+                      "apiGroups": [
+                        "apps"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "daemonsets",
+                        "deployments",
+                        "statefulsets"
+                      ]
+                    },
+                    {
+                      "apiGroups": [
+                        "batch"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "jobs"
+                      ]
+                    }
+                  ]
+                },
+                "validationActions": [
+                  "Deny"
+                ],
+                "validations": [
+                  {
+                    "expression": "(\n  object.spec.template.spec.?securityContext.?runAsNonRoot.orValue(false) == true &&\n  variables.allContainers.all(container,\n    container.?securityContext.?runAsNonRoot.orValue(true) == true\n  )\n) || variables.allContainers.all(container,\n  container.?securityContext.?runAsNonRoot.orValue(false) == true\n)\n",
+                    "message": "Every container must run as non-root. Set spec.securityContext.runAsNonRoot to true, or set securityContext.runAsNonRoot to true on every container."
+                  }
+                ],
+                "variables": [
+                  {
+                    "expression": "object.spec.template.spec.containers +\nobject.spec.template.spec.?initContainers.orValue([]) +\nobject.spec.template.spec.?ephemeralContainers.orValue([])\n",
+                    "name": "allContainers"
+                  }
+                ]
+              },
+              "targets": [
+                {
+                  "group": "apps",
+                  "kind": "DaemonSet",
+                  "resource": "daemonsets",
+                  "version": "v1"
+                },
+                {
+                  "group": "apps",
+                  "kind": "Deployment",
+                  "resource": "deployments",
+                  "version": "v1"
+                },
+                {
+                  "group": "apps",
+                  "kind": "StatefulSet",
+                  "resource": "statefulsets",
+                  "version": "v1"
+                },
+                {
+                  "group": "batch",
+                  "kind": "Job",
+                  "resource": "jobs",
+                  "version": "v1"
+                }
+              ]
+            }
+          }
+        },
+        "conditionStatus": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-12T21:20:16Z",
+              "message": "Webhook configured.",
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "WebhookConfigured"
+            },
+            {
+              "lastTransitionTime": "2026-10-12T21:20:16Z",
+              "message": "Policy is ready for reporting.",
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "RBACPermissionsGranted"
+            }
+          ],
+          "message": "skip generating ValidatingAdmissionPolicy: not enabled.",
+          "ready": true
+        },
+        "generated": false
+      }
+    },
+    {
+      "apiVersion": "policies.kyverno.io/v1",
+      "kind": "ValidatingPolicy",
+      "metadata": {
+        "annotations": {
+          "argocd.argoproj.io/tracking-id": "kyverno-policies:policies.kyverno.io/ValidatingPolicy:kyverno-policies/validate-trusted-registries",
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"policies.kyverno.io/v1\",\"kind\":\"ValidatingPolicy\",\"metadata\":{\"annotations\":{\"argocd.argoproj.io/tracking-id\":\"kyverno-policies:policies.kyverno.io/ValidatingPolicy:kyverno-policies/validate-trusted-registries\"},\"name\":\"validate-trusted-registries\"},\"spec\":{\"autogen\":{\"podControllers\":{\"controllers\":[\"deployments\",\"statefulsets\",\"daemonsets\",\"jobs\",\"cronjobs\"]}},\"evaluation\":{\"admission\":{\"enabled\":true},\"background\":{\"enabled\":true}},\"failurePolicy\":\"Fail\",\"matchConstraints\":{\"namespaceSelector\":{\"matchLabels\":{\"kubernetes.io/metadata.name\":\"labs\"}},\"resourceRules\":[{\"apiGroups\":[\"\"],\"apiVersions\":[\"v1\"],\"operations\":[\"CREATE\",\"UPDATE\"],\"resources\":[\"pods\"]}]},\"validationActions\":[\"Deny\"],\"validations\":[{\"expression\":\"variables.allContainers.all(container,\\n  image(container.image).registry() in variables.allowedRegistries\\n)\\n\",\"message\":\"Container images must come from an approved registry.\"}],\"variables\":[{\"expression\":\"object.spec.containers +\\nobject.spec.?initContainers.orValue([]) +\\nobject.spec.?ephemeralContainers.orValue([])\\n\",\"name\":\"allContainers\"},{\"expression\":\"[\\n  \\\"docker.io\\\",\\n  \\\"index.docker.io\\\",\\n  \\\"ghcr.io\\\",\\n  \\\"quay.io\\\",\\n  \\\"registry.k8s.io\\\",\\n  \\\"192.168.0.242:3000\\\"\\n]\\n\",\"name\":\"allowedRegistries\"}]}}\n"
+        },
+        "creationTimestamp": "2026-10-12T21:20:16Z",
+        "generation": 3,
+        "name": "validate-trusted-registries",
+        "resourceVersion": "55301310",
+        "uid": "57ca3863-a01b-4b66-b64b-1ee241083197"
+      },
+      "spec": {
+        "autogen": {
+          "podControllers": {
+            "controllers": [
+              "deployments",
+              "statefulsets",
+              "daemonsets",
+              "jobs",
+              "cronjobs"
+            ]
+          }
+        },
+        "evaluation": {
+          "admission": {
+            "enabled": true
+          },
+          "background": {
+            "enabled": true
+          }
+        },
+        "failurePolicy": "Fail",
+        "matchConstraints": {
+          "namespaceSelector": {
+            "matchLabels": {
+              "kubernetes.io/metadata.name": "labs"
+            }
+          },
+          "resourceRules": [
+            {
+              "apiGroups": [
+                ""
+              ],
+              "apiVersions": [
+                "v1"
+              ],
+              "operations": [
+                "CREATE",
+                "UPDATE"
+              ],
+              "resources": [
+                "pods"
+              ]
+            }
+          ]
+        },
+        "validationActions": [
+          "Deny"
+        ],
+        "validations": [
+          {
+            "expression": "variables.allContainers.all(container,\n  image(container.image).registry() in variables.allowedRegistries\n)\n",
+            "message": "Container images must come from an approved registry."
+          }
+        ],
+        "variables": [
+          {
+            "expression": "object.spec.containers +\nobject.spec.?initContainers.orValue([]) +\nobject.spec.?ephemeralContainers.orValue([])\n",
+            "name": "allContainers"
+          },
+          {
+            "expression": "[\n  \"docker.io\",\n  \"index.docker.io\",\n  \"ghcr.io\",\n  \"quay.io\",\n  \"registry.k8s.io\",\n  \"192.168.0.242:3000\"\n]\n",
+            "name": "allowedRegistries"
+          }
+        ]
+      },
+      "status": {
+        "autogen": {
+          "configs": {
+            "cronjobs": {
+              "spec": {
+                "autogen": {
+                  "podControllers": {
+                    "controllers": [
+                      "deployments",
+                      "statefulsets",
+                      "daemonsets",
+                      "jobs",
+                      "cronjobs"
+                    ]
+                  }
+                },
+                "evaluation": {
+                  "admission": {
+                    "enabled": true
+                  },
+                  "background": {
+                    "enabled": true
+                  }
+                },
+                "failurePolicy": "Fail",
+                "matchConstraints": {
+                  "namespaceSelector": {
+                    "matchLabels": {
+                      "kubernetes.io/metadata.name": "labs"
+                    }
+                  },
+                  "resourceRules": [
+                    {
+                      "apiGroups": [
+                        "batch"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "cronjobs"
+                      ]
+                    }
+                  ]
+                },
+                "validationActions": [
+                  "Deny"
+                ],
+                "validations": [
+                  {
+                    "expression": "variables.allContainers.all(container,\n  image(container.image).registry() in variables.allowedRegistries\n)\n",
+                    "message": "Container images must come from an approved registry."
+                  }
+                ],
+                "variables": [
+                  {
+                    "expression": "object.spec.jobTemplate.spec.template.spec.containers +\nobject.spec.jobTemplate.spec.template.spec.?initContainers.orValue([]) +\nobject.spec.jobTemplate.spec.template.spec.?ephemeralContainers.orValue([])\n",
+                    "name": "allContainers"
+                  },
+                  {
+                    "expression": "[\n  \"docker.io\",\n  \"index.docker.io\",\n  \"ghcr.io\",\n  \"quay.io\",\n  \"registry.k8s.io\",\n  \"192.168.0.242:3000\"\n]\n",
+                    "name": "allowedRegistries"
+                  }
+                ]
+              },
+              "targets": [
+                {
+                  "group": "batch",
+                  "kind": "CronJob",
+                  "resource": "cronjobs",
+                  "version": "v1"
+                }
+              ]
+            },
+            "defaults": {
+              "spec": {
+                "autogen": {
+                  "podControllers": {
+                    "controllers": [
+                      "deployments",
+                      "statefulsets",
+                      "daemonsets",
+                      "jobs",
+                      "cronjobs"
+                    ]
+                  }
+                },
+                "evaluation": {
+                  "admission": {
+                    "enabled": true
+                  },
+                  "background": {
+                    "enabled": true
+                  }
+                },
+                "failurePolicy": "Fail",
+                "matchConstraints": {
+                  "namespaceSelector": {
+                    "matchLabels": {
+                      "kubernetes.io/metadata.name": "labs"
+                    }
+                  },
+                  "resourceRules": [
+                    {
+                      "apiGroups": [
+                        "apps"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "daemonsets",
+                        "deployments",
+                        "statefulsets"
+                      ]
+                    },
+                    {
+                      "apiGroups": [
+                        "batch"
+                      ],
+                      "apiVersions": [
+                        "v1"
+                      ],
+                      "operations": [
+                        "CREATE",
+                        "UPDATE"
+                      ],
+                      "resources": [
+                        "jobs"
+                      ]
+                    }
+                  ]
+                },
+                "validationActions": [
+                  "Deny"
+                ],
+                "validations": [
+                  {
+                    "expression": "variables.allContainers.all(container,\n  image(container.image).registry() in variables.allowedRegistries\n)\n",
+                    "message": "Container images must come from an approved registry."
+                  }
+                ],
+                "variables": [
+                  {
+                    "expression": "object.spec.template.spec.containers +\nobject.spec.template.spec.?initContainers.orValue([]) +\nobject.spec.template.spec.?ephemeralContainers.orValue([])\n",
+                    "name": "allContainers"
+                  },
+                  {
+                    "expression": "[\n  \"docker.io\",\n  \"index.docker.io\",\n  \"ghcr.io\",\n  \"quay.io\",\n  \"registry.k8s.io\",\n  \"192.168.0.242:3000\"\n]\n",
+                    "name": "allowedRegistries"
+                  }
+                ]
+              },
+              "targets": [
+                {
+                  "group": "apps",
+                  "kind": "DaemonSet",
+                  "resource": "daemonsets",
+                  "version": "v1"
+                },
+                {
+                  "group": "apps",
+                  "kind": "Deployment",
+                  "resource": "deployments",
+                  "version": "v1"
+                },
+                {
+                  "group": "apps",
+                  "kind": "StatefulSet",
+                  "resource": "statefulsets",
+                  "version": "v1"
+                },
+                {
+                  "group": "batch",
+                  "kind": "Job",
+                  "resource": "jobs",
+                  "version": "v1"
+                }
+              ]
+            }
+          }
+        },
+        "conditionStatus": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-12T21:20:17Z",
+              "message": "Webhook configured.",
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "WebhookConfigured"
+            },
+            {
+              "lastTransitionTime": "2026-10-12T21:20:17Z",
+              "message": "Policy is ready for reporting.",
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "RBACPermissionsGranted"
+            }
+          ],
+          "message": "skip generating ValidatingAdmissionPolicy: not enabled.",
+          "ready": true
+        },
+        "generated": false
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

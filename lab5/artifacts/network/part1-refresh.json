@@ -1,0 +1,15 @@
+{
+  "time": 1793015050.6004694,
+  "pod": "shop-api-d89c79656-nbqc2",
+  "ip": "10.0.1.164",
+  "node": "k8s-node-1",
+  "ifindex": "1746",
+  "iflink": "1747",
+  "node_peer": "1747: lxc463d91ef2c7e@if1746: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\\    link/ether 1a:17:ce:84:68:0c brd ff:ff:ff:ff:ff:ff link-netnsid 34",
+  "commands": [
+    "kubectl -n lab5 get pods -o wide",
+    "kubectl -n lab5 exec shop-api-d89c79656-nbqc2 -c api -- hostname -i",
+    "kubectl -n lab5 exec shop-api-d89c79656-nbqc2 -c api -- cat /sys/class/net/eth0/ifindex /sys/class/net/eth0/iflink",
+    "kubectl -n kube-system exec cilium-kkdrc -- ip -o link show dev lxc463d91ef2c7e"
+  ]
+}

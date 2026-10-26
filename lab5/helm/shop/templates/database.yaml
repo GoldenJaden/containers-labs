@@ -1,0 +1,18 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Values.database.name }}
+  labels:
+    {{- include "shop.labels" . | nindent 4 }}
+spec:
+  imageName: {{ .Values.database.image | quote }}
+  instances: {{ .Values.database.instances }}
+  bootstrap:
+    initdb: {database: orders, owner: app}
+  resources:
+    {{- toYaml .Values.database.resources | nindent 4 }}
+  storage:
+    size: {{ .Values.database.storage }}
+    storageClass: {{ .Values.database.storageClass }}
+  monitoring:
+    enablePodMonitor: true

@@ -1,0 +1,87 @@
+{
+  "status": "success",
+  "data": {
+    "resultType": "vector",
+    "result": [
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "api",
+          "endpoint": "http",
+          "instance": "10.0.1.124:8080",
+          "job": "shop-api",
+          "namespace": "lab5",
+          "pod": "shop-api-d89c79656-8kzgj",
+          "service": "shop-api"
+        },
+        "value": [
+          1792946708.827,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "postgres",
+          "endpoint": "metrics",
+          "instance": "10.0.1.55:9187",
+          "job": "lab5/shop-db",
+          "namespace": "lab5",
+          "pod": "shop-db-1"
+        },
+        "value": [
+          1792946708.827,
+          "0"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "api",
+          "endpoint": "http",
+          "instance": "10.0.1.19:8080",
+          "job": "shop-api",
+          "namespace": "lab5",
+          "pod": "shop-api-d89c79656-npjd9",
+          "service": "shop-api"
+        },
+        "value": [
+          1792946708.827,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "api",
+          "endpoint": "http",
+          "instance": "10.0.1.113:8080",
+          "job": "shop-api",
+          "namespace": "lab5",
+          "pod": "shop-api-d89c79656-7tflv",
+          "service": "shop-api"
+        },
+        "value": [
+          1792946708.827,
+          "0"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "up",
+          "container": "api",
+          "endpoint": "http",
+          "instance": "10.0.1.75:8080",
+          "job": "shop-api",
+          "namespace": "lab5",
+          "pod": "shop-api-d89c79656-6wj7j",
+          "service": "shop-api"
+        },
+        "value": [
+          1792946708.827,
+          "1"
+        ]
+      }
+    ]
+  }
+}

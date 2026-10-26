@@ -1,0 +1,1180 @@
+[
+  {
+    "id": 329,
+    "pod": "lab5/shop-worker-d469cc64f-xrnjj",
+    "policy": {
+      "proxy-policy-revision": 30,
+      "proxy-statistics": [],
+      "realized": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 3649,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-worker-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=e7b68e1c-bd41-4967-8a50-d195a8f99e82"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-worker",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=670873b8-c533-4514-8c51-72b07a951ce8"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-worker",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=670873b8-c533-4514-8c51-72b07a951ce8"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": []
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      },
+      "spec": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 3649,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-worker",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=670873b8-c533-4514-8c51-72b07a951ce8"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-worker",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=670873b8-c533-4514-8c51-72b07a951ce8"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-worker-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=e7b68e1c-bd41-4967-8a50-d195a8f99e82"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": []
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      }
+    }
+  },
+  {
+    "id": 527,
+    "pod": "lab5/shop-api-d89c79656-vrzf4",
+    "policy": {
+      "proxy-policy-revision": 30,
+      "proxy-statistics": [],
+      "realized": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 15012,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-api-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=c9f6493f-4026-4087-882e-0a4df096d9f3"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                ]
+              ],
+              "rule": "{\"port\":8080,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      },
+      "spec": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 15012,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-api-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=c9f6493f-4026-4087-882e-0a4df096d9f3"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                ]
+              ],
+              "rule": "{\"port\":8080,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      }
+    }
+  },
+  {
+    "id": 535,
+    "pod": "lab5/shop-db-1",
+    "policy": {
+      "proxy-policy-revision": 30,
+      "proxy-statistics": [],
+      "realized": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 6661,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=CiliumNetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-apiserver",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=df83817a-6cd9-4b44-b559-15a67aaed9f3"
+                ]
+              ],
+              "rule": "{\"port\":6443,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{reserved.kube-apiserver: ,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=CiliumNetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-apiserver",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=df83817a-6cd9-4b44-b559-15a67aaed9f3"
+                ]
+              ],
+              "rule": "{\"port\":443,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{reserved.kube-apiserver: ,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                ]
+              ],
+              "rule": "{\"port\":8000,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-database",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=3fac294e-495d-4dec-8d40-505b6e231cb9"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-database",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=3fac294e-495d-4dec-8d40-505b6e231cb9"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-monitoring-database",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=61151987-53da-4435-9c00-412037b637a8"
+                ]
+              ],
+              "rule": "{\"port\":9187,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-monitoring-database",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=61151987-53da-4435-9c00-412037b637a8"
+                  ]
+                ]
+              }
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                ]
+              ],
+              "rule": "{\"port\":8000,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: cloudnative-pg,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: cnpg-system,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: cloudnative-pg,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: cnpg-system,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                  ]
+                ]
+              }
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-api-database-ingress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b31acffc-4892-4d8d-96f8-79856fa13d37"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-worker-database-ingress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=8cf3efab-fcff-4d04-af09-44645c9ab391"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/component: api,k8s.app.kubernetes.io/instance: shop,k8s.app.kubernetes.io/name: shop,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/component: worker,k8s.app.kubernetes.io/instance: shop,k8s.app.kubernetes.io/name: shop,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/component: api,k8s.app.kubernetes.io/instance: shop,k8s.app.kubernetes.io/name: shop,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-api-database-ingress",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=b31acffc-4892-4d8d-96f8-79856fa13d37"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/component: worker,k8s.app.kubernetes.io/instance: shop,k8s.app.kubernetes.io/name: shop,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-worker-database-ingress",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=8cf3efab-fcff-4d04-af09-44645c9ab391"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      },
+      "spec": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 6661,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                ]
+              ],
+              "rule": "{\"port\":8000,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-database",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=3fac294e-495d-4dec-8d40-505b6e231cb9"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-database",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=3fac294e-495d-4dec-8d40-505b6e231cb9"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=CiliumNetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-apiserver",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=df83817a-6cd9-4b44-b559-15a67aaed9f3"
+                ]
+              ],
+              "rule": "{\"port\":6443,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{reserved.kube-apiserver: ,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=CiliumNetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-apiserver",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=df83817a-6cd9-4b44-b559-15a67aaed9f3"
+                ]
+              ],
+              "rule": "{\"port\":443,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{reserved.kube-apiserver: ,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-monitoring-database",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=61151987-53da-4435-9c00-412037b637a8"
+                ]
+              ],
+              "rule": "{\"port\":9187,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-monitoring-database",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=61151987-53da-4435-9c00-412037b637a8"
+                  ]
+                ]
+              }
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                ]
+              ],
+              "rule": "{\"port\":8000,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: cloudnative-pg,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: cnpg-system,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: cloudnative-pg,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: cnpg-system,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                  ]
+                ]
+              }
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-api-database-ingress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b31acffc-4892-4d8d-96f8-79856fa13d37"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-worker-database-ingress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=8cf3efab-fcff-4d04-af09-44645c9ab391"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/component: api,k8s.app.kubernetes.io/instance: shop,k8s.app.kubernetes.io/name: shop,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/component: worker,k8s.app.kubernetes.io/instance: shop,k8s.app.kubernetes.io/name: shop,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/component: api,k8s.app.kubernetes.io/instance: shop,k8s.app.kubernetes.io/name: shop,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-api-database-ingress",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=b31acffc-4892-4d8d-96f8-79856fa13d37"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/component: worker,k8s.app.kubernetes.io/instance: shop,k8s.app.kubernetes.io/name: shop,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-worker-database-ingress",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=8cf3efab-fcff-4d04-af09-44645c9ab391"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-database-management",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=1e8eb1a2-dda1-4046-a4eb-c17f8e6b8385"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      }
+    }
+  },
+  {
+    "id": 972,
+    "pod": "lab5/shop-worker-d469cc64f-9f44j",
+    "policy": {
+      "proxy-policy-revision": 30,
+      "proxy-statistics": [],
+      "realized": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 3649,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-worker",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=670873b8-c533-4514-8c51-72b07a951ce8"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-worker",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=670873b8-c533-4514-8c51-72b07a951ce8"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-worker-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=e7b68e1c-bd41-4967-8a50-d195a8f99e82"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": []
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      },
+      "spec": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 3649,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-worker",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=670873b8-c533-4514-8c51-72b07a951ce8"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-worker",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=670873b8-c533-4514-8c51-72b07a951ce8"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-worker-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=e7b68e1c-bd41-4967-8a50-d195a8f99e82"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": []
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      }
+    }
+  },
+  {
+    "id": 2267,
+    "pod": "lab5/shop-api-d89c79656-xf9zx",
+    "policy": {
+      "proxy-policy-revision": 30,
+      "proxy-statistics": [],
+      "realized": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 15012,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-api-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=c9f6493f-4026-4087-882e-0a4df096d9f3"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                ]
+              ],
+              "rule": "{\"port\":8080,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      },
+      "spec": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 15012,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-api-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=c9f6493f-4026-4087-882e-0a4df096d9f3"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                ]
+              ],
+              "rule": "{\"port\":8080,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      }
+    }
+  },
+  {
+    "id": 3939,
+    "pod": "lab5/shop-api-d89c79656-nbqc2",
+    "policy": {
+      "proxy-policy-revision": 30,
+      "proxy-statistics": [],
+      "realized": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 15012,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-api-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=c9f6493f-4026-4087-882e-0a4df096d9f3"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                ]
+              ],
+              "rule": "{\"port\":8080,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      },
+      "spec": {
+        "allowed-egress-identities": null,
+        "allowed-ingress-identities": [
+          1
+        ],
+        "build": 30,
+        "denied-egress-identities": null,
+        "denied-ingress-identities": null,
+        "id": 15012,
+        "l4": {
+          "egress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-api-database-egress",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=c9f6493f-4026-4087-882e-0a4df096d9f3"
+                ]
+              ],
+              "rule": "{\"port\":5432,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.cnpg.io/cluster: shop-db,k8s.io.kubernetes.pod.namespace: lab5,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"UDP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            },
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-dns-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=b04d6444-7700-4859-b83a-c48751900889"
+                ]
+              ],
+              "rule": "{\"port\":53,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: kube-system,k8s.k8s-app: kube-dns,},MatchExpressions:[]LabelSelectorRequirement{},}\":null}]}"
+            }
+          ],
+          "ingress": [
+            {
+              "derived-from-rules": [
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                ],
+                [
+                  "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                  "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                  "k8s:io.cilium.k8s.policy.namespace=lab5",
+                  "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                ]
+              ],
+              "rule": "{\"port\":8080,\"protocol\":\"TCP\",\"l7-rules\":[{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}\":null},{\"\\u0026LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}\":null}]}",
+              "rules-by-selector": {
+                "&LabelSelector{MatchLabels:map[string]string{k8s.app.kubernetes.io/name: prometheus,k8s.io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name: monitoring,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-monitoring-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=64739541-e9da-48ab-9ffa-e3d383daf149"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{k8s.io.kubernetes.pod.namespace: lab5,k8s.lab5-role: client,},MatchExpressions:[]LabelSelectorRequirement{},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ],
+                "&LabelSelector{MatchLabels:map[string]string{},MatchExpressions:[]LabelSelectorRequirement{LabelSelectorRequirement{Key:cidr.192.168.0.0/24,Operator:Exists,Values:[],},},}": [
+                  [
+                    "k8s:io.cilium.k8s.policy.derived-from=NetworkPolicy",
+                    "k8s:io.cilium.k8s.policy.name=shop-client-api",
+                    "k8s:io.cilium.k8s.policy.namespace=lab5",
+                    "k8s:io.cilium.k8s.policy.uid=a450c9f4-db48-4f6f-bd2a-ec310f051310"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "policy-enabled": "both",
+        "policy-revision": 30
+      }
+    }
+  }
+]
