@@ -216,3 +216,47 @@ gVisor - рантайм среда для контейнеров. Этот ин�
 ![Запуск контейнера через runtime runsc](./images/20-gvisor-runsc.png)
 
 ## Part 8 — Monitoring
+
+Качаем cadvisor.
+
+Стартуем на порту "sudo cadvisor --port=8080"
+
+Разворачиваем в docker compose графану и прометей на другом хосту. Прометею говорим скрейпить наш хост по порту 8080.
+
+![alt text](image.png)
+
+В докер компоузе поднимаем графану и прометеус, прометеус натравливаем на cadvisor, а графану на прометеус.
+
+![alt text](image-1.png)
+
+Метрики есть.
+
+Придумаем 3 алерта:
+
+### 1. cAdvisor недоступен
+
+Если Prometheus не может собрать метрики cAdvisor более 2 минут, срабатывает алерт с важностью `critical`.
+
+```promql
+up{job="cadvisor"} == 0
+```
+
+### 2. Высокая загрузка CPU хоста
+
+Если загрузка CPU превышает 85% суммарной мощности всех ядер более 5 минут, срабатывает алерт с важностью `warning`.
+
+```promql
+100 * sum by (instance) (
+  rate(container_cpu_usage_seconds_total{job="cadvisor",id="/"}[5m])
+)
+/ on (instance) machine_cpu_cores{job="cadvisor"} > 85
+```
+
+### 3. Мало места на корневом диске
+
+Если на корневом диске занято больше 85% места более 10 минут, срабатывает алерт с важностью `warning`.
+
+```promql
+100 * container_fs_usage_bytes{job="cadvisor",id="/",device="/dev/sda1"}
+/ container_fs_limit_bytes{job="cadvisor",id="/",device="/dev/sda1"} > 85
+```
