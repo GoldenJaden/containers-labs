@@ -1,0 +1,11 @@
+﻿# Cilium 1.18.5 overrides for this homelab.
+# Applied during lab6: keep the physical node IP instead of auto-detecting cilium_host.
+socketLB:
+  hostNamespaceOnly: true
+extraEnv:
+  - name: K8S_NODE_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.hostIP
+extraArgs:
+  - '--ipv4-node=$(K8S_NODE_IP)'

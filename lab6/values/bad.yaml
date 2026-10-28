@@ -1,0 +1,3 @@
+api:
+  versions:
+    v2: {fail: true}

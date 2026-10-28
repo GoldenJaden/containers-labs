@@ -1,0 +1,12 @@
+# Only change this local copy; source repositories are not required.
+api:
+  image:
+    repository: shop-api
+    tag: "6.0.0"
+database:
+  storage:
+    storageClass: ""
+# If the existing Prometheus selects only release-labelled monitors:
+# monitoring:
+#   labels:
+#     release: kube-prometheus-stack

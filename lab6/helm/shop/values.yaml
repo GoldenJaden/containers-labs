@@ -1,0 +1,55 @@
+# Final experiment: healthy v1/v2, initial split 90/10.
+api:
+  image:
+    repository: shop-api
+    tag: "6.0.0"
+    pullPolicy: IfNotPresent
+  versions:
+    v1: {enabled: true, replicas: 1, fail: false, flaky: false}
+    v2: {enabled: true, replicas: 1, fail: false, flaky: false}
+  flakyRate: "0.25"
+  resources:
+    requests: {cpu: 100m, memory: 96Mi}
+    limits: {cpu: "1", memory: 256Mi}
+  podAnnotations: {}
+  port: 8080
+
+# Single PostgreSQL instance for the service-mesh experiment.
+database:
+  image: postgres:17.11-bookworm
+  name: orders
+  user: app
+  # Demo credentials for an isolated local lab; override in values-local.yaml.
+  password: lab6-local-password
+  storage: {size: 2Gi, storageClass: ""}
+  resources:
+    requests: {cpu: 100m, memory: 256Mi}
+    limits: {cpu: "1", memory: 512Mi}
+
+mesh:
+  enabled: true
+  strict: true
+  annotations:
+    linkerd.io/inject: enabled
+    config.linkerd.io/skip-inbound-ports: "9090"
+    config.linkerd.io/proxy-cpu-request: "25m"
+    config.linkerd.io/proxy-memory-request: "32Mi"
+    config.linkerd.io/proxy-memory-limit: "128Mi"
+  retries: {enabled: true, limit: 3}
+  traffic: {v1: 90, v2: 10}
+
+client:
+  enabled: true
+  rps: 10
+  resources:
+    requests: {cpu: 50m, memory: 64Mi}
+    limits: {cpu: "1", memory: 256Mi}
+
+monitoring:
+  enabled: true
+  interval: 15s
+  labels: {}
+  dashboard: true
+  alerts: true
+
+imagePullSecrets: []

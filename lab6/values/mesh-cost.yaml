@@ -1,0 +1,6 @@
+api:
+  versions:
+    v2: {enabled: false}
+mesh:
+  traffic: {v1: 100, v2: 0}
+  retries: {enabled: false}

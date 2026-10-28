@@ -1,0 +1,23 @@
+Local verification - 2026-10-27, standalone lab6 revision.
+
+helm lint helm/shop:
+1 chart(s) linted, 0 chart(s) failed (icon recommendation only).
+
+pytest -q -ra:
+27 passed, 1 skipped, 1 warning in 1.85s.
+Skipped: tests/test_database.py - PostgreSQL not available.
+Warning: Starlette TestClient uses the deprecated AnyIO BlockingPortal alias.
+The five rendered scenarios include the standalone PostgreSQL StatefulSet,
+Service, Secret and PVC template; API connection settings are verified.
+
+Bash syntax: passed for deploy.sh and collect.sh.
+No Docker build, Kubernetes rollout or actual PostgreSQL integration run.
+32 rendered Linkerd/Gateway objects validated against official OpenAPI schemas (CEL and admission webhooks not executed).
+
+Grafana-style illustration revision - 2026-10-27:
+7 synthetic PNG dashboards rendered and visually inspected.
+The generated mTLS scheme was removed; the report retains verification commands.
+Python compilation passed for grafana_style, render_demo, plot_results and export_metrics.
+Rendering smoke checks passed for gate JSONL, baseline/mesh comparison and
+mocked Prometheus ranges with NaN gaps and different series timestamps.
+These checks use local fixtures, not a real Prometheus server or Kubernetes cluster.

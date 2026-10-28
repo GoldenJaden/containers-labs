@@ -1,0 +1,15 @@
+﻿api:
+  image:
+    repository: 192.168.0.242:3000/gjaden/lab6-api
+    tag: "6.0.0"
+  resources:
+    requests: {cpu: 10m, memory: 96Mi}
+database:
+  resources:
+    requests: {cpu: 10m, memory: 256Mi}
+client:
+  resources:
+    requests: {cpu: 10m, memory: 64Mi}
+mesh:
+  annotations:
+    config.linkerd.io/proxy-cpu-request: "5m"

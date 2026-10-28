@@ -1,0 +1,96 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "shop.labels" . | nindent 4 }}
+    {{- with .Values.monitoring.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels: {lab_release: {{ .Release.Name }}}
+    matchExpressions:
+      - {key: lab_component, operator: In, values: [api, client]}
+  targetLabels: [lab_release, lab_component, lab_version]
+  endpoints:
+    - {port: metrics, path: /metrics, interval: {{ .Values.monitoring.interval }}}
+{{- if .Values.mesh.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ .Release.Name }}-proxies
+  labels:
+    {{- include "shop.labels" . | nindent 4 }}
+    {{- with .Values.monitoring.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels: {lab_release: {{ .Release.Name }}}
+    matchExpressions:
+      - {key: lab_component, operator: In, values: [api, client]}
+  podTargetLabels: [lab_release, lab_component, lab_version]
+  podMetricsEndpoints:
+    - port: linkerd-admin
+      interval: {{ .Values.monitoring.interval }}
+      relabelings:
+        - {sourceLabels: [__meta_kubernetes_pod_container_name], action: keep, regex: linkerd-proxy}
+{{- end }}
+{{- if .Values.monitoring.alerts }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Release.Name }}-mesh
+  labels:
+    {{- include "shop.labels" . | nindent 4 }}
+    {{- with .Values.monitoring.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    - name: shop.mesh
+      rules:
+        - alert: ShopCanaryErrorRate
+          expr: |
+            (sum(rate(shop_order_requests_total{namespace="{{ .Release.Namespace }}",lab_release="{{ .Release.Name }}",version="v2",status=~"5.."}[1m]))
+            / sum(rate(shop_order_requests_total{namespace="{{ .Release.Namespace }}",lab_release="{{ .Release.Name }}",version="v2"}[1m]))) > 0.05
+          for: 30s
+          labels: {severity: warning}
+          annotations:
+            summary: "v2 returns more than 5% backend errors"
+        - alert: ShopMeshRetryRateHigh
+          expr: |
+            (sum(rate(outbound_http_route_backend_requests_total{namespace="{{ .Release.Namespace }}",lab_release="{{ .Release.Name }}",lab_component="client"}[1m]))
+            / sum(rate(outbound_http_route_request_statuses_total{namespace="{{ .Release.Namespace }}",lab_release="{{ .Release.Name }}",lab_component="client"}[1m]))) > 1.15
+          for: 1m
+          labels: {severity: warning}
+          annotations:
+            summary: "More than 1.15 backend attempts per completed client request"
+        - alert: ShopApiHighLatency
+          expr: |
+            histogram_quantile(0.95, sum by (le, lab_version) (rate(response_latency_ms_bucket{namespace="{{ .Release.Namespace }}",lab_release="{{ .Release.Name }}",lab_component="api",direction="inbound",tls="true"}[1m]))) > 500
+          for: 1m
+          labels: {severity: warning}
+          annotations:
+            summary: "API proxy p95 exceeds 500 ms"
+{{- end }}
+{{- if .Values.monitoring.dashboard }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-mesh-dashboard
+  labels:
+    grafana_dashboard: "1"
+    {{- include "shop.labels" . | nindent 4 }}
+data:
+  shop-mesh.json: |
+{{ .Files.Get "dashboard.json" | indent 4 }}
+  shop-experiments.json: |
+{{ .Files.Get "experiments.json" | indent 4 }}
+{{- end }}
+{{- end }}

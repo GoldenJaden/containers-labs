@@ -1,0 +1,70 @@
+{{- if and .Values.mesh.enabled .Values.mesh.strict }}
+apiVersion: policy.linkerd.io/v1beta3
+kind: Server
+metadata:
+  name: {{ .Release.Name }}-api
+  labels: {{- include "shop.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels: {lab_release: {{ .Release.Name }}, lab_component: api}
+  port: http
+  proxyProtocol: HTTP/1
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: {{ .Release.Name }}-clients
+spec:
+  identityRefs:
+    - {kind: ServiceAccount, name: {{ .Release.Name }}-client}
+    - {kind: ServiceAccount, name: {{ .Release.Name }}-api-v1}
+    - {kind: ServiceAccount, name: {{ .Release.Name }}-api-v2}
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .Release.Name }}-api
+spec:
+  targetRef: {group: policy.linkerd.io, kind: Server, name: {{ .Release.Name }}-api}
+  requiredAuthenticationRefs:
+    - {group: policy.linkerd.io, kind: MeshTLSAuthentication, name: {{ .Release.Name }}-clients}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Release.Name }}-api-inbound
+spec:
+  parentRefs:
+    - {group: policy.linkerd.io, kind: Server, name: {{ .Release.Name }}-api}
+  rules:
+    - matches:
+        - path: {type: PathPrefix, value: /}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Release.Name }}-health
+spec:
+  parentRefs:
+    - {group: policy.linkerd.io, kind: Server, name: {{ .Release.Name }}-api}
+  rules:
+    - matches:
+        - path: {type: Exact, value: /health}
+          method: GET
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: NetworkAuthentication
+metadata:
+  name: {{ .Release.Name }}-health
+spec:
+  networks: [{cidr: 0.0.0.0/0}, {cidr: "::/0"}]
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .Release.Name }}-health
+spec:
+  targetRef: {group: gateway.networking.k8s.io, kind: HTTPRoute, name: {{ .Release.Name }}-health}
+  requiredAuthenticationRefs:
+    - {group: policy.linkerd.io, kind: NetworkAuthentication, name: {{ .Release.Name }}-health}
+{{- end }}

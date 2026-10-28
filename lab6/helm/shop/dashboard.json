@@ -1,0 +1,341 @@
+{
+  "uid": "shop-lab6-mesh",
+  "title": "Shop / Lab 6 / Service mesh",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "15s",
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "tags": [
+    "lab6",
+    "linkerd"
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "label": "Prometheus",
+        "type": "datasource",
+        "query": "prometheus"
+      },
+      {
+        "name": "namespace",
+        "type": "constant",
+        "query": "lab6",
+        "current": {
+          "text": "lab6",
+          "value": "lab6"
+        }
+      },
+      {
+        "name": "release",
+        "type": "constant",
+        "query": "shop",
+        "current": {
+          "text": "shop",
+          "value": "shop"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Backend errors by version",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(version)(rate(shop_order_requests_total{namespace=\"$namespace\",lab_release=\"$release\",status=~\"5..\"}[1m])) / sum by(version)(rate(shop_order_requests_total{namespace=\"$namespace\",lab_release=\"$release\"}[1m]))",
+          "legendFormat": "{{version}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Mesh p95 by version (TTFB)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95,sum by(le,lab_version)(rate(response_latency_ms_bucket{namespace=\"$namespace\",lab_release=\"$release\",lab_component=\"api\",direction=\"inbound\",tls=\"true\"}[1m])))",
+          "legendFormat": "{{lab_version}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Backend attempt share (includes retries)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(lab_version)(rate(response_total{namespace=\"$namespace\",lab_release=\"$release\",lab_component=\"api\",direction=\"inbound\",tls=\"true\"}[1m])) / ignoring(lab_version) group_left sum(rate(response_total{namespace=\"$namespace\",lab_release=\"$release\",lab_component=\"api\",direction=\"inbound\",tls=\"true\"}[1m]))",
+          "legendFormat": "{{lab_version}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Client errors after mesh retries",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(shop_client_requests_total{namespace=\"$namespace\",lab_release=\"$release\",status!=\"201\"}[1m])) / sum(rate(shop_client_requests_total{namespace=\"$namespace\",lab_release=\"$release\"}[1m]))",
+          "legendFormat": "client"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Backend attempts per logical request",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(outbound_http_route_backend_requests_total{namespace=\"$namespace\",lab_release=\"$release\",lab_component=\"client\"}[1m])) / sum(rate(outbound_http_route_request_statuses_total{namespace=\"$namespace\",lab_release=\"$release\",lab_component=\"client\"}[1m]))",
+          "legendFormat": "attempts / request"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "API connections by TLS state",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(tls)(tcp_open_connections{namespace=\"$namespace\",lab_release=\"$release\",lab_component=\"api\",direction=\"inbound\"})",
+          "legendFormat": "tls={{tls}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Client end-to-end p95",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95,sum by(le)(rate(shop_client_duration_seconds_bucket{namespace=\"$namespace\",lab_release=\"$release\"}[1m])))",
+          "legendFormat": "p95"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Offered load dropped by client",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(shop_client_dropped_total{namespace=\"$namespace\",lab_release=\"$release\"}[1m]))",
+          "legendFormat": "dropped"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+values-local.yaml
+*.key
+.tools/

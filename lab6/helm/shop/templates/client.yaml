@@ -1,0 +1,65 @@
+{{- if .Values.client.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-client
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-load
+data:
+  load.py: |
+{{ .Files.Get "load.py" | indent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-client
+  labels: {{- include "shop.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxSurge: 0, maxUnavailable: 1}
+  selector:
+    matchLabels: {lab_release: {{ .Release.Name }}, lab_component: client}
+  template:
+    metadata:
+      labels:
+        {{- include "shop.labels" . | nindent 8 }}
+        lab_component: client
+      annotations:
+        {{- include "shop.annotations" . | nindent 8 }}
+        checksum/load: {{ .Files.Get "load.py" | sha256sum }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}-client
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001}
+      containers:
+        - name: client
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          command: [python, /load/load.py]
+          args: ["--url", "http://{{ .Release.Name }}-api:{{ .Values.api.port }}", "--rps", {{ .Values.client.rps | quote }}]
+          ports: [{name: metrics, containerPort: 9090}]
+          volumeMounts: [{name: load, mountPath: /load, readOnly: true}]
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          resources: {{- toYaml .Values.client.resources | nindent 12 }}
+      volumes:
+        - name: load
+          configMap: {name: {{ .Release.Name }}-load}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-client
+  labels:
+    {{- include "shop.labels" . | nindent 4 }}
+    lab_component: client
+spec:
+  selector: {lab_release: {{ .Release.Name }}, lab_component: client}
+  ports: [{name: metrics, port: 9090, targetPort: metrics}]
+{{- end }}

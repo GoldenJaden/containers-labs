@@ -1,0 +1,28 @@
+{{- if .Values.mesh.enabled }}
+{{- if ne (int (add .Values.mesh.traffic.v1 .Values.mesh.traffic.v2)) 100 }}
+{{- fail "mesh.traffic weights must sum to 100" }}
+{{- end }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Release.Name }}-api
+  labels: {{- include "shop.labels" . | nindent 4 }}
+  {{- if .Values.mesh.retries.enabled }}
+  annotations:
+    retry.linkerd.io/http: "5xx"
+    retry.linkerd.io/limit: {{ .Values.mesh.retries.limit | quote }}
+  {{- end }}
+spec:
+  parentRefs:
+    - {group: "", kind: Service, name: {{ .Release.Name }}-api, port: {{ .Values.api.port }}}
+  rules:
+    - matches:
+        - path: {type: PathPrefix, value: /}
+      backendRefs:
+        - {name: {{ .Release.Name }}-api-v1, port: {{ .Values.api.port }}, weight: {{ .Values.mesh.traffic.v1 }}}
+        {{- if .Values.api.versions.v2.enabled }}
+        - {name: {{ .Release.Name }}-api-v2, port: {{ .Values.api.port }}, weight: {{ .Values.mesh.traffic.v2 }}}
+        {{- else if ne (int .Values.mesh.traffic.v2) 0 }}
+        {{- fail "v2 must be enabled when its traffic weight is nonzero" }}
+        {{- end }}
+{{- end }}
